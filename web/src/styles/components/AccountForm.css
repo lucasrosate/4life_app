@@ -1,0 +1,63 @@
+.container {
+    width: 400px;
+    height: auto;
+    background: rgba(245, 245, 245, .5);
+    display: flex;
+
+    align-items: center;
+
+    border-radius: 10px;
+}
+
+
+label > span {
+    font-size: 100%;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.login-form .title p {
+    margin-top: 20px;
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 200%;
+    font-weight: 600;
+}
+
+.login-form h4 {
+
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.login-form h4 a {
+    text-decoration: none;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.login {
+    margin-bottom: 30px;
+}
+
+.buttons-registration {
+    display: flex; 
+    align-items: center;
+}
+
+.arrowleft {
+    background: var(--primary-color);
+    width: 90px;
+    padding: 5px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.arrowleft:hover {
+    background: #425ff1;
+}

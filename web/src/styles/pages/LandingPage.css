@@ -1,0 +1,32 @@
+.landing-page {
+    height: 100vh;
+    width: 100vw;
+    background: url("../../assets/images/landscape.jpg") no-repeat;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-page {
+font-family: "Heebo", sans-serif;
+    height: 200px;
+    width: 850px;
+}
+
+.info-page h1 {
+    font-weight: 800;
+
+    color: var(--primary-color);
+    font-size: 350%;
+}
+
+.info-page h2 {
+    color: var(--text-color);
+    font-size: 150%;
+    font-weight: 600;
+
+    margin-top: 20px;
+}
+
