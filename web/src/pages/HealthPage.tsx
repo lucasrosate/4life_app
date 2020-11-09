@@ -1,11 +1,11 @@
 import React from 'react';
 import NavigationBar from '../components/NavigationBar';
 
-function HealthPage () {
+function HealthPage (props: any) {
     return (
         <div>
             <NavigationBar />
-            <h1>dqwdqwdqwdw</h1>
+            <h1></h1>
         </div>
 
     )

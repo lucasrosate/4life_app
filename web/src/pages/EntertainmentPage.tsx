@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationBar from '../components/NavigationBar'
 
-function EntertainmentPage () {
+function EntertainmentPage (props: any) {
     return (
         <div>
             <NavigationBar />

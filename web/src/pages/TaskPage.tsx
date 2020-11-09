@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationBar from '../components/NavigationBar'
 
-function TaskPage () {
+function TaskPage(props: any) {
     return (
         <div>
             <NavigationBar />

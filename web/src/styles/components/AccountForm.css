@@ -1,4 +1,5 @@
 .container {
+    margin-right: 30px;
     width: 400px;
     height: auto;
     background: rgba(245, 245, 245, .5);
@@ -9,13 +10,27 @@
     border-radius: 10px;
 }
 
+.signup-form-container {
+    padding-top: 20px;
+    display: block;
+    text-align: center;
+}
+
+.signupform {
+    margin-bottom: 10px;
+}
 
 label > span {
+    text-align: left;
     font-size: 100%;
     font-weight: 600;
-    margin-top: 25px;
+    margin-top: 20px;
     margin-bottom: 10px;
     display: block;
+}
+
+.signuplabel {
+    margin-left: 45px;
 }
 
 .login-form .title p {
@@ -38,7 +53,8 @@ label > span {
     cursor: pointer;
 }
 
-.login {
+.signin,
+.signup {
     margin-bottom: 30px;
 }
 
@@ -60,4 +76,8 @@ label > span {
 
 .arrowleft:hover {
     background: #425ff1;
+}
+
+.stateplace {
+    margin-right: 10px;
 }

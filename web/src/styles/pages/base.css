@@ -24,7 +24,6 @@
 .input {
     font-family: "Roboto", sans-serif;
     padding-left: 10px;
-    margin-top: 3px;
 
     border: 0;
     border-radius: 8px;
@@ -60,4 +59,16 @@
 
 .btn:focus {
     outline: none;
+}
+
+
+.error {
+    margin-top: 10px;
+    color: rgb(202, 39, 39);
+}
+
+.success {
+    margin-top: 10px;
+    text-align: center;
+    color: rgb(39, 202, 93);
 }

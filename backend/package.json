@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "proxy": "http://localhost:3333",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
@@ -10,7 +11,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
     "nodemon": "^2.0.6",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "routes": "^2.1.0"
   },
   "scripts": {
     "dev": "nodemon start src/server.js"

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationBar from '../components/NavigationBar'
 
-function CashFlowPage () {
+function CashFlowPage(props: any) {
     return (
         <div>
             <NavigationBar />

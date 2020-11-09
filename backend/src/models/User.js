@@ -24,22 +24,26 @@ const UserSchema = new Schema ({
     password: {
         type: String,
         require: true,
-        minlength: 8
+        minlength: 8,
+        maxlength: 1024
     },
 
     email: {
         type: String,
         require: true,
         unique: 1,
+        maxlength: 255
     },
     state: {
         type: String,
         require: true,
+        maxlength: 30,
     },
 
     phone: {
         type: String,
-        require: true
+        require: true,
+        maxlength: 11
     }
 
 })
