@@ -6,9 +6,9 @@
 Em desenvolvimento.
 
 ### Fotos
-![Landing Page Login] (https://imgur.com/rHr4tRA)
+![Landing Page Login] (https://i.imgur.com/rHr4tRA.png)
 
 
-![Landing Page Register] (https://imgur.com/r9Q8sHo)
+![Landing Page Register] (https://i.imgur.com/r9Q8sHo.png)
 
-![My Account] (https://imgur.com/4vC7bnt)
+![My Account] (https://i.imgur.com/4vC7bnt.png)
