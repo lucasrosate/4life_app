@@ -23,7 +23,6 @@ function MyAccountPage(props: any) {
     const handleShowStatePlaceInput = () => setShowStatePlaceInput(!showStatePlaceInput);
 
     const handleUserNameInputAcceptChange = () => {
-        changeUserName()
     };
 
 
