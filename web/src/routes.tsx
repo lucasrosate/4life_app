@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import LandingPage from './pages/LandingPage';
-import HomePage from './pages/HomePage';
-import HealthPage from './pages/HealthPage';
-import CashFlowPage from './pages/CashFlowPage';
-import TaskPage from './pages/TaskPage';
-import EntertainmentPage from './pages/EntertainmentPage';
+import LandingPage from './components/pages/LandingPage';
+import HomePage from './components/pages/HomePage';
+import HealthPage from './components/pages/HealthPage';
+import CashFlowPage from './components/pages/CashFlowPage';
+import TaskPage from './components/pages/TaskPage';
+import EntertainmentPage from './components/pages/EntertainmentPage';
+import NotFoundPage from './components/pages/NotFoundPage';
 import getUserInfo from './services/QueryServices';
+import MyAccountPage from './components/pages/MyAccountPage';
 
 
 
 
+function Routes() {
 
-function Routes(props: any) {
+    //O usuário está logado?
+    var [isLoggedIn, setIsLoggedIn] = useState(Boolean(localStorage.getItem('isLoggedIn')));
+
+
     // Propriedades do usuário
-
     var [user, setUser] = useState({
         username: '',
         firstname: '',
@@ -25,6 +30,7 @@ function Routes(props: any) {
         stateplace: '',
     });
 
+    //Pegar propriedades do usuário assim que logar
     useEffect(() => {
         (async () => {
             const data = await getUserInfo();
@@ -33,54 +39,98 @@ function Routes(props: any) {
             }
 
         })();
-
     }, []);
 
 
+    const handleChangeIsLoggedIn = (bool: any) => Boolean(setIsLoggedIn(bool));
 
-
+    //Rotas
     return (
         <BrowserRouter>
             <Switch>
-                <Route path="/" exact component={LandingPage} />
-
-                <Route path="/home"
-                    render={() => (
+                <Route exact path="/" render={() => (
+                    isLoggedIn ?
                         <HomePage
                             user={user}
+                        /> :
+                        <LandingPage
+                            handleChangeIsLoggedIn={handleChangeIsLoggedIn}
                         />
-                    )} />
 
 
-                <Route path="/health"
+                )}
+                />
+
+
+
+                <Route exact path="/home"
                     render={() => (
-                        <HealthPage
-                            user={user}
-                        />
-                    )} />
+                        isLoggedIn ?
+                            <HomePage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
 
 
-                <Route path="/cash"
+                <Route exact path="/health"
                     render={() => (
-                        <CashFlowPage
-                            user={user}
-                        />
-                    )} />
+                        isLoggedIn ?
+                            <HealthPage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
 
-                <Route path="/task"
+
+                <Route exact path="/cash"
                     render={() => (
-                        <TaskPage
-                            user={user}
-                        />
-                    )} />
+                        isLoggedIn ?
+                            <CashFlowPage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
 
-
-                <Route path="/entertainment"
+                <Route exact path="/task"
                     render={() => (
-                        <EntertainmentPage
-                            user={user}
-                        />
-                    )} />
+                        isLoggedIn ?
+                            <TaskPage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
+
+
+                <Route exact path="/entertainment"
+                    render={() => (
+                        isLoggedIn ?
+                            <EntertainmentPage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
+
+                <Route exact path="/myaccount"
+                    render={() => (
+                        isLoggedIn ?
+                            <MyAccountPage
+                                user={user}
+                                handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                            /> :
+                            <NotFoundPage />
+                    )}
+                />
 
             </Switch>
 

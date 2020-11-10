@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-UserSchema = require('../models/User')
+UserSchema = require('../models/UserModel')
 
 require('dotenv').config();
 

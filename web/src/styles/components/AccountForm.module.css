@@ -1,5 +1,5 @@
 .container {
-    margin-right: 30px;
+    margin: auto;
     width: 400px;
     height: auto;
     background: rgba(245, 245, 245, .5);
@@ -10,13 +10,14 @@
     border-radius: 10px;
 }
 
-.signup-form-container {
+.signupFormContainer {
     padding-top: 20px;
+    padding-bottom: 20px;
     display: block;
     text-align: center;
 }
 
-.signupform {
+.signupForm {
     margin-bottom: 10px;
 }
 
@@ -29,11 +30,15 @@ label > span {
     display: block;
 }
 
-.signuplabel {
+.signupLabel {
     margin-left: 45px;
 }
 
-.login-form .title p {
+.loginFormContainer {
+    padding-bottom: 20px;
+}
+
+.loginFormContainer .title p {
     margin-top: 20px;
     color: var(--primary-color);
     text-align: center;
@@ -41,27 +46,30 @@ label > span {
     font-weight: 600;
 }
 
-.login-form h4 {
+.loginFormContainer h4 {
 
     font-weight: 400;
     margin-top: 8px;
 }
 
-.login-form h4 a {
+.loginFormContainer h4 a {
     text-decoration: none;
     color: var(--primary-color);
     cursor: pointer;
 }
 
-.signin,
-.signup {
-    margin-bottom: 30px;
+
+.btn { 
+    width: 100px;
+    height: 34px;
+
 }
 
-.buttons-registration {
-    display: flex; 
+.buttonsRegistration {
+    display: flex;
     align-items: center;
 }
+
 
 .arrowleft {
     background: var(--primary-color);
@@ -80,4 +88,10 @@ label > span {
 
 .stateplace {
     margin-right: 10px;
+}
+
+
+.error {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

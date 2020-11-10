@@ -1,0 +1,96 @@
+.navHeader {
+    padding-top: 10px;
+    
+    font-family: 'Heebo', sans-serif;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navHeader a {
+    text-decoration: none;
+    margin: 0;
+}
+
+.navHeader ul {
+    font-size: 95%;
+    margin:0;
+}
+
+
+.navHeader h2 {
+    margin: 0; 
+    font-size: 200%;
+    color: var(--primary-color);
+}
+
+.navHeader ul {
+    margin-left: 50px;
+}
+
+.navbarMenuList,
+.navbarMenuList a {
+    font-size: 100%;
+    font-weight: 600;
+}
+
+.navbarMenuList {
+    display: inline-block;
+    margin-right: 80px;
+    width: 150px;
+    padding-bottom: 15px;
+    padding-top: 20px;
+    text-align: center;
+
+    border-bottom: 5px solid white;
+
+}
+
+.navbarMenuList:hover {
+    border-bottom: 5px solid rgb(192, 192, 192);
+}
+
+
+.navbarMenuList a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding-bottom: 15px;
+}
+
+
+span {
+    margin: 0;
+}
+
+.userBox img {
+    margin: 0;
+    border-radius: 50%;
+    width: 45px;
+    height: auto;
+}
+
+.accountInfo ul {
+    list-style: none;
+    margin-left: 5px;
+}
+
+.accountInfo li {
+    margin-top: 15px;
+}
+
+.userUserName {
+    font-size: 110%;
+    font-weight: 600;
+    margin-left: 5px;
+    color: var(--primary-color);
+    cursor: pointer;
+
+    margin-left: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

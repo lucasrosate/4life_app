@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
-import { signinService } from '../services/FormServices';
+import { signinService } from '../services/AuthServices';
 
-import '../styles/components/AccountForm.css';
+
+import AccountForm from '../styles/components/AccountForm.module.css';
+
+
 
 export default function LoginForm(props: any) {
 
@@ -18,7 +21,8 @@ export default function LoginForm(props: any) {
         const success = await signinService(data);
 
         if (success) {
-            return history.push('/home');
+            props.handleChangeIsLoggedIn(true);
+            history.push('/home');
 
         } else {
             setError("Login ou senha inválidos.")
@@ -28,9 +32,9 @@ export default function LoginForm(props: any) {
 
 
     return (
-        <div className="container">
+        <div className={AccountForm.container}>
             <form action="" onSubmit={handleSubmit(handleSignin)}>
-                <div className="login-form">
+                <div className={`${AccountForm.userForm} ${AccountForm.loginFormContainer}`}>
                     <div className="">
                         <label htmlFor="username"><span>Nome de usuário</span></label>
                         <input className="input username" type="text" name="username" id="username" ref={register({ required: true, maxLength: 36 })} />
@@ -43,8 +47,8 @@ export default function LoginForm(props: any) {
 
                     <h4>ou <a onClick={handleShowRegistrationFormFunction}>crie uma conta.</a></h4>
                     <div className="success box-success">{props.messageFromRegistration}</div>
-                    <div className="error">{error}</div>
-                    <button className="btn signin" type="submit">Entrar</button>
+                    <div className={`error ${AccountForm.error}`}>{error}</div>
+                    <button className={`btn ${AccountForm.btn}`} type="submit">Entrar</button>
 
                 </div>
             </form>

@@ -32,7 +32,7 @@ async function getUserInfo() {
                     lastname: data.lastname,
                     email: data.email,
                     phone: data.phone,
-                    stateplace: data.stateplace
+                    stateplace: data.state
                 },
 
                 success: true,

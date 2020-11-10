@@ -1,7 +1,7 @@
 
 const express = require('express');
 
-UserSchema = require('../models/User')
+UserSchema = require('../models/UserModel')
 
 require('dotenv').config();
 

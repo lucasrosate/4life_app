@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-
-import '../styles/components/AccountForm.css';
-
-import { GoArrowLeft } from "react-icons/go";
-
 import { useForm } from 'react-hook-form';
-
 import { registerService } from '../services/FormServices';
-
-
+import AccountForm from '../styles/components/AccountForm.module.css';
+import { GoArrowLeft } from "react-icons/go";
 
 
 export default function RegistrationForm(props: any) {
@@ -31,31 +25,31 @@ export default function RegistrationForm(props: any) {
 
 
     return (
-        <div className="container form-container">
+        <div className="container">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="container signup-form-container">
+                <div className={`container ${AccountForm.container}  ${AccountForm.signupFormContainer}`}>
 
 
-                    <label htmlFor="firstname"><span className="signuplabel">Primeiro nome</span></label>
+                    <label htmlFor="firstname"><span className={AccountForm.signupLabel}>Primeiro nome</span></label>
                     <input type="text" className="input signupform firstname" placeholder="Primeiro Nome" name="firstname" ref={register({ required: true, maxLength: 80 })} />
                     <div>{errors.name}</div>
 
-                    <label htmlFor="lastname"><span className="signuplabel">Sobrenome</span></label>
+                    <label htmlFor="lastname"><span className={AccountForm.signupLabel}>Sobrenome</span></label>
                     <input type="text" className="input signupform lastname" placeholder="Sobrenome" name="lastname" ref={register({ required: true, maxLength: 100 })} />
 
-                    <label htmlFor="username"><span className="signuplabel">Nome de usuário</span></label>
+                    <label htmlFor="username"><span className={AccountForm.signupLabel}>Nome de usuário</span></label>
                     <input type="text" className="input signupform username" placeholder="Nome de usuário" name="username" ref={register({ required: true, maxLength: 80 })} />
 
-                    <label htmlFor="email"><span className="signuplabel">E-mail</span></label>
+                    <label htmlFor="email"><span className={AccountForm.signupLabel}>E-mail</span></label>
                     <input type="text" className="input signupform email" placeholder="Email" name="email" ref={register({ required: true, pattern: /^\S+@\S+$/i })} />
 
-                    <label htmlFor="phonenumber"><span className="signuplabel">Telefone</span></label>
+                    <label htmlFor="phonenumber"><span className={AccountForm.signupLabel}>Telefone</span></label>
                     <input type="tel" className="input signupform phone" placeholder="Número de telefone" name="phonenumber" ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })} />
 
-                    <label htmlFor="password1"><span className="signuplabel">Senha</span></label>
+                    <label htmlFor="password1"><span className={AccountForm.signupLabel}>Senha</span></label>
                     <input type="password" className="input signupform password1" placeholder="Senha" name="password1" ref={register({ required: true, maxLength: 24 })} />
 
-                    <label htmlFor="password2"><span className="signuplabel">Repita a senha</span></label>
+                    <label htmlFor="password2"><span className={AccountForm.signupLabel}>Repita a senha</span></label>
                     <input type="password" className="input signupform password2" placeholder="Senha" name="password2" ref={register({
                         required: true, maxLength: 24,
                         validate: (value) => {
@@ -66,7 +60,7 @@ export default function RegistrationForm(props: any) {
                         }
                     })} />
 
-                    <label htmlFor="stateplace"><span className="signuplabel">Estado</span></label>
+                    <label htmlFor="stateplace"><span className={AccountForm.signupLabel}>Estado</span></label>
                     <select name="stateplace" className="input signupform stateplace " ref={register}>
                         <option value="Acre">Acre</option>
                         <option value="Alagoas">Alagoas</option>
@@ -97,13 +91,13 @@ export default function RegistrationForm(props: any) {
                         <option value="Tocantins">Tocantins</option>
                     </select>
 
-                    <div className="error">{error}
+                    <div className={`error ${AccountForm.error}`}>{error}</div>
+
+                    <div className={`${AccountForm.buttonsRegistration}`}>
+                        <GoArrowLeft fill="white" size={24} className={AccountForm.arrowleft} onClick={handleShowLoginFormFunction} />
+                        <button className={`btn ${AccountForm.btn}`} type="submit">Registrar</button>
                     </div>
 
-                    <div className="buttons-registration">
-                        <GoArrowLeft fill="white" size={24} className="arrowleft" onClick={handleShowLoginFormFunction} />
-                        <button className="btn signup" type="submit">Registrar</button>
-                    </div>
 
                 </div>
 

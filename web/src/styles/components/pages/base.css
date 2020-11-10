@@ -3,7 +3,10 @@
     --background-color-1: #FBFBFE;
     --background-color-2: #F5F5F8;
     --text-color: #3D3D3D;
+    --background-field-color: rgb(251, 251, 251);
+    --background-field-color-darker: rgb(240, 238, 238);
     --border-color: rgb(232, 232, 232, .5);
+    --secondary-border-color: rgb(221, 221, 221);
 }
 
 
@@ -36,12 +39,7 @@
     outline: none;
 }
 
-
 .btn {
-    margin-top: 30px;
-    width: 100px;
-    height: 35px;
-
     border: 0;
     border-radius: 10px;
 

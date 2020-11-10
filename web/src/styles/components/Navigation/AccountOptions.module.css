@@ -1,0 +1,48 @@
+.accountOptionsList {
+    position: absolute;
+    z-index: 1;
+    margin-top: 3px;
+}
+
+.accountOptionsList ul {
+    background-color: var(--background-field-color-darker);
+    float: none;
+    list-style: none;
+    display: block;
+
+    border-radius: 0px 0px 5px 5px;
+    overflow: hidden;
+
+    margin: 0;
+}
+
+
+.accountOptionsList ul li button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 100%;
+
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 25px;
+
+    height: 30px;
+    width: 130px;
+    border: 0;
+
+    background: none;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.accountOptionsList ul li button:hover {
+    background-color: var(--background-field-color);
+}
+
+.accountOptionsList ul li button:focus {
+    outline: none;
+}

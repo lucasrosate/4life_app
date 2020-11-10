@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Routes from './routes';
-import './styles/pages/base.css';
 
+import './styles/components/pages/base.css'
 
 
 export function App() {
