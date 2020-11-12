@@ -16,6 +16,7 @@ async function getUserInfo() {
             email: '',
             phone: '',
             stateplace: '',
+            birth: ''
         },
         success: false,
         message: "Failed"
@@ -32,7 +33,8 @@ async function getUserInfo() {
                     lastname: data.lastname,
                     email: data.email,
                     phone: data.phone,
-                    stateplace: data.state
+                    stateplace: data.state,
+                    birth: data.birth
                 },
 
                 success: true,

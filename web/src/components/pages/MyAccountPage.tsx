@@ -3,12 +3,37 @@ import NavigationBar from '../Navigation/NavigationBar';
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profilePhoto from '../../assets/images/nophoto.svg';
 import ChangeButtonSystem from '../MyAccount/ChangeButtonSystem';
+import ChangeStateButtonSystem from '../MyAccount/ChangeStateButtonSystem';
+import ChangeBirthButtonSystem from '../MyAccount/ChangeBirthButtonSystem';
 import { changeUserName } from '../../services/changeAccountDataService'
 
-function MyAccountPage(props: any) {
 
+interface Props {
+    user: {
+        username: string,
+        firstname: string,
+        lastname: string,
+        email: string,
+        phone: string,
+        stateplace: string,
+        birth: string
+    },
+    handleChangeIsLoggedIn: Function,
+    updateUserInfo: Function
+}
+
+
+
+
+function MyAccountPage(props: Props) {
+
+    //username
     var [showUserNameInput, setShowUserNameInput] = useState(false);
     var [showFirstNameInput, setShowFirstNameInput] = useState(false);
+    var [firstNameErrorMessage, setFirstNameInput] = useState('');
+
+
+
     var [showLastNameInput, setShowLastNameInput] = useState(false);
     var [showEmailInput, setShowEmailInput] = useState(false);
     var [showPhoneInput, setShowPhoneInput] = useState(false);
@@ -22,7 +47,18 @@ function MyAccountPage(props: any) {
     const handleShowPhoneInput = () => setShowPhoneInput(!showPhoneInput);
     const handleShowStatePlaceInput = () => setShowStatePlaceInput(!showStatePlaceInput);
 
-    const handleUserNameInputAcceptChange = () => {
+    const handleUserNameInputAcceptChange = async (newUserName: string) => {
+        const data = await changeUserName(newUserName)
+
+        console.log(data);
+
+        if (data.success) {
+            localStorage.setItem("username", newUserName);
+            props.updateUserInfo();
+        } else {
+        }
+
+
     };
 
 
@@ -48,70 +84,83 @@ function MyAccountPage(props: any) {
 
 
                 <div className={MyAccountPageStyle.userInfoContainer}>
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Nome de usuário</span>
-
+                        {/* username */}
                         <ChangeButtonSystem
+                            label="Nome de Usuário"
                             PropertyValue={props.user.username}
                             showInput={showUserNameInput}
                             handleFunction={handleShowUserNameInput}
-                            handleAcceptChange={handleShowUserNameInput}
+                            handleAcceptChange={handleUserNameInputAcceptChange}
+                            trim={true}
 
                         />
 
-                    </div>
 
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Primeiro Nome</span>
+                        {/* Primeiro nome */}
                         <ChangeButtonSystem
+                            label="Primeiro nome"
                             PropertyValue={props.user.firstname}
                             showInput={showFirstNameInput}
                             handleFunction={handleShowFirstNameInput}
                             handleAcceptChange={handleShowFirstNameInput}
                         />
-                    </div>
 
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Sobrenome</span>
+                    
+
+                        {/* Sobrenome */}
                         <ChangeButtonSystem
+                            label="Sobrenome"
                             PropertyValue={props.user.lastname}
                             showInput={showLastNameInput}
                             handleFunction={handleShowLastNameInput}
                             handleAcceptChange={handleShowLastNameInput}
                         />
-                    </div>
 
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Email</span>
+
+                        {/* Email */}
                         <ChangeButtonSystem
+                            label="E-mail"
                             PropertyValue={props.user.email}
                             showInput={showEmailInput}
                             handleFunction={handleShowEmailInput}
                             handleAcceptChange={handleShowEmailInput}
                         />
-                    </div>
 
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Telefone</span>
+
+
+                        {/* Telefone */}
                         <ChangeButtonSystem
+                            label="Telefone"
                             PropertyValue={props.user.phone}
                             showInput={showPhoneInput}
                             handleFunction={handleShowPhoneInput}
                             handleAcceptChange={handleShowPhoneInput}
                         />
-                    </div>
 
-                    <div className={MyAccountPageStyle.userData}>
-                        <span className={MyAccountPageStyle.userDataLabel}>Estado</span>
-                        <ChangeButtonSystem
+
+
+                        {/* Estado */}
+                        <ChangeStateButtonSystem
                             PropertyValue={props.user.stateplace}
                             showInput={showStatePlaceInput}
                             handleFunction={handleShowStatePlaceInput}
                             handleAcceptChange={handleShowStatePlaceInput}
                         />
+
+
+
+                        {/* Estado */}
+                        <ChangeBirthButtonSystem
+                            PropertyValue={props.user.stateplace}
+                            showInput={showStatePlaceInput}
+                            handleFunction={handleShowStatePlaceInput}
+                            handleAcceptChange={handleShowStatePlaceInput}
+                        />
+
+
                     </div>
 
-                </div>
+                
             </div>
         </div>
 

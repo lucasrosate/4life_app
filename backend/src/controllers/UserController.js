@@ -25,16 +25,21 @@ getUserInfo = async (req, res) => {
 
 
 changeUserProperty = async (req, res) => {
-    user = User.findOne({
+
+    User.findOne({
         username: req.body.username,
-        newVal: req.body.newVal,
-        option: req.body.option,
     },
         async (err, user) => {
-            if (err) return res.status(401).json({})
+
+            const newVal = req.body.newVal;
+            const option = req.body.option;
+
+            if (err) return res.status(401).json({ success: false, message: "Erro ao se conectar com o servidor." })
 
             if (!user) {
-                return res.status(401).json({ success: false })
+
+                return res.status(401).json({ success: false, message: "Esse nome de usuário já existe." })
+
             } else {
 
                 switch (option) {
@@ -62,10 +67,11 @@ changeUserProperty = async (req, res) => {
                         user.stateplace = newVal;
                         break;
                 }
-                user.save();
 
-
-                return res.status(200).json({ success: true })
+                user.save((err, user) => {
+                    if(err) return res.status(200).json({ success: false, message: "Já existe." });
+                    return res.status(200).json({ success: true, message: "Alterado com sucesso." });
+                });
             }
         })
 }

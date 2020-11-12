@@ -1,8 +1,36 @@
+.DataLabel {
+    color: gray;
+    width: 130px;
+}
 
 .changeButtonContainer {
     display: flex;
     flex-direction: row;
 }
+
+
+.userData {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    width: 60%;
+    height: 60px;
+
+    padding-left: 15px;
+
+
+    margin: 0;
+    margin-top: 50px;
+    background-color:var(--background-field-color);
+
+    border-radius: 5px 10px 10px 5px;
+    border-left: 5px solid var(--primary-color);
+
+    color: gray;
+}
+
+
 
 .userDataInfo,
 .userDataInfoInput {
@@ -38,18 +66,44 @@
     outline: none;
 }
 
+
+
+.buttonInv {
+    background-color: rgb(0,0,0,0);
+    border: 0;
+    display: flex;
+    margin-right: 10px;
+    cursor: pointer;
+    padding: 0px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.buttonInv:hover {
+    transform: translateY(-3px);
+}
+.buttonInv:focus { 
+    outline: none;
+}
+
+
 .optionsGo {
     display: flex;
 }
 
-.goIcon {
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
 
-    transition: 0.3s;
+.errorContainer {
+    display: block;
+    float: inline-start;
+    width: 400px;
+
+    padding: 10px;
+    margin: 0;
+
+    border-radius: 0px 0px 5px 5px;
 }
 
-.goIcon:hover {
-    transform: translateY(-3px);
+.errorContainer h2 {
+    font-weight: 400;
+    color: rgb(201, 5, 5);
 }

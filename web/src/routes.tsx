@@ -28,10 +28,10 @@ function Routes() {
         email: '',
         phone: '',
         stateplace: '',
+        birth: ""
     });
 
-    //Pegar propriedades do usuário assim que logar
-    useEffect(() => {
+    const updateUserInfo = async () => {
         (async () => {
             const data = await getUserInfo();
             if (typeof (data) == "object") {
@@ -39,6 +39,11 @@ function Routes() {
             }
 
         })();
+    }
+
+    //Pegar propriedades do usuário assim que logar
+    useEffect(() => {
+        updateUserInfo();
     }, []);
 
 
@@ -127,6 +132,7 @@ function Routes() {
                             <MyAccountPage
                                 user={user}
                                 handleChangeIsLoggedIn={handleChangeIsLoggedIn}
+                                updateUserInfo={updateUserInfo}
                             /> :
                             <NotFoundPage />
                     )}

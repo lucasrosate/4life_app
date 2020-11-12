@@ -33,19 +33,24 @@ const UserSchema = new Schema ({
         unique: 1,
         maxlength: 255
     },
+    
     state: {
         type: String,
         require: true,
         maxlength: 30,
     },
 
+
     phone: {
         type: String,
         require: true,
         maxlength: 11
+    },
+
+    birth: {
+        type: Date,
+        require: false,
     }
-
-
 
 })
 

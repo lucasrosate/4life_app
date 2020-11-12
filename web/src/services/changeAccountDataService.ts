@@ -1,15 +1,14 @@
-import Axios from 'axios';
 import api from './api';
 
-const changeUserName = async (newVal: String) => {
-    return await Axios.post('/changeuserproperty',
+const changeUserName = async (newVal: string) => {
+    return await api.post('/changeuserproperty',
         {
-            username: localStorage.get("username"),
+            username: localStorage.getItem("username"),
             newVal: newVal,
             option: 0
         })
-        .then((res: any) => res.data.user_id)
-        .catch((err: any) => err.response);
+        .then((res: any) => res.data)
+        .catch((err: any) => err.response.data);
     
 }
 
