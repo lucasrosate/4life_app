@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "proxy": "http://localhost:3333",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",

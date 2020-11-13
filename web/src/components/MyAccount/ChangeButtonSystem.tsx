@@ -83,8 +83,9 @@ export default function ChangeButtonSystem(props: Props) {
                                     placeholder="Preencha este campo"
                                     minLength={3}
                                     maxLength={24}
-
                                     value={newPropertyParentValue}
+
+                                    //Bloqueia de por espaços no campo se trim = true na hora de declarar o componente
                                     onChange={e => props.trim ? setNewPropertyParentValue(e.target.value.trim())
                                         : setNewPropertyParentValue(e.target.value)}
                                     size={size}

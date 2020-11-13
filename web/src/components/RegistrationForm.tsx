@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { registerService } from '../services/FormServices';
 import AccountForm from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
+let estados: Estados = require('../assets/files/estados.json');
 
+
+interface Estados {
+    UF: [{
+        nome: string,
+        sigla: string
+    }]
+}
 
 export default function RegistrationForm(props: any) {
 
-    const { register, watch, handleSubmit, errors } = useForm();
     var [error, setError] = useState('');
+    var [phoneNumber, setPhoneNumber] = useState("");
+    const { register, watch, handleSubmit, errors } = useForm();
+
+    useEffect(()=> {console.log(estados.UF)}, []);
+
 
     async function onSubmit(data: any) {
         const success = await registerService(data);
@@ -22,7 +34,6 @@ export default function RegistrationForm(props: any) {
     }
 
     const handleShowLoginFormFunction = (responseMessage: any) => responseMessage.length > 0 ? props.showLoginFormFunction(responseMessage) : props.showLoginFormFunction('');
-
 
     return (
         <div className="container">
@@ -44,7 +55,14 @@ export default function RegistrationForm(props: any) {
                     <input type="text" className="input signupform email" placeholder="Email" name="email" ref={register({ required: true, pattern: /^\S+@\S+$/i })} />
 
                     <label htmlFor="phonenumber"><span className={AccountForm.signupLabel}>Telefone</span></label>
-                    <input type="tel" className="input signupform phone" placeholder="Número de telefone" name="phonenumber" ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })} />
+                    <input type="tel" className="input signupform phone" placeholder="Número de telefone" name="phonenumber"
+                    ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })}
+                    value= {phoneNumber}
+                    onChange = { (e) => {
+                        const letterTrim = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(letterTrim);
+                    }}
+                    />
 
                     <label htmlFor="password1"><span className={AccountForm.signupLabel}>Senha</span></label>
                     <input type="password" className="input signupform password1" placeholder="Senha" name="password1" ref={register({ required: true, maxLength: 24 })} />
@@ -62,33 +80,7 @@ export default function RegistrationForm(props: any) {
 
                     <label htmlFor="stateplace"><span className={AccountForm.signupLabel}>Estado</span></label>
                     <select name="stateplace" className="input signupform stateplace " ref={register}>
-                        <option value="Acre">Acre</option>
-                        <option value="Alagoas">Alagoas</option>
-                        <option value="Amapá">Amapá</option>
-                        <option value="Amazonas">Amazonas</option>
-                        <option value="Bahia">Bahia</option>
-                        <option value="Ceará">Ceará</option>
-                        <option value="Distrito Federal">Distrito Federal</option>
-                        <option value="Espírito Santo">Espírito Santo</option>
-                        <option value="Goiás">Goiás</option>
-                        <option value="Maranhão">Maranhão</option>
-                        <option value="Mato Grosso">Mato Grosso</option>
-                        <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
-                        <option value="Minas Gerais">Minas Gerais</option>
-                        <option value="Pará">Pará</option>
-                        <option value="Paraíba">Paraíba</option>
-                        <option value="Paraná">Paraná</option>
-                        <option value="Pernambuco">Pernambuco</option>
-                        <option value="Piauí">Piauí</option>
-                        <option value="Rio de Janeiro">Rio de Janeiro</option>
-                        <option value="Rio Grande do Norte">Rio Grande do Norte</option>
-                        <option value="Rio Grande do Sul">Rio Grande do Sul</option>
-                        <option value="Rondônia">Rondônia</option>
-                        <option value="Roraima">Roraima</option>
-                        <option value="Santa Catarina">Santa Catarina</option>
-                        <option value="São Paulo">São Paulo</option>
-                        <option value="Sergipe">Sergipe</option>
-                        <option value="Tocantins">Tocantins</option>
+                        {estados.UF.map((uf)=> <option value={uf.nome}>{`${uf.nome} - ${uf.sigla}`}</option>)}
                     </select>
 
                     <div className={`error ${AccountForm.error}`}>{error}</div>
