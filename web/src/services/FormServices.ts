@@ -1,4 +1,4 @@
-import api from './api';
+import api from './apis';
 
 // data = {Obj} injetado do react-hook-form
 

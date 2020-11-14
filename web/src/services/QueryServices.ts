@@ -1,4 +1,6 @@
-import api from './api';
+import api from './apis';
+import { UserInterface, UserResponseInterface } from '../interfaces/UserInterface';
+
 
 async function getUserInfo() {
     if (!Boolean(localStorage.getItem("isLoggedIn"))) return false;
@@ -9,22 +11,27 @@ async function getUserInfo() {
     if (username === undefined || token === undefined) return false;
 
     var resData = {
-        user: {
-            username: '',
-            firstname: '',
-            lastname: '',
-            email: '',
-            phone: '',
-            stateplace: '',
-            birth: ''
-        },
+        user: <UserInterface>
+            {
+                username: '',
+                firstname: '',
+                lastname: '',
+                email: '',
+                phone: '',
+                stateplace: '',
+                birth: ''
+            },
         success: false,
         message: "Failed"
     }
 
-    return await api.post('getuserinfo', { username: username, token: token })
+    return await api.post('getuserinfo', {
+        username: username,
+        token: token
+    }
+    )
         .then((res: any) => {
-            const data = res.data.user;
+            const data: UserResponseInterface = res.data.user;
 
             resData = {
                 user: {
@@ -34,7 +41,7 @@ async function getUserInfo() {
                     email: data.email,
                     phone: data.phone,
                     stateplace: data.state,
-                    birth: data.birth
+                    birth: new Date(data.birth).toLocaleString("pt-BR").split(" ")[0]
                 },
 
                 success: true,

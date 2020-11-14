@@ -5,9 +5,9 @@ const UserView = (user) => {
         username: user.username,
         email: user.email,
         state: user.state,
-        phone: user.phone
+        phone: user.phone,
+        birth: user.birth
     }
 }
-
 
 module.exports = UserView;

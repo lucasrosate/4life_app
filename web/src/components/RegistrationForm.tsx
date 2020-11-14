@@ -8,8 +8,8 @@ let estados: Estados = require('../assets/files/estados.json');
 
 interface Estados {
     UF: [{
-        nome: string,
-        sigla: string
+        name: string,
+        abbrev: string
     }]
 }
 
@@ -80,7 +80,7 @@ export default function RegistrationForm(props: any) {
 
                     <label htmlFor="stateplace"><span className={AccountForm.signupLabel}>Estado</span></label>
                     <select name="stateplace" className="input signupform stateplace " ref={register}>
-                        {estados.UF.map((uf)=> <option value={uf.nome}>{`${uf.nome} - ${uf.sigla}`}</option>)}
+                        {estados.UF.map((uf, index)=> <option key={index} value={uf.name}>{`${uf.name} - ${uf.abbrev}`}</option>)}
                     </select>
 
                     <div className={`error ${AccountForm.error}`}>{error}</div>

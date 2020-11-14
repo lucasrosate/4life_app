@@ -1,5 +1,8 @@
 .navHeader {
+    top: 0;
     padding-top: 10px;
+    height: 6%;
+    width: 100%;
     
     font-family: 'Heebo', sans-serif;
 
@@ -7,6 +10,8 @@
     align-items: center;
     justify-content: center;
 
+    background-color: white;
+    position: fixed;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -22,7 +27,7 @@
 
 
 .navHeader h2 {
-    margin: 0; 
+    margin-left: 20px;
     font-size: 200%;
     color: var(--primary-color);
 }
@@ -45,7 +50,7 @@
     padding-top: 20px;
     text-align: center;
 
-    border-bottom: 5px solid white;
+    border-bottom: 6px solid white;
 
 }
 
@@ -84,7 +89,6 @@ span {
 .userUserName {
     font-size: 110%;
     font-weight: 600;
-    margin-left: 5px;
     color: var(--primary-color);
     cursor: pointer;
 

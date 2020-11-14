@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, useCallback, useEffect } from 'react';
+import React, { CSSProperties, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
@@ -6,15 +6,41 @@ import ChangeButtonStyle from '../../styles/components/MyAccount/ChangeButtonSys
 
 
 interface Props {
-    label?: string
-    color?: string
+    //Propriedade (Ex: username,firstname, etc)
     PropertyValue: string,
-    showInput: Boolean,
-    handleFunction: Function,
+
+    //showInput Status (Se true, aparece o input com a opção aceitar/recusar)
+    showInput: boolean,
+
+    //Função a ser chamada do parent caso seja recusado a mudança
+    handleExitChange: Function,
+
+    //Função a ser chamada do parent caso seja aceito a mudança
     handleAcceptChange: Function,
+
+    //Label a ser mostrada
+    label?: string,
+
+    //Cor do botão de alterar e a lateral
+    color?: string,
+
+    //Tamanho dos ícones (padrão: 18 px)
     size?: number,
+
+    //Trim = true, bloqueia o usuário de por espaços no input
     trim?: boolean,
-    errorMessage?: string
+
+    //Somente números
+    onlyNumber?: boolean,
+
+    //Erro a ser passado caso haja algum problema durante a execução da função
+    errorMessage?: string,
+
+    //Default: 3
+    minLength?: number,
+
+    //Default: 24
+    maxLength?: number,
 
 }
 
@@ -27,9 +53,10 @@ export default function ChangeButtonSystem(props: Props) {
 
     const size = props.size === undefined ? 18 : props.size;
     const label = props.label === undefined ? "" : props.label;
-    
+    const minLength = props.minLength === undefined ? 3 : props.minLength;
+    const maxLength = props.maxLength === undefined ? 24 : props.maxLength;
     const error1 = "Campo vazio."
-    
+
 
     var [color, setColor] = useState("")
     var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
@@ -37,10 +64,9 @@ export default function ChangeButtonSystem(props: Props) {
 
 
 
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         setColor(props.color === undefined ? "#2F4EF0" : props.color);
-        setNewPropertyParentValue(props.PropertyValue);
     }, [])
 
 
@@ -50,24 +76,27 @@ export default function ChangeButtonSystem(props: Props) {
     }
 
     const handleChangeProperty = async () => {
-
-        if(newPropertyParentValue.length > 0 ) {
+        if (newPropertyParentValue.length > 0) {
             props.handleAcceptChange(newPropertyParentValue);
         } else {
-            if (!(errorMessages.includes(error1)))  
+            if (!(errorMessages.includes(error1)))
                 setErrorMessages(errorMessages.concat(error1));
-                console.log(errorMessages.includes(error1))
+            console.log(errorMessages.includes(error1))
         }
 
-        props.handleFunction();
+        props.handleExitChange();
     }
+
 
 
     return (
         <div>
             <div className={ChangeButtonStyle.userData} style={styleBorder}>
+
                 <span className={ChangeButtonStyle.DataLabel}>{label}</span>
+
                 <span>
+                    {/* ON SUBMIT, CLICANDO EM GO CHECK -> handleChangeProperty */}
                     <form onSubmit={handleSubmit(handleChangeProperty)}>
 
                         {/* Mostrar ?
@@ -81,14 +110,17 @@ export default function ChangeButtonSystem(props: Props) {
                                 {/* Input */}
                                 <input type="text" className={ChangeButtonStyle.userDataInfoInput}
                                     placeholder="Preencha este campo"
-                                    minLength={3}
-                                    maxLength={24}
+                                    minLength={minLength}
+                                    maxLength={maxLength}
                                     value={newPropertyParentValue}
-
-                                    //Bloqueia de por espaços no campo se trim = true na hora de declarar o componente
-                                    onChange={e => props.trim ? setNewPropertyParentValue(e.target.value.trim())
-                                        : setNewPropertyParentValue(e.target.value)}
-                                    size={size}
+                                    onChange={e => {
+                                        let s = e.target.value;
+                                        if(props.trim) s = s.trim();
+                                        if(props.onlyNumber) s = s.replace(/\D/g, '');
+                                        console.log(props.onlyNumber);
+                                        return setNewPropertyParentValue(s);
+                                    }
+                                    }
                                 />
 
 
@@ -118,7 +150,7 @@ export default function ChangeButtonSystem(props: Props) {
                                     <button type="button" className={ChangeButtonStyle.buttonInv}>
                                         <GoX fill="rgb(202, 39, 39)"
                                             className={ChangeButtonStyle.goIcon}
-                                            onClick={() => props.handleFunction()}
+                                            onClick={() => props.handleExitChange()}
                                             size={size}
                                         />
                                     </button>
@@ -136,7 +168,7 @@ export default function ChangeButtonSystem(props: Props) {
                                 <button type="button" className={ChangeButtonStyle.buttonInv}>
                                     <GoPencil fill={color}
                                         className={ChangeButtonStyle.goIcon}
-                                        onClick={() => props.handleFunction()}
+                                        onClick={() => props.handleExitChange()}
                                         size={size}
                                     />
                                 </button>

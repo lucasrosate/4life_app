@@ -4,6 +4,9 @@ const UserSchema = require('../models/UserModel');
 const User = mongoose.model('User', UserSchema)
 
 const UserView = require('../views/UserView');
+require('dotenv').config;
+
+
 
 isloggedin = async (req, res) => {
     return res.status(200).json({ ans: true });
@@ -24,13 +27,18 @@ getUserInfo = async (req, res) => {
 }
 
 
+getUploadToken = async (req, res) => {
+    return res.status(200).json({token: process.env.UPLOAD_ACCESS_TOKEN_SECRET})
+}
+
+
+
 changeUserProperty = async (req, res) => {
 
     User.findOne({
         username: req.body.username,
     },
         async (err, user) => {
-
             const newVal = req.body.newVal;
             const option = req.body.option;
 
@@ -64,12 +72,16 @@ changeUserProperty = async (req, res) => {
                         break;
 
                     case 5:
-                        user.stateplace = newVal;
+                        user.state = newVal;
+                        break;
+
+                    case 6:
+                        user.birth = newVal;
                         break;
                 }
 
                 user.save((err, user) => {
-                    if(err) return res.status(200).json({ success: false, message: "Já existe." });
+                    if (err) return res.status(200).json({ success: false, message: "Já existe." });
                     return res.status(200).json({ success: true, message: "Alterado com sucesso." });
                 });
             }
@@ -79,5 +91,6 @@ changeUserProperty = async (req, res) => {
 module.exports = {
     isloggedin,
     getUserInfo,
+    getUploadToken,
     changeUserProperty
 }

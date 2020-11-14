@@ -70,3 +70,8 @@
     text-align: center;
     color: rgb(39, 202, 93);
 }
+
+.content-container {
+    margin-top: 80px;
+    overflow: hidden;
+}

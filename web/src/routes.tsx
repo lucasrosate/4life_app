@@ -10,6 +10,7 @@ import EntertainmentPage from './components/pages/EntertainmentPage';
 import NotFoundPage from './components/pages/NotFoundPage';
 import getUserInfo from './services/QueryServices';
 import MyAccountPage from './components/pages/MyAccountPage';
+import {UserInterface} from './interfaces/UserInterface';
 
 
 
@@ -28,7 +29,7 @@ function Routes() {
         email: '',
         phone: '',
         stateplace: '',
-        birth: ""
+        birth: ''
     });
 
     const updateUserInfo = async () => {

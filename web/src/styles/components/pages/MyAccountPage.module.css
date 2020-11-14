@@ -1,6 +1,7 @@
 
 .profileContainer {
     width: 60vw;
+    min-width: 600px;
     margin-top: 50px;
     height: 100vh;
 }

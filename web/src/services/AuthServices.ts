@@ -1,4 +1,4 @@
-import api from './api';
+import api from './apis';
 
 interface Data {
     username: string,
@@ -27,6 +27,17 @@ const signinService = async (data: Data) => {
         });
 }
 
+const getUploadTokenService = async () => {
+    return await api.post('/getuploadtoken', {
+        username: localStorage.getItem('username'),
+        token: localStorage.getItem("auth-token")
+    })
+    .then(res => {
+        return res.data;
+    })
+    .catch(err => err.response.data);
+}
+
 
 const logoutService = async () => {
     localStorage.removeItem("auth-token")
@@ -35,5 +46,8 @@ const logoutService = async () => {
 
     return;
 }
+
+
+
 
 export { signinService, logoutService };

@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
+
+
 import NavigationBar from '../Navigation/NavigationBar';
+import InputChangeSystem from '../MyAccountPage/InputChangeSystem';
+import SelectChangeSystem from '../MyAccountPage/SelectChangeSystem';
+import DateChangeSystem from '../MyAccountPage/DateChangeSystem';
+
+import {
+    changeUserNameService,
+    changeFirstNameService,
+    changeLastNameService,
+    changeEmailService,
+    changePhoneService,
+    changeStatePlaceService,
+    changeBirthService,
+} from '../../services/changeAccountDataService';
+
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profilePhoto from '../../assets/images/nophoto.svg';
-import ChangeButtonSystem from '../MyAccount/ChangeButtonSystem';
-import ChangeStateButtonSystem from '../MyAccount/ChangeStateButtonSystem';
-import ChangeBirthButtonSystem from '../MyAccount/ChangeBirthButtonSystem';
-import { changeUserName } from '../../services/changeAccountDataService'
+let estados: Estados = require('../../assets/files/estados.json');
 
 
 interface Props {
@@ -23,6 +36,13 @@ interface Props {
 }
 
 
+interface Estados {
+    UF: [{
+        name: string,
+        abbrev: string
+    }]
+}
+
 
 
 function MyAccountPage(props: Props) {
@@ -38,7 +58,8 @@ function MyAccountPage(props: Props) {
     var [showEmailInput, setShowEmailInput] = useState(false);
     var [showPhoneInput, setShowPhoneInput] = useState(false);
     var [showStatePlaceInput, setShowStatePlaceInput] = useState(false);
-
+    var [showBirthInput, setShowBirthInput] = useState(false);
+    var [image, setImage] = useState({ preview: "", raw: "" })
 
     const handleShowUserNameInput = () => setShowUserNameInput(!showUserNameInput);
     const handleShowFirstNameInput = () => setShowFirstNameInput(!showFirstNameInput);
@@ -46,20 +67,34 @@ function MyAccountPage(props: Props) {
     const handleShowEmailInput = () => setShowEmailInput(!showEmailInput);
     const handleShowPhoneInput = () => setShowPhoneInput(!showPhoneInput);
     const handleShowStatePlaceInput = () => setShowStatePlaceInput(!showStatePlaceInput);
+    const handleShowBirthInput = () => setShowBirthInput(!showBirthInput);
 
-    const handleUserNameInputAcceptChange = async (newUserName: string) => {
-        const data = await changeUserName(newUserName)
+    //CheckChangeSuccess() -> Chama a api e tenta mudar, caso não haja
+    const checkChangeSuccess = async (newVal: string, changeFunction: Function, option: number) => {
+        const data = await changeFunction(newVal, option)
+        if (data.success && option === 0) localStorage.setItem("username", newVal);
+        if (data.success) props.updateUserInfo();
+    }
 
-        console.log(data);
+    //CONTEXTO
+    //Opção 0: user.username
+    //Opção 1: user.firstname
+    //Opção 2: user.lastname
+    //Opção 3: user.email
+    //Opção 4: user.phone
+    //Opção 5: user.stateplace
+    //Opção 6: user.birth
 
-        if (data.success) {
-            localStorage.setItem("username", newUserName);
-            props.updateUserInfo();
-        } else {
-        }
 
+    //Cada função chama a função de troca CheckSuccess()
+    const handleUserNameInputAcceptChange = async (newUserName: string) => checkChangeSuccess(newUserName, changeUserNameService, 0);
+    const handleUserFirstNameInputAcceptChange = async (newFirstName: string) => checkChangeSuccess(newFirstName, changeFirstNameService, 1);
+    const handleUserLastNameInputAcceptChange = async (newFirstName: string) => checkChangeSuccess(newFirstName, changeLastNameService, 2);
+    const handleEmailInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeEmailService, 3);
+    const handlePhoneInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changePhoneService, 4);
+    const handleStatePlaceInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeStatePlaceService, 5);
+    const handleStateBirthInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeBirthService, 6);
 
-    };
 
 
 
@@ -69,27 +104,27 @@ function MyAccountPage(props: Props) {
                 user={props.user}
                 handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
             />
+            <div className="content-container">
+                <div className={MyAccountPageStyle.profileContainer}>
 
-            <div className={MyAccountPageStyle.profileContainer}>
+                    <div className={MyAccountPageStyle.userProfileImg}>
+                        <img src={profilePhoto} alt="profile" />
 
-                <div className={MyAccountPageStyle.userProfileImg}>
-                    <img src={profilePhoto} alt="profile" />
+                        <div className={MyAccountPageStyle.userprofileImgInfo}>
+                            <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
+                            <button className="btn">Mudar foto de perfil</button>
+                        </div>
 
-                    <div className={MyAccountPageStyle.userprofileImgInfo}>
-                        <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
-                        <button className="btn">Mudar foto de perfil</button>
                     </div>
 
-                </div>
 
-
-                <div className={MyAccountPageStyle.userInfoContainer}>
+                    <div className={MyAccountPageStyle.userInfoContainer}>
                         {/* username */}
-                        <ChangeButtonSystem
+                        <InputChangeSystem
                             label="Nome de Usuário"
                             PropertyValue={props.user.username}
                             showInput={showUserNameInput}
-                            handleFunction={handleShowUserNameInput}
+                            handleExitChange={handleShowUserNameInput}
                             handleAcceptChange={handleUserNameInputAcceptChange}
                             trim={true}
 
@@ -97,71 +132,79 @@ function MyAccountPage(props: Props) {
 
 
                         {/* Primeiro nome */}
-                        <ChangeButtonSystem
+                        <InputChangeSystem
                             label="Primeiro nome"
                             PropertyValue={props.user.firstname}
                             showInput={showFirstNameInput}
-                            handleFunction={handleShowFirstNameInput}
-                            handleAcceptChange={handleShowFirstNameInput}
+                            handleExitChange={handleShowFirstNameInput}
+                            handleAcceptChange={handleUserFirstNameInputAcceptChange}
                         />
 
-                    
+
 
                         {/* Sobrenome */}
-                        <ChangeButtonSystem
+                        <InputChangeSystem
                             label="Sobrenome"
                             PropertyValue={props.user.lastname}
                             showInput={showLastNameInput}
-                            handleFunction={handleShowLastNameInput}
-                            handleAcceptChange={handleShowLastNameInput}
+                            handleExitChange={handleShowLastNameInput}
+                            handleAcceptChange={handleUserLastNameInputAcceptChange}
                         />
 
 
                         {/* Email */}
-                        <ChangeButtonSystem
+                        <InputChangeSystem
                             label="E-mail"
                             PropertyValue={props.user.email}
                             showInput={showEmailInput}
-                            handleFunction={handleShowEmailInput}
-                            handleAcceptChange={handleShowEmailInput}
+                            handleExitChange={handleShowEmailInput}
+                            handleAcceptChange={handleEmailInputAcceptChange}
                         />
 
 
 
                         {/* Telefone */}
-                        <ChangeButtonSystem
+                        <InputChangeSystem
                             label="Telefone"
                             PropertyValue={props.user.phone}
                             showInput={showPhoneInput}
-                            handleFunction={handleShowPhoneInput}
-                            handleAcceptChange={handleShowPhoneInput}
+                            handleExitChange={handleShowPhoneInput}
+                            handleAcceptChange={handlePhoneInputAcceptChange}
+                            onlyNumber={true}
+                            minLength={9}
+                            maxLength={9}
+                        />
+
+
+                        {/* Estado */}
+                        <SelectChangeSystem
+                            label="Estado"
+                            PropertyValue={props.user.stateplace}
+                            SelectListProperties={estados.UF}
+                            showInput={showStatePlaceInput}
+                            handleExitChange={handleShowStatePlaceInput}
+                            handleAcceptChange={handleStatePlaceInputAcceptChange}
                         />
 
 
 
                         {/* Estado */}
-                        <ChangeStateButtonSystem
-                            PropertyValue={props.user.stateplace}
-                            showInput={showStatePlaceInput}
-                            handleFunction={handleShowStatePlaceInput}
-                            handleAcceptChange={handleShowStatePlaceInput}
-                        />
-
-
-
-                        {/* Estado */}
-                        <ChangeBirthButtonSystem
-                            PropertyValue={props.user.stateplace}
-                            showInput={showStatePlaceInput}
-                            handleFunction={handleShowStatePlaceInput}
-                            handleAcceptChange={handleShowStatePlaceInput}
+                        <DateChangeSystem
+                            label="Data de nascimento"
+                            PropertyValue={props.user.birth}
+                            showInput={showBirthInput}
+                            handleExitChange={handleShowBirthInput}
+                            handleAcceptChange={handleStateBirthInputAcceptChange}
                         />
 
 
                     </div>
 
-                
+
+                </div>
+
             </div>
+
         </div>
 
     )
