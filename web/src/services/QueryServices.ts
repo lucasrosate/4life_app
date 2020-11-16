@@ -1,7 +1,6 @@
 import api from './apis';
 import { UserInterface, UserResponseInterface } from '../interfaces/UserInterface';
 
-
 async function getUserInfo() {
     if (!Boolean(localStorage.getItem("isLoggedIn"))) return false;
 

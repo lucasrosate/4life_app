@@ -4,10 +4,5 @@ const api = axios.create({
     baseURL: "http://localhost:3333" ,
 })
 
-const uploadImage_api = axios.create({
-    baseURL: ""
-})
-
-
 
 export default api;

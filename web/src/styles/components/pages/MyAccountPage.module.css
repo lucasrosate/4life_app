@@ -36,6 +36,7 @@
 }
 
 .userprofileImgInfo {
+    margin-left: 20px;
     width: 60%;
 }
 
@@ -51,3 +52,6 @@
     height: 35px;
 }
 
+.inputProfileImg {
+    margin-top: 20px;
+}

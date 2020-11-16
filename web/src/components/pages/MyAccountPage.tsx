@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 import NavigationBar from '../Navigation/NavigationBar';
@@ -6,6 +6,7 @@ import InputChangeSystem from '../MyAccountPage/InputChangeSystem';
 import SelectChangeSystem from '../MyAccountPage/SelectChangeSystem';
 import DateChangeSystem from '../MyAccountPage/DateChangeSystem';
 
+//Executa a troca das variáveis
 import {
     changeUserNameService,
     changeFirstNameService,
@@ -16,11 +17,14 @@ import {
     changeBirthService,
 } from '../../services/changeAccountDataService';
 
+//Estilos
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profilePhoto from '../../assets/images/nophoto.svg';
+
+//Lista de estados
 let estados: Estados = require('../../assets/files/estados.json');
 
-
+//Inteface
 interface Props {
     user: {
         username: string,
@@ -46,20 +50,19 @@ interface Estados {
 
 
 function MyAccountPage(props: Props) {
+    //Picture
+    var [pictureUploadedName, setPictureUploadedName] = useState("Nenhum arquivo escolhido.")
+    var [profilePicture, setProfilePicture] = useState({ preview: "", raw: "" })
 
-    //username
+    //user Data
     var [showUserNameInput, setShowUserNameInput] = useState(false);
     var [showFirstNameInput, setShowFirstNameInput] = useState(false);
-    var [firstNameErrorMessage, setFirstNameInput] = useState('');
-
-
-
     var [showLastNameInput, setShowLastNameInput] = useState(false);
     var [showEmailInput, setShowEmailInput] = useState(false);
     var [showPhoneInput, setShowPhoneInput] = useState(false);
     var [showStatePlaceInput, setShowStatePlaceInput] = useState(false);
     var [showBirthInput, setShowBirthInput] = useState(false);
-    var [image, setImage] = useState({ preview: "", raw: "" })
+
 
     const handleShowUserNameInput = () => setShowUserNameInput(!showUserNameInput);
     const handleShowFirstNameInput = () => setShowFirstNameInput(!showFirstNameInput);
@@ -75,6 +78,11 @@ function MyAccountPage(props: Props) {
         if (data.success && option === 0) localStorage.setItem("username", newVal);
         if (data.success) props.updateUserInfo();
     }
+
+
+    const handleChangePhoto = (e: any) => {
+        setProfilePicture(e.target.value);
+    } 
 
     //CONTEXTO
     //Opção 0: user.username
@@ -95,117 +103,123 @@ function MyAccountPage(props: Props) {
     const handleStatePlaceInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeStatePlaceService, 5);
     const handleStateBirthInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeBirthService, 6);
 
-
-
-
     return (
-        <div className={MyAccountPageStyle.pageContainer}>
-            <NavigationBar
-                user={props.user}
-                handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
-            />
-            <div className="content-container">
-                <div className={MyAccountPageStyle.profileContainer}>
+        <>
+            <div className={MyAccountPageStyle.pageContainer}>
 
-                    <div className={MyAccountPageStyle.userProfileImg}>
-                        <img src={profilePhoto} alt="profile" />
+                <NavigationBar
+                    user={props.user}
+                    handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
+                />
+                <div className="content-container">
+                    <div className={MyAccountPageStyle.profileContainer}>
 
-                        <div className={MyAccountPageStyle.userprofileImgInfo}>
-                            <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
-                            <button className="btn">Mudar foto de perfil</button>
+                        <div className={MyAccountPageStyle.userProfileImg}>
+                            <img src={profilePhoto} alt="profile" />
+
+                            <div className={MyAccountPageStyle.userprofileImgInfo}>
+                                <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
+                                <input
+                                className={MyAccountPageStyle.inputProfileImg}
+                                type="file"
+                                accept=".jpg, .jpeg, .png"
+                                onChange={(e)=> handleChangePhoto(e)}
+                                />
+
+                            </div>
+
                         </div>
 
+
+                        <div className={MyAccountPageStyle.userInfoContainer}>
+                            {/* username */}
+                            <InputChangeSystem
+                                label="Nome de Usuário"
+                                PropertyValue={props.user.username}
+                                showInput={showUserNameInput}
+                                handleExitChange={handleShowUserNameInput}
+                                handleAcceptChange={handleUserNameInputAcceptChange}
+                                trim={true}
+
+                            />
+
+
+                            {/* Primeiro nome */}
+                            <InputChangeSystem
+                                label="Primeiro nome"
+                                PropertyValue={props.user.firstname}
+                                showInput={showFirstNameInput}
+                                handleExitChange={handleShowFirstNameInput}
+                                handleAcceptChange={handleUserFirstNameInputAcceptChange}
+                            />
+
+
+
+                            {/* Sobrenome */}
+                            <InputChangeSystem
+                                label="Sobrenome"
+                                PropertyValue={props.user.lastname}
+                                showInput={showLastNameInput}
+                                handleExitChange={handleShowLastNameInput}
+                                handleAcceptChange={handleUserLastNameInputAcceptChange}
+                            />
+
+
+                            {/* Email */}
+                            <InputChangeSystem
+                                label="E-mail"
+                                PropertyValue={props.user.email}
+                                showInput={showEmailInput}
+                                handleExitChange={handleShowEmailInput}
+                                handleAcceptChange={handleEmailInputAcceptChange}
+                            />
+
+
+
+                            {/* Telefone */}
+                            <InputChangeSystem
+                                label="Telefone"
+                                PropertyValue={props.user.phone}
+                                showInput={showPhoneInput}
+                                handleExitChange={handleShowPhoneInput}
+                                handleAcceptChange={handlePhoneInputAcceptChange}
+                                onlyNumber={true}
+                                minLength={9}
+                                maxLength={9}
+                            />
+
+
+                            {/* Estado */}
+                            <SelectChangeSystem
+                                label="Estado"
+                                PropertyValue={props.user.stateplace}
+                                SelectListProperties={estados.UF}
+                                showInput={showStatePlaceInput}
+                                handleExitChange={handleShowStatePlaceInput}
+                                handleAcceptChange={handleStatePlaceInputAcceptChange}
+                            />
+
+
+
+                            {/* Estado */}
+                            <DateChangeSystem
+                                label="Data de nascimento"
+                                PropertyValue={props.user.birth}
+                                showInput={showBirthInput}
+                                handleExitChange={handleShowBirthInput}
+                                handleAcceptChange={handleStateBirthInputAcceptChange}
+                            />
+
+
+                        </div>
+
+
                     </div>
-
-
-                    <div className={MyAccountPageStyle.userInfoContainer}>
-                        {/* username */}
-                        <InputChangeSystem
-                            label="Nome de Usuário"
-                            PropertyValue={props.user.username}
-                            showInput={showUserNameInput}
-                            handleExitChange={handleShowUserNameInput}
-                            handleAcceptChange={handleUserNameInputAcceptChange}
-                            trim={true}
-
-                        />
-
-
-                        {/* Primeiro nome */}
-                        <InputChangeSystem
-                            label="Primeiro nome"
-                            PropertyValue={props.user.firstname}
-                            showInput={showFirstNameInput}
-                            handleExitChange={handleShowFirstNameInput}
-                            handleAcceptChange={handleUserFirstNameInputAcceptChange}
-                        />
-
-
-
-                        {/* Sobrenome */}
-                        <InputChangeSystem
-                            label="Sobrenome"
-                            PropertyValue={props.user.lastname}
-                            showInput={showLastNameInput}
-                            handleExitChange={handleShowLastNameInput}
-                            handleAcceptChange={handleUserLastNameInputAcceptChange}
-                        />
-
-
-                        {/* Email */}
-                        <InputChangeSystem
-                            label="E-mail"
-                            PropertyValue={props.user.email}
-                            showInput={showEmailInput}
-                            handleExitChange={handleShowEmailInput}
-                            handleAcceptChange={handleEmailInputAcceptChange}
-                        />
-
-
-
-                        {/* Telefone */}
-                        <InputChangeSystem
-                            label="Telefone"
-                            PropertyValue={props.user.phone}
-                            showInput={showPhoneInput}
-                            handleExitChange={handleShowPhoneInput}
-                            handleAcceptChange={handlePhoneInputAcceptChange}
-                            onlyNumber={true}
-                            minLength={9}
-                            maxLength={9}
-                        />
-
-
-                        {/* Estado */}
-                        <SelectChangeSystem
-                            label="Estado"
-                            PropertyValue={props.user.stateplace}
-                            SelectListProperties={estados.UF}
-                            showInput={showStatePlaceInput}
-                            handleExitChange={handleShowStatePlaceInput}
-                            handleAcceptChange={handleStatePlaceInputAcceptChange}
-                        />
-
-
-
-                        {/* Estado */}
-                        <DateChangeSystem
-                            label="Data de nascimento"
-                            PropertyValue={props.user.birth}
-                            showInput={showBirthInput}
-                            handleExitChange={handleShowBirthInput}
-                            handleAcceptChange={handleStateBirthInputAcceptChange}
-                        />
-
-
-                    </div>
-
 
                 </div>
 
             </div>
-
-        </div>
+        </>
 
     )
 }
