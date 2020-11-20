@@ -3,10 +3,9 @@
     width: 60vw;
     min-width: 600px;
     margin-top: 50px;
-    height: 100vh;
 }
 
-.userProfileImg {
+.userProfileImgBox {
     display: flex;
     flex-direction: row;
 
@@ -29,11 +28,40 @@
 
 }
 
-.userProfileImg img { 
+.userProfileImg {
+    width: 200px;
+    height: 220px;
+    overflow: hidden;
+    display: flexbox;
+
+    align-items: center;
+text-align: center;
+    flex-direction: column;
+}
+
+
+.userProfileImg img{ 
+
+    border-radius: 100%;
+
     margin: 0;
     margin-left: 10%;
+    margin-bottom: 15px;
+    height: 170px;
     width: 170px;
+
 }
+
+.userProfileImg label {
+    cursor: pointer;
+    background: var(--primary-color);
+    padding: 8px 30px;
+    margin-left:15px;
+
+    border-radius: 10px;
+    color: white;
+}
+
 
 .userprofileImgInfo {
     margin-left: 20px;

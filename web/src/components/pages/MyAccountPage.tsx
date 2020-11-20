@@ -19,7 +19,8 @@ import {
 
 //Estilos
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
-import profilePhoto from '../../assets/images/nophoto.svg';
+import profileNoPhoto from '../../assets/images/nophoto.svg';
+import ChangePictureSystem from '../MyAccountPage/ChangePictureSystem';
 
 //Lista de estados
 let estados: Estados = require('../../assets/files/estados.json');
@@ -51,8 +52,24 @@ interface Estados {
 
 function MyAccountPage(props: Props) {
     //Picture
-    var [pictureUploadedName, setPictureUploadedName] = useState("Nenhum arquivo escolhido.")
-    var [profilePicture, setProfilePicture] = useState({ preview: "", raw: "" })
+    var [uncroppedPicture, setUncroppedPicture] = useState<string | null>(null)
+    var [croppedPicture, setCroppedPicture] = useState<string | null>(null);
+    var [showCropPictureWindow, setShowCropPictureWindow] = useState(false);
+
+    var checkPhoto = () => croppedPicture === null ? profileNoPhoto : uncroppedPicture;
+
+    const handleShowCropPictureWindow = () => setShowCropPictureWindow(!showCropPictureWindow);
+
+    const uploadPicture = (e: any) => {
+        setUncroppedPicture(URL.createObjectURL(e.target.files[0]))
+        handleShowCropPictureWindow();
+    }
+    
+    
+    const handleCroppedPicture = (croppedPic: any) => {
+        if(croppedPic !== null) setCroppedPicture(URL.createObjectURL(croppedPic));
+        setUncroppedPicture(null);
+    };
 
     //user Data
     var [showUserNameInput, setShowUserNameInput] = useState(false);
@@ -72,7 +89,7 @@ function MyAccountPage(props: Props) {
     const handleShowStatePlaceInput = () => setShowStatePlaceInput(!showStatePlaceInput);
     const handleShowBirthInput = () => setShowBirthInput(!showBirthInput);
 
-    //CheckChangeSuccess() -> Chama a api e tenta mudar, caso não haja
+    //CheckChangeSuccess() -> Chama a api e tenta mudar, caso retorne um erro apenas fecha a janela de input
     const checkChangeSuccess = async (newVal: string, changeFunction: Function, option: number) => {
         const data = await changeFunction(newVal, option)
         if (data.success && option === 0) localStorage.setItem("username", newVal);
@@ -80,9 +97,7 @@ function MyAccountPage(props: Props) {
     }
 
 
-    const handleChangePhoto = (e: any) => {
-        setProfilePicture(e.target.value);
-    } 
+
 
     //CONTEXTO
     //Opção 0: user.username
@@ -105,30 +120,45 @@ function MyAccountPage(props: Props) {
 
     return (
         <>
+            {showCropPictureWindow ?
+                <ChangePictureSystem
+                    Picture={uncroppedPicture!}
+                    handleCroppedPicture={handleCroppedPicture}
+                    handleShowCropPictureWindow={handleShowCropPictureWindow} /> : null}
+            
+            
             <div className={MyAccountPageStyle.pageContainer}>
 
                 <NavigationBar
                     user={props.user}
                     handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
                 />
+
                 <div className="content-container">
+
+
                     <div className={MyAccountPageStyle.profileContainer}>
 
-                        <div className={MyAccountPageStyle.userProfileImg}>
-                            <img src={profilePhoto} alt="profile" />
+                        <div className={MyAccountPageStyle.userProfileImgBox}>
+                            <div className={MyAccountPageStyle.userProfileImg}>
+                                <img src={checkPhoto()!} alt="profile" />
+                                <input
+                                    className={MyAccountPageStyle.inputProfileImg}
+                                    id="inputProfileImgFile"
+                                    type="file"
+                                    accept=".jpg, .jpeg, .png"
+                                    onChange={(e) => uploadPicture(e)}
+                                    hidden />
+                                <label htmlFor="inputProfileImgFile">Trocar a foto</label>
+                            </div>
 
                             <div className={MyAccountPageStyle.userprofileImgInfo}>
                                 <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
-                                <input
-                                className={MyAccountPageStyle.inputProfileImg}
-                                type="file"
-                                accept=".jpg, .jpeg, .png"
-                                onChange={(e)=> handleChangePhoto(e)}
-                                />
 
                             </div>
 
                         </div>
+
 
 
                         <div className={MyAccountPageStyle.userInfoContainer}>
@@ -219,9 +249,12 @@ function MyAccountPage(props: Props) {
                 </div>
 
             </div>
+
         </>
 
     )
 }
+
+
 
 export default MyAccountPage;

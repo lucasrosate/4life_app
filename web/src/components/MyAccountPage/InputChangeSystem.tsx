@@ -2,7 +2,7 @@ import React, { CSSProperties, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
-import ChangeButtonStyle from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
+import ChangeButtonStyle from '../../styles/components/MyAccount/ChangeButtonSystemStyle.module.css';
 
 
 interface Props {
