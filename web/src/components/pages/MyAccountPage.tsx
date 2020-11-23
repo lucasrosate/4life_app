@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
 
 import NavigationBar from '../Navigation/NavigationBar';
 import InputChangeSystem from '../MyAccountPage/InputChangeSystem';
@@ -21,11 +20,12 @@ import {
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profileNoPhoto from '../../assets/images/nophoto.svg';
 import ChangePictureSystem from '../MyAccountPage/ChangePictureSystem';
+import { Console } from 'console';
 
 //Lista de estados
 let estados: Estados = require('../../assets/files/estados.json');
 
-//Inteface
+//Interfaces
 interface Props {
     user: {
         username: string,
@@ -48,28 +48,20 @@ interface Estados {
     }]
 }
 
+const { useState } = React;
 
-
-function MyAccountPage(props: Props) {
+const MyAccountPage: React.FC<Props> = (props) => {
     //Picture
-    var [uncroppedPicture, setUncroppedPicture] = useState<string | null>(null)
     var [croppedPicture, setCroppedPicture] = useState<string | null>(null);
     var [showCropPictureWindow, setShowCropPictureWindow] = useState(false);
 
-    var checkPhoto = () => croppedPicture === null ? profileNoPhoto : uncroppedPicture;
-
     const handleShowCropPictureWindow = () => setShowCropPictureWindow(!showCropPictureWindow);
 
-    const uploadPicture = (e: any) => {
-        setUncroppedPicture(URL.createObjectURL(e.target.files[0]))
-        handleShowCropPictureWindow();
-    }
-    
-    
     const handleCroppedPicture = (croppedPic: any) => {
-        if(croppedPic !== null) setCroppedPicture(URL.createObjectURL(croppedPic));
-        setUncroppedPicture(null);
+        if (croppedPic !== null) setCroppedPicture(croppedPic);
     };
+
+    const checkPhoto = () => croppedPicture == null ? profileNoPhoto : croppedPicture;
 
     //user Data
     var [showUserNameInput, setShowUserNameInput] = useState(false);
@@ -122,11 +114,10 @@ function MyAccountPage(props: Props) {
         <>
             {showCropPictureWindow ?
                 <ChangePictureSystem
-                    Picture={uncroppedPicture!}
                     handleCroppedPicture={handleCroppedPicture}
                     handleShowCropPictureWindow={handleShowCropPictureWindow} /> : null}
-            
-            
+
+
             <div className={MyAccountPageStyle.pageContainer}>
 
                 <NavigationBar
@@ -142,14 +133,7 @@ function MyAccountPage(props: Props) {
                         <div className={MyAccountPageStyle.userProfileImgBox}>
                             <div className={MyAccountPageStyle.userProfileImg}>
                                 <img src={checkPhoto()!} alt="profile" />
-                                <input
-                                    className={MyAccountPageStyle.inputProfileImg}
-                                    id="inputProfileImgFile"
-                                    type="file"
-                                    accept=".jpg, .jpeg, .png"
-                                    onChange={(e) => uploadPicture(e)}
-                                    hidden />
-                                <label htmlFor="inputProfileImgFile">Trocar a foto</label>
+                                <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
                             </div>
 
                             <div className={MyAccountPageStyle.userprofileImgInfo}>
@@ -254,7 +238,5 @@ function MyAccountPage(props: Props) {
 
     )
 }
-
-
 
 export default MyAccountPage;

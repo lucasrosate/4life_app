@@ -1,7 +1,9 @@
 import React from 'react';
 import NavigationBar from '../Navigation/NavigationBar';
 
-function CashFlowPage(props: any) {
+import { PagesProps } from '../../interfaces/UserInterface';
+
+const CashFlowPage: React.FC <PagesProps> = (props: PagesProps) => {
     return (
         <div>
             <div>

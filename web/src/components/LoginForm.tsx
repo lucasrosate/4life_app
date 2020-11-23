@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
@@ -7,9 +7,16 @@ import { signinService } from '../services/AuthServices';
 
 import AccountForm from '../styles/components/AccountForm.module.css';
 
+const { useState } = React
 
 
-export default function LoginForm(props: any) {
+interface Props {
+    showRegistrationFormFunction: Function,
+    messageFromRegistration: string,
+    handleChangeIsLoggedIn: Function,
+}
+
+const LoginForm: React.FC<Props> = (props: Props) => {
 
     const history = useHistory();
     const { register, handleSubmit } = useForm();
@@ -58,3 +65,5 @@ export default function LoginForm(props: any) {
     )
 
 }
+
+export default LoginForm;

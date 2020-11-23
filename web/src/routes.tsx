@@ -58,6 +58,7 @@ function Routes() {
                     isLoggedIn ?
                         <HomePage
                             user={user}
+                            handleChangeIsLoggedIn={handleChangeIsLoggedIn}
                         /> :
                         <LandingPage
                             handleChangeIsLoggedIn={handleChangeIsLoggedIn}

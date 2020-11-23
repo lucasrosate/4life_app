@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import NavigationBarStyle from '../../styles/components/Navigation/NavigationBar
 import profilePhoto from '../../assets/images/nophoto.svg';
 import AccountOptions from './AccountOptions';
 
+const { useState } = React;
 
 function NavigationBar(props: any) {
 
@@ -69,8 +70,8 @@ function NavigationBar(props: any) {
                 onClick={() => setAccMenu(!accMenu)}
             >
                 <ul>
-                    <li  className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={24} /> : <GoChevronUp size={24} />}</li>
-                    <li>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}/> : null}</li>
+                    <li className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={24} /> : <GoChevronUp size={24} />}</li>
+                    <li>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn} /> : null}</li>
                 </ul>
             </span>
 

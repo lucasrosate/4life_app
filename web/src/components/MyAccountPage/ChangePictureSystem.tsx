@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { GoX } from "react-icons/go";
+import Cropper from 'react-cropper';
 import Slider from '@material-ui/core/Slider'
 import ChangePictureSystemStyle from '../../styles/components/MyAccount/ChangePictureSystemStyle.module.css';
 
+const { useState, useEffect } = React;
 
 interface Props {
-    Picture: string,
     handleCroppedPicture: Function,
     handleShowCropPictureWindow: Function,
 
 }
 
-export default function ChangePictureSystem(props: Props) {
+const ChangePictureSystem: React.FC<Props> = (props: Props) => {
 
     const _handleShowCrop = () => props.handleShowCropPictureWindow();
 
+    const [picture, setPicture] = useState<string | null>(null);
+    const [cropData, setCropData] = useState('#');
+    const [cropper, setCropper] = useState<Cropper>();
+    const pictureRef = useRef<HTMLImageElement>(null);
+
+
+    const uploadPicture = (e: any) => {
+        e.preventDefault();
+        let files;
+        if (e.dataTransfer) {
+            files = e.dataTransfer.files;
+        } else if (e.target) {
+            files = e.target.files;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            setPicture(reader.result as any);
+        };
+        reader.readAsDataURL(files[0]);
+    };
 
     return (
         <>
@@ -28,7 +49,32 @@ export default function ChangePictureSystem(props: Props) {
                             </button>
                         </div>
                         <div className={ChangePictureSystemStyle.PictureField}>
-                            <img src={props.Picture} alt="" />
+                            <Cropper
+                                style={{ height: 400, width: "100%" }}
+                                initialAspectRatio={1}
+                                src={picture!}
+                                ref={pictureRef}
+                                viewMode={1}
+                                guides={true}
+                                minCropBoxHeight={50}
+                                minCropBoxWidth={50}
+                                background={false}
+                                responsive={true}
+                                checkOrientation={false}
+                                onInitialized={(instance: any) => setCropper(instance)} />
+                        </div>
+
+                        <div className={ChangePictureSystemStyle.cropPictureTools}>
+                            <input
+                                className={ChangePictureSystemStyle.inputProfileImg}
+                                id="inputProfileImgFile"
+                                type="file"
+                                accept=".jpg, .jpeg, .png"
+                                onChange={(e) => uploadPicture(e)}
+                                hidden />
+                            <label htmlFor="inputProfileImgFile">Trocar a foto</label>
+
+                            <button>Salvar mudanças</button>
                         </div>
                     </div>
                 </div>
@@ -37,3 +83,5 @@ export default function ChangePictureSystem(props: Props) {
         </>
     )
 }
+
+export default ChangePictureSystem;

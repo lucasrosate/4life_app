@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { registerService } from '../services/FormServices';
 import AccountForm from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
 let estados: Estados = require('../assets/files/estados.json');
 
+const { useState } = React;
 
 interface Estados {
     UF: [{
@@ -13,14 +14,15 @@ interface Estados {
     }]
 }
 
-export default function RegistrationForm(props: any) {
+interface Props {
+    showLoginFormFunction: Function
+}
+
+const RegistrationForm: React.FC<Props> = (props: Props) => {
 
     var [error, setError] = useState('');
     var [phoneNumber, setPhoneNumber] = useState("");
     const { register, watch, handleSubmit, errors } = useForm();
-
-    useEffect(()=> {console.log(estados.UF)}, []);
-
 
     async function onSubmit(data: any) {
         const success = await registerService(data);
@@ -32,6 +34,19 @@ export default function RegistrationForm(props: any) {
         }
 
     }
+
+    // Validação de senhas   - onFocusOut(onBlur) haverá uma validação para saber se as senhas 1 e 2 se coincidem e se ambas tem mais de 8 caracteres
+    const validatePassword = () => {
+        const password1 = watch('password1', (newPassword1: string) => newPassword1);
+        const password2 = watch('password2', (newPassword2: string) => newPassword2);
+
+        if ((password1 === password2) && (password1.length >= 8 && password2.length >= 8)) {
+            setError('');
+        } else {
+            setError('As senhas devem ser iguais e com caracter e com pelo menos 8 caracteres');
+        }
+    }
+
 
     const handleShowLoginFormFunction = (responseMessage: any) => responseMessage.length > 0 ? props.showLoginFormFunction(responseMessage) : props.showLoginFormFunction('');
 
@@ -56,31 +71,23 @@ export default function RegistrationForm(props: any) {
 
                     <label htmlFor="phonenumber"><span className={AccountForm.signupLabel}>Telefone</span></label>
                     <input type="tel" className="input signupform phone" placeholder="Número de telefone" name="phonenumber"
-                    ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })}
-                    value= {phoneNumber}
-                    onChange = { (e) => {
-                        const letterTrim = e.target.value.replace(/\D/g, "");
-                        setPhoneNumber(letterTrim);
-                    }}
+                        ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })}
+                        value={phoneNumber}
+                        onChange={(e) => {
+                            const letterTrim = e.target.value.replace(/\D/g, "");
+                            setPhoneNumber(letterTrim);
+                        }}
                     />
 
                     <label htmlFor="password1"><span className={AccountForm.signupLabel}>Senha</span></label>
-                    <input type="password" className="input signupform password1" placeholder="Senha" name="password1" ref={register({ required: true, maxLength: 24 })} />
+                    <input type="password" className="input signupform password1" placeholder="Senha" name="password1" onBlur={validatePassword} ref={register({ required: true, maxLength: 24 })} />
 
                     <label htmlFor="password2"><span className={AccountForm.signupLabel}>Repita a senha</span></label>
-                    <input type="password" className="input signupform password2" placeholder="Senha" name="password2" ref={register({
-                        required: true, maxLength: 24,
-                        validate: (value) => {
-                            const isValid = value === watch('password1');
-                            if (!isValid) { setError('As senhas devem ser iguais.'); }
-                            else { setError(''); }
-                            return isValid
-                        }
-                    })} />
+                    <input type="password" className="input signupform password2" placeholder="Senha" name="password2" onBlur={validatePassword} ref={register({ required: true, maxLength: 24 })} />
 
                     <label htmlFor="stateplace"><span className={AccountForm.signupLabel}>Estado</span></label>
                     <select name="stateplace" className="input signupform stateplace " ref={register}>
-                        {estados.UF.map((uf, index)=> <option key={index} value={uf.name}>{`${uf.name} - ${uf.abbrev}`}</option>)}
+                        {estados.UF.map((uf, index) => <option key={index} value={uf.name}>{`${uf.name} - ${uf.abbrev}`}</option>)}
                     </select>
 
                     <div className={`error ${AccountForm.error}`}>{error}</div>
@@ -100,3 +107,5 @@ export default function RegistrationForm(props: any) {
 
 
 }
+
+export default RegistrationForm;

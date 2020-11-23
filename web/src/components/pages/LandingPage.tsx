@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import LoginForm from '../LoginForm';
 import RegistrationForm from '../RegistrationForm';
 import LandingPageStyle from '../../styles/components/pages/LandingPage.module.css';
 
+const {useState} = React;
 
-function LandingPage(props: any) {
+
+interface Props {
+    handleChangeIsLoggedIn: Function,
+}
+
+const LandingPage: React.FC <Props> = (props: Props) => {
 
     const [showLoginForm, setShowLoginForm] = useState(true);
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
@@ -36,7 +41,7 @@ function LandingPage(props: any) {
                             <LoginForm
                                 showRegistrationFormFunction={showRegistrationFormFunction}
                                 messageFromRegistration={messageFromRegistration}
-                                handleChangeIsLoggedIn = {props.handleChangeIsLoggedIn}
+                                handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
                             />
                             : null}
                     </div>
@@ -55,7 +60,6 @@ function LandingPage(props: any) {
         </div>
     )
 }
-
 
 
 export default LandingPage;

@@ -4,9 +4,6 @@ import { logoutService } from '../../services/AuthServices';
 
 import AccountOptionsStyle from '../../styles/components/Navigation/AccountOptions.module.css';
 
-
-
-
 function AccountOptions (props: any) {
     const history = useHistory();
 

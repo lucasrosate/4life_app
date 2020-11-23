@@ -1,16 +1,17 @@
 import React, { CSSProperties } from 'react';
-import {FcGlobe} from 'react-icons/fc';
+import { FcGlobe } from 'react-icons/fc';
 
-function NotFoundPage () {
 
-    const errorStyle: CSSProperties  = {
+const NotFoundPage: React.FC = () => {
+
+    const errorStyle: CSSProperties = {
         display: "flex",
         height: "100vh",
         alignItems: "center",
         textAlign: "center"
     }
 
-    const errorMessage: CSSProperties  = {
+    const errorMessage: CSSProperties = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -21,8 +22,8 @@ function NotFoundPage () {
 
 
     return (
-        <div style={errorStyle}><h1 style={errorMessage}>Erro 404: A página que você deseja visualizar não foi encontrada.</h1> <FcGlobe size={800}/></div>
+        <div style={errorStyle}><h1 style={errorMessage}>Erro 404: A página que você deseja visualizar não foi encontrada.</h1> <FcGlobe size={800} /></div>
     )
 }
 
-export default NotFoundPage
+export default NotFoundPage;

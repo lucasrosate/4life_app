@@ -18,7 +18,15 @@ interface UserInterface {
     birth: string
 }
 
+interface PagesProps {
+    user: UserInterface,
+    handleChangeIsLoggedIn: Function
+}
+
+
+
 export type {
     UserInterface,
-    UserResponseInterface
+    UserResponseInterface,
+    PagesProps
 };

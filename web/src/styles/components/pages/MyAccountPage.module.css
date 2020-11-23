@@ -13,7 +13,7 @@
     justify-content: center;
 
     width: 80%;
-    height: 250px;
+    height: 300px;
     padding-right: 40px;
 
     margin: 0;
@@ -29,8 +29,8 @@
 }
 
 .userProfileImg {
-    width: 200px;
-    height: 220px;
+    width: 260px;
+    height: 250px;
     overflow: hidden;
     display: flexbox;
 
@@ -52,17 +52,6 @@ text-align: center;
 
 }
 
-.userProfileImg label {
-    cursor: pointer;
-    background: var(--primary-color);
-    padding: 8px 30px;
-    margin-left:15px;
-
-    border-radius: 10px;
-    color: white;
-}
-
-
 .userprofileImgInfo {
     margin-left: 20px;
     width: 60%;
@@ -73,13 +62,17 @@ text-align: center;
     line-height: 150%;
 }
 
-.userprofileImgInfo button {
-    margin: 0;
-    margin-top: 30px;
-    width: 300px;
-    height: 35px;
+.userProfileImg button {
+    cursor: pointer;
+    background: var(--primary-color);
+    padding: 8px 30px;
+    margin-left:15px;
+    border: 0;
+    border-radius: 10px;
+    color: white;
+    width: 200px;
 }
 
-.inputProfileImg {
-    margin-top: 20px;
+.userProfileImg button:focus {
+    outline: none;
 }
