@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const UserSchema = require('../models/UserModel');
+var dropboxV2Api = require('dropbox-v2-api');
 
 const User = mongoose.model('User', UserSchema)
-
 const UserView = require('../views/UserView');
+
+const convertImage = require('../functions/decodeImage');
+
+
 require('dotenv').config;
-
-
 
 isloggedin = async (req, res) => {
     return res.status(200).json({ ans: true });
@@ -28,12 +30,14 @@ getUserInfo = async (req, res) => {
 
 
 getUploadToken = async (req, res) => {
-    return res.status(200).json({token: process.env.UPLOAD_ACCESS_TOKEN_SECRET})
+    return res.status(200).json({ token: process.env.UPLOAD_ACCESS_TOKEN_SECRET })
 }
 
 
 
 changeUserProperty = async (req, res) => {
+
+
 
     User.findOne({
         username: req.body.username,
@@ -88,9 +92,41 @@ changeUserProperty = async (req, res) => {
         })
 }
 
+const uploadProfilePicture = (req, res) => {
+    const username = req.body.username
+    var encodedPicture = req.body.encodedPicture;
+
+    User.findOne({
+        username: username
+    }, async (err, user) => {
+        if (err) return err;
+
+        if (!user) return { message: "usuário não encontrado" }
+
+
+        console.log(convertImage(encodedPicture,user._id));
+
+        // const dropbox = dropboxV2Api.authenticate({
+        //     token: process.env.DROPBOX_ACCESS_TOKEN
+        // });
+
+        // const msgResponse = dropbox({
+        //     resource: fr,
+        //     parameters: {
+        //         path: `/dropbox/path/to/${user._id} ${Date.now}`
+        //     }
+        // }, (err, result) => {
+        //     if (err) return err;
+        //     return result;
+        // });
+        return res.status(200).send('ok');
+    });
+}
+
 module.exports = {
     isloggedin,
     getUserInfo,
     getUploadToken,
-    changeUserProperty
+    changeUserProperty,
+    uploadProfilePicture
 }

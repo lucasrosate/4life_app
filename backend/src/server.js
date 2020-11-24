@@ -29,8 +29,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.json());
-
+app.use(express.json({limit: "1.2mb"}));
 app.use(UserRoutes);
 app.use(AuthRoutes);
 

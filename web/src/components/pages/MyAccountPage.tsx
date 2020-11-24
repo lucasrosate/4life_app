@@ -20,7 +20,7 @@ import {
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profileNoPhoto from '../../assets/images/nophoto.svg';
 import ChangePictureSystem from '../MyAccountPage/ChangePictureSystem';
-import { Console } from 'console';
+import uploadFilesService from '../../services/uploadFilesService';
 
 //Lista de estados
 let estados: Estados = require('../../assets/files/estados.json');
@@ -57,8 +57,13 @@ const MyAccountPage: React.FC<Props> = (props) => {
 
     const handleShowCropPictureWindow = () => setShowCropPictureWindow(!showCropPictureWindow);
 
-    const handleCroppedPicture = (croppedPic: any) => {
-        if (croppedPic !== null) setCroppedPicture(croppedPic);
+    const handleCroppedPicture = (croppedPicture: any, encodedCroppedPicture: any) => {
+        if (croppedPicture !== null) {
+            setCroppedPicture(croppedPicture);
+            uploadFilesService(encodedCroppedPicture);
+        }
+
+
     };
 
     const checkPhoto = () => croppedPicture == null ? profileNoPhoto : croppedPicture;
@@ -108,7 +113,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
     const handleStateBirthInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeBirthService, 6);
 
     return (
-        <>
+        <div>
             {showCropPictureWindow ?
                 <ChangePictureSystem
                     handleCroppedPicture={handleCroppedPicture}
@@ -130,7 +135,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                         <div className={MyAccountPageStyle.userProfileImgBox}>
                             <div className={MyAccountPageStyle.userProfileImg}>
                                 <img src={checkPhoto()!} alt="profile" />
-                                
+
                                 <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
                             </div>
 
@@ -140,8 +145,6 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             </div>
 
                         </div>
-
-                        {checkPhoto}
 
                         <div className={MyAccountPageStyle.userInfoContainer}>
                             {/* username */}
@@ -232,7 +235,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
 
             </div>
 
-        </>
+        </ div>
 
     )
 }

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { registerService } from '../services/FormServices';
 import AccountForm from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
-let estados: Estados = require('../assets/files/estados.json');
+const estados: Estados = require('../assets/files/estados.json');
 
 const { useState } = React;
 

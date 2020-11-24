@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React from 'react';
 import { GoX } from "react-icons/go";
 import Cropper from 'react-easy-crop';
 import Slider from '@material-ui/core/Slider'
@@ -6,10 +6,10 @@ import ChangePictureSystemStyle from '../../styles/components/MyAccount/ChangePi
 import '../../styles/components/MyAccount/ReactEasyCropContainer.css';
 import { withStyles } from '@material-ui/core/styles';
 import getCroppedPic from '../../scripts/getCroppedPic';
-import { exception } from 'console';
 
+const {useCallback} = React;
 
-const { useState, useEffect } = React;
+const { useState } = React;
 
 interface Props {
     handleCroppedPicture: Function,
@@ -54,10 +54,11 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
     }, [])
 
     const exportCroppedPicture = useCallback(async ()=> {
-        var croppedPicture;
+        var _cropped;
         
+     
         try {
-                croppedPicture = await getCroppedPic(
+                _cropped = await getCroppedPic(
                 picture,
                 croppedAreaPixels,
                 rotation
@@ -65,11 +66,10 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
         } catch(e) {
             
         }
-    props.handleCroppedPicture(croppedPicture);
+    props.handleCroppedPicture(_cropped.croppedPicture, _cropped.encodedCroppedPicture);
     props.handleShowCropPictureWindow();
-    
-    console.log(croppedPicture);
-    }, [croppedAreaPixels, rotation])
+
+    }, [props, picture, croppedAreaPixels, rotation])
 
 
     const onCropChange = (newCrop: Object) => setCrop(newCrop);
