@@ -1,5 +1,6 @@
 :root {
     --primary-color: #2F4EF0;
+    --primary-color-lighter: #425ff1;
     --background-color-1: #FBFBFE;
     --background-color-2: #F5F5F8;
     --text-color: #3D3D3D;
@@ -52,7 +53,7 @@
 }
 
 .btn:hover {
-    background: #425ff1;
+    background: var(--primary-color-lighter);
 }
 
 .btn:focus {
@@ -73,5 +74,4 @@
 
 .content-container {
     margin-top: 100px;
-    margin-bottom: 300px;
 }

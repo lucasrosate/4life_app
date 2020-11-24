@@ -88,9 +88,6 @@ const MyAccountPage: React.FC<Props> = (props) => {
         if (data.success) props.updateUserInfo();
     }
 
-
-
-
     //CONTEXTO
     //Opção 0: user.username
     //Opção 1: user.firstname
@@ -133,6 +130,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                         <div className={MyAccountPageStyle.userProfileImgBox}>
                             <div className={MyAccountPageStyle.userProfileImg}>
                                 <img src={checkPhoto()!} alt="profile" />
+                                
                                 <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
                             </div>
 
@@ -143,7 +141,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
 
                         </div>
 
-
+                        {checkPhoto}
 
                         <div className={MyAccountPageStyle.userInfoContainer}>
                             {/* username */}

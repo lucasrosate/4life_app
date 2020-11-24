@@ -1,6 +1,6 @@
 import { Console } from 'console';
 import { Dropbox } from 'dropbox';
-const authKeys: authKeysInterface = require('../../authkeys.json')
+const authKeys: authKeysInterface = require('../../dropboxConfig.json')
 
 interface authKeysInterface {
     dropbox: {

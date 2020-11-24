@@ -1,41 +1,83 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { GoX } from "react-icons/go";
-import Cropper from 'react-cropper';
+import Cropper from 'react-easy-crop';
 import Slider from '@material-ui/core/Slider'
 import ChangePictureSystemStyle from '../../styles/components/MyAccount/ChangePictureSystemStyle.module.css';
+import '../../styles/components/MyAccount/ReactEasyCropContainer.css';
+import { withStyles } from '@material-ui/core/styles';
+import getCroppedPic from '../../scripts/getCroppedPic';
+import { exception } from 'console';
+
 
 const { useState, useEffect } = React;
 
 interface Props {
     handleCroppedPicture: Function,
     handleShowCropPictureWindow: Function,
-
 }
+
+const AppSlider = withStyles(() => ({
+    thumb: {
+        color: "#2F4EF0"
+    },
+    track: {
+        color: "#425ff1"
+    },
+}))(Slider);
+
+
 
 const ChangePictureSystem: React.FC<Props> = (props: Props) => {
 
+
+
+
     const _handleShowCrop = () => props.handleShowCropPictureWindow();
 
-    const [picture, setPicture] = useState<string | null>(null);
-    const [cropData, setCropData] = useState('#');
-    const [cropper, setCropper] = useState<Cropper>();
-    const pictureRef = useRef<HTMLImageElement>(null);
+    var [picture, setPicture] = useState<Object | null>(null);
+    var [showEasyCrop, setShowEasyCrop] = useState<boolean>(false);
+    var [crop, setCrop] = useState<any>({ x: 0, y: 0 });
+    var [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    var [rotation, setRotation] = useState <number> (0);
+    var [zoom, setZoom] = useState<number>(1);
 
 
     const uploadPicture = (e: any) => {
-        e.preventDefault();
-        let files;
-        if (e.dataTransfer) {
-            files = e.dataTransfer.files;
-        } else if (e.target) {
-            files = e.target.files;
+        if (e.target.files[0] !== undefined) {
+            setPicture(e.target.files[0])
+            setShowEasyCrop(!showEasyCrop);
         }
-        const reader = new FileReader();
-        reader.onload = () => {
-            setPicture(reader.result as any);
-        };
-        reader.readAsDataURL(files[0]);
     };
+
+    const onCropComplete = useCallback ((croppedArea, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    }, [])
+
+    const exportCroppedPicture = useCallback(async ()=> {
+        var croppedPicture;
+        
+        try {
+                croppedPicture = await getCroppedPic(
+                picture,
+                croppedAreaPixels,
+                rotation
+            )
+        } catch(e) {
+            
+        }
+    props.handleCroppedPicture(croppedPicture);
+    props.handleShowCropPictureWindow();
+    
+    console.log(croppedPicture);
+    }, [croppedAreaPixels, rotation])
+
+
+    const onCropChange = (newCrop: Object) => setCrop(newCrop);
+    const onZoomChange = (newZoom: number) => setZoom(newZoom);
+    const onSlideZoomChange = (e: any, value: any) => {setZoom (value)};
+    const onSlideRotationChange = (e: any, value: any) => {setRotation (value)};
+
+
 
     return (
         <>
@@ -45,23 +87,48 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                     <div className={ChangePictureSystemStyle.changePictureContainer}>
                         <div className={ChangePictureSystemStyle.exitButtonContainer}>
                             <button type="button" onClick={_handleShowCrop}>
-                                <GoX size={32} />
+                                <GoX size={25} />
                             </button>
                         </div>
                         <div className={ChangePictureSystemStyle.PictureField}>
-                            <Cropper
-                                style={{ height: 400, width: "100%" }}
-                                initialAspectRatio={1}
-                                src={picture!}
-                                ref={pictureRef}
-                                viewMode={1}
-                                guides={true}
-                                minCropBoxHeight={50}
-                                minCropBoxWidth={50}
-                                background={false}
-                                responsive={true}
-                                checkOrientation={false}
-                                onInitialized={(instance: any) => setCropper(instance)} />
+                            {
+                                showEasyCrop ? 
+    
+                                <Cropper
+                                    image={URL.createObjectURL(picture!)}
+                                    zoom={zoom}
+                                    rotation = {rotation}
+                                    crop={crop}
+                                    aspect={1}
+                                    onZoomChange={onZoomChange}
+                                    onCropChange={onCropChange}
+                                    onCropComplete={onCropComplete}
+                                    cropShape="round"
+                                />: null
+                            }
+
+                        </div>
+
+                        <div className={ChangePictureSystemStyle.ZoomSliderContainer}>
+                            <h3>Zoom</h3> <span>({zoom}x)</span>
+                            <AppSlider
+                            defaultValue={1}
+                            min={1}
+                            max={4}
+                            step={.1}
+                            onChange={onSlideZoomChange}
+                            marks
+                            />
+
+                            <h3>Rotação</h3> <span>({rotation} °)</span>
+                            <AppSlider
+                            defaultValue={0}
+                            min={-180}
+                            max={180}
+
+                            onChange={onSlideRotationChange}
+                            />
+       
                         </div>
 
                         <div className={ChangePictureSystemStyle.cropPictureTools}>
@@ -74,7 +141,7 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                                 hidden />
                             <label htmlFor="inputProfileImgFile">Trocar a foto</label>
 
-                            <button>Salvar mudanças</button>
+                            <button type="button" onClick={exportCroppedPicture}>Salvar mudanças</button>
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import { signinService } from '../services/AuthServices';
 
 import AccountForm from '../styles/components/AccountForm.module.css';
 
-const { useState } = React
+const { useState } = React;
 
 
 interface Props {
