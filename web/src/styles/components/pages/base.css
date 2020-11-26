@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #2F4EF0;
-    --primary-color-lighter: #425ff1;
+    --primary-color: #0e36fd;
+    --primary-color-lighter: #2146fd;
     --background-color-1: #FBFBFE;
     --background-color-2: #F5F5F8;
     --text-color: #3D3D3D;
@@ -10,28 +10,23 @@
     --secondary-border-color: rgb(221, 221, 221);
 }
 
-
-* { 
+* {
     margin-top: 0;
     margin-bottom: 0;
     margin-left: auto;
     margin-right: auto;
-
     padding: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
-
     color: var(--text-color);
 }
 
-
 .input {
     font-family: "Roboto", sans-serif;
+    background-color: #f3f4fc;
     padding-left: 10px;
-
     border: 0;
     border-radius: 8px;
-
     width: 300px;
     height: 35px;
 }
@@ -43,12 +38,9 @@
 .btn {
     border: 0;
     border-radius: 10px;
-
     background: var(--primary-color);
     color: white;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
@@ -59,7 +51,6 @@
 .btn:focus {
     outline: none;
 }
-
 
 .error {
     margin-top: 10px;
@@ -73,5 +64,5 @@
 }
 
 .content-container {
-    margin-top: 100px;
+    margin-top: 70px;
 }

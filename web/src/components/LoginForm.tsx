@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { signinService } from '../services/AuthServices';
 
-
+import Fade from '@material-ui/core/Fade';
 import AccountForm from '../styles/components/AccountForm.module.css';
 
 const { useState } = React;
@@ -39,10 +39,12 @@ const LoginForm: React.FC<Props> = (props: Props) => {
 
 
     return (
+
         <div className={AccountForm.container}>
             <form action="" onSubmit={handleSubmit(handleSignin)}>
                 <div className={`${AccountForm.userForm} ${AccountForm.loginFormContainer}`}>
                     <div className="">
+                        <h1>Fazer login</h1>
                         <label htmlFor="username"><span>Nome de usuário</span></label>
                         <input className="input username" type="text" name="username" id="username" ref={register({ required: true, maxLength: 36 })} />
                     </div>
@@ -59,7 +61,6 @@ const LoginForm: React.FC<Props> = (props: Props) => {
 
                 </div>
             </form>
-
         </div>
 
     )

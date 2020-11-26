@@ -1,102 +1,88 @@
 .navHeader {
-    z-index: 3;
-    top: 0;
-    padding-top: 10px;
-    height: 6%;
-    width: 100%;
-    padding-bottom: 1px;
-    
-    font-family: 'Heebo', sans-serif;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+    top: 0px;
     background-color: white;
     position: fixed;
+    height: auto;
+    z-index: 1;
+    width: 100vw;
     border-bottom: 1px solid var(--border-color);
 }
 
-.navHeader a {
+.menuContainer {
+    width: 100vw;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    font-family: 'Heebo, sans-serif';
+}
+
+.menuContainer h2 {
+    font-size: 180%;
     text-decoration: none;
-    margin: 0;
-}
-
-.navHeader ul {
-    font-size: 95%;
-    margin:0;
-}
-
-
-.navHeader h2 {
-    margin-left: 20px;
-    font-size: 200%;
     color: var(--primary-color);
+    width: 10vw;
 }
 
-.navHeader ul {
-    margin-left: 50px;
+.menuContainer a {
+    text-decoration: none;
 }
 
-.navbarMenuList,
-.navbarMenuList a {
-    font-size: 100%;
+.RoutesOptions ul {
+    width: 50vw;
+    list-style: none;
+    display: inline-flex;
+}
+
+.RoutesOptions ul li {
+    text-align: center;
+    width: 140px;
+    padding: 18px;
+    border-bottom: 5px solid rgb(0, 0, 0, 0);
+}
+
+.RoutesOptions ul li:hover {
+    border-bottom: 5px solid gray;
+}
+
+.RoutesOptions ul li a {
+    text-decoration: none;
+    color: rgb(51, 51, 51);
     font-weight: 600;
 }
 
-.navbarMenuList {
-    display: inline-block;
-    margin-right: 80px;
-    width: 150px;
-    padding-bottom: 15px;
-    padding-top: 20px;
-    text-align: center;
-    border-bottom: 5px solid white;
-
+.accountInfo {
+    width: 20vw;
 }
 
-.navbarMenuList:hover {
-    padding-bottom: 15px;
-    border-bottom: 5px solid rgb(192, 192, 192);
-}
-
-
-.navbarMenuList a {
-    text-decoration: none;
-    color: var(--text-color);
-    padding-bottom: 15px;
-}
-
-
-span {
-    margin: 0;
+.userAllInfo {
+    display: flex;
+    align-items: center;
+    width: 200px;
 }
 
 .userBox img {
-    margin: 0;
-    border-radius: 50%;
     width: 45px;
     height: auto;
 }
 
 .accountInfo ul {
     list-style: none;
-    margin-left: 5px;
 }
 
-.accountInfo li {
-    margin-top: 15px;
+.accountInfo ul li {
+    cursor: pointer;
+}
+
+.accountInfo ul li div {
+    margin-top: 0.9%;
+    z-index: 0;
 }
 
 .userUserName {
-    font-size: 110%;
-    font-weight: 600;
     color: var(--primary-color);
-    cursor: pointer;
-
-    margin-left: 10px;
-
+    font-weight: 600;
+    font-size: 120%;
+    width: 100px;
     display: flex;
     align-items: center;
-    justify-content: center;
 }

@@ -2,12 +2,11 @@
     margin: auto;
     width: 400px;
     height: auto;
-    background: rgba(245, 245, 245, .5);
     display: flex;
-
     align-items: center;
-
     border-radius: 10px;
+    padding: 30px 40px 40px 30px;
+    background-color: rgb(255, 255, 255);
 }
 
 .signupFormContainer {
@@ -17,14 +16,20 @@
     text-align: center;
 }
 
+.signupFormContainer h1 {
+    text-align: left;
+    font-size: 180%;
+    margin-left: 11%;
+}
+
 .signupForm {
     margin-bottom: 10px;
 }
 
-label > span {
+label>span {
     text-align: left;
     font-size: 100%;
-    font-weight: 600;
+    font-weight: 500;
     margin-top: 20px;
     margin-bottom: 10px;
     display: block;
@@ -38,16 +43,19 @@ label > span {
     padding-bottom: 20px;
 }
 
+.loginFormContainer h1 {
+    font-size: 180%;
+}
+
 .loginFormContainer .title p {
     margin-top: 20px;
     color: var(--primary-color);
     text-align: center;
     font-size: 200%;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .loginFormContainer h4 {
-
     font-weight: 400;
     margin-top: 8px;
 }
@@ -58,28 +66,26 @@ label > span {
     cursor: pointer;
 }
 
-
-.btn { 
+.btn {
     width: 100px;
     height: 34px;
-
+    margin-right: 10px;
 }
 
 .buttonsRegistration {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    margin-top: 10px;
 }
-
 
 .arrowleft {
     background: var(--primary-color);
     width: 90px;
     padding: 5px;
-
     border-radius: 10px;
-
     cursor: pointer;
     transition: 0.2s;
+    margin-right: 80px;
 }
 
 .arrowleft:hover {
@@ -89,7 +95,6 @@ label > span {
 .stateplace {
     margin-right: 10px;
 }
-
 
 .error {
     margin-top: 10px;

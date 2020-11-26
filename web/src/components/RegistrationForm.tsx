@@ -55,7 +55,7 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={`container ${AccountForm.container}  ${AccountForm.signupFormContainer}`}>
 
-
+                    <h1>Registrar</h1>
                     <label htmlFor="firstname"><span className={AccountForm.signupLabel}>Primeiro nome</span></label>
                     <input type="text" className="input signupform firstname" placeholder="Primeiro Nome" name="firstname" ref={register({ required: true, maxLength: 80 })} />
                     <div>{errors.name}</div>

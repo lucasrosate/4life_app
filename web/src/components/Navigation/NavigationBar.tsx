@@ -57,23 +57,34 @@ function NavigationBar(props: any) {
 
     return (
         <nav className={NavigationBarStyle.navHeader}>
-            <Link to="/home" ><h2>4life</h2></Link>
-            <ul>
-                <NavBarList />
-            </ul>
+            <div className={NavigationBarStyle.menuContainer}>
+                <Link to="/home" ><h2>4life</h2></Link>
 
-            <span className={NavigationBarStyle.userBox}>
-                <img src={profilePhoto} alt="profile" />
-            </span>
+                <div className={NavigationBarStyle.RoutesOptions}>
+                    <ul>
+                        <NavBarList />
+                    </ul>
+                </div>
 
-            <span className={NavigationBarStyle.accountInfo}
-                onClick={() => setAccMenu(!accMenu)}
-            >
-                <ul>
-                    <li className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={24} /> : <GoChevronUp size={24} />}</li>
-                    <li>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn} /> : null}</li>
-                </ul>
-            </span>
+                <div className={NavigationBarStyle.userAllInfo}>
+                    <span className={NavigationBarStyle.userBox}>
+                        <img src={profilePhoto} alt="profile" />
+                    </span>
+
+                    <span className={NavigationBarStyle.accountInfo}
+                        onClick={() => setAccMenu(!accMenu)}
+                    >
+                        <ul>
+                            <li className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={24} /> : <GoChevronUp size={24} />}</li>
+                            <li><div>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn} /> : null}</div></li>
+                        </ul>
+
+
+                    </span>
+                </div>
+
+            </div>
+
 
         </nav>
     )

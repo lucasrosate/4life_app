@@ -18,10 +18,10 @@ interface Props {
 
 const AppSlider = withStyles(() => ({
     thumb: {
-        color: "#2F4EF0"
+        color: "#2146fd"
     },
     track: {
-        color: "#425ff1"
+        color: "#2146fd"
     },
 }))(Slider);
 
