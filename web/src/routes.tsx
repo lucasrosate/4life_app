@@ -51,8 +51,7 @@ function Routes() {
             const profilePhoto = await getProfilePhotoLink();
             setUserProfilePhoto(profilePhoto.url);
 
-            console.log(user);
-            console.log(userProfilePhoto);
+
             
             setUserProfile(
                 {
@@ -60,6 +59,9 @@ function Routes() {
                     userProfilePhoto: userProfilePhoto
                 }
             )
+
+            console.log(user);
+            console.log(userProfilePhoto);
  
 
         })();
