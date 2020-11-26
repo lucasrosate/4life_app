@@ -8,9 +8,9 @@ import CashFlowPage from './components/pages/CashFlowPage';
 import TaskPage from './components/pages/TaskPage';
 import EntertainmentPage from './components/pages/EntertainmentPage';
 import NotFoundPage from './components/pages/NotFoundPage';
-import getUserInfo from './services/QueryServices';
+import { getUserInfo, getProfilePhotoLink } from './services/QueryServices';
 import MyAccountPage from './components/pages/MyAccountPage';
-import {UserInterface} from './interfaces/UserInterface';
+import { UserInterface } from './interfaces/UserInterface';
 
 
 
@@ -32,12 +32,35 @@ function Routes() {
         birth: ''
     });
 
+    var [userProfilePhoto, setUserProfilePhoto] = useState<string | null>(null);
+
+
+    var [userProfile, setUserProfile] = useState<any>({
+        user: user,
+        userProfilePhoto: userProfilePhoto
+    });
+
+
     const updateUserInfo = async () => {
         (async () => {
             const data = await getUserInfo();
             if (typeof (data) == "object") {
                 setUser(data.user);
             }
+
+            const profilePhoto = await getProfilePhotoLink();
+            setUserProfilePhoto(profilePhoto.url);
+
+            console.log(user);
+            console.log(userProfilePhoto);
+            
+            setUserProfile(
+                {
+                    user: user,
+                    userProfilePhoto: userProfilePhoto
+                }
+            )
+ 
 
         })();
     }
@@ -132,7 +155,7 @@ function Routes() {
                     render={() => (
                         isLoggedIn ?
                             <MyAccountPage
-                                user={user}
+                                userProfile={userProfile}
                                 handleChangeIsLoggedIn={handleChangeIsLoggedIn}
                                 updateUserInfo={updateUserInfo}
                             /> :

@@ -3,7 +3,7 @@ const express = require('express');
 const verifyUser = require('../middlewares/verifyToken');
 
 
-const { isloggedin, getUserInfo, getUploadToken, changeUserProperty, uploadProfilePicture } = require('../controllers/UserController');
+const { isloggedin, getUserInfo, getUploadToken, changeUserProperty, uploadProfilePicture, getProfilePicture } = require('../controllers/UserController');
 
 
 
@@ -11,8 +11,9 @@ routes = express.Router();
 
 routes.post('/isloggedin', verifyUser, isloggedin);
 routes.post('/getuserinfo', verifyUser, getUserInfo);
-routes.post('/getuploadtoken', verifyUser, getUploadToken)
+routes.post('/getuploadtoken', verifyUser, getUploadToken);
 routes.post('/changeuserproperty', verifyUser, changeUserProperty);
-routes.post('/uploadprofilepicture', verifyUser, uploadProfilePicture)
+routes.post('/uploadprofilepicture', verifyUser, uploadProfilePicture);
+routes.post('/getprofilepicture', verifyUser, getProfilePicture);
 
 module.exports = routes;

@@ -60,7 +60,7 @@ export default function ChangeButtonSystem(props: Props) {
 
 
     useEffect(() => {
-        setColor(props.color === undefined ? "#2146fd" : props.color);
+        setColor(props.color === undefined ? "#79acf8" : props.color);
     }, [])
 
 

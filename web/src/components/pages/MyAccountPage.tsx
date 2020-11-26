@@ -1,4 +1,5 @@
 import React from 'react';
+import CSSTransition from 'react-transition-group/CSSTransition';
 
 import NavigationBar from '../Navigation/NavigationBar';
 import InputChangeSystem from '../MyAccountPage/InputChangeSystem';
@@ -27,14 +28,17 @@ let estados: Estados = require('../../assets/files/estados.json');
 
 //Interfaces
 interface Props {
-    user: {
-        username: string,
-        firstname: string,
-        lastname: string,
-        email: string,
-        phone: string,
-        stateplace: string,
-        birth: string
+    userProfile: {
+        user: {
+            username: string,
+            firstname: string,
+            lastname: string,
+            email: string,
+            phone: string,
+            stateplace: string,
+            birth: string
+        },
+        userProfilePhoto:string
     },
     handleChangeIsLoggedIn: Function,
     updateUserInfo: Function
@@ -48,9 +52,13 @@ interface Estados {
     }]
 }
 
-const { useState } = React;
+const { useState, useEffect } = React;
 
 const MyAccountPage: React.FC<Props> = (props) => {
+
+    //Page
+    const [showPage, setShowPage] = useState(false); 
+
     //Picture
     var [croppedPicture, setCroppedPicture] = useState<string | null>(null);
     var [showCropPictureWindow, setShowCropPictureWindow] = useState(false);
@@ -66,7 +74,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
 
     };
 
-    const checkPhoto = () => croppedPicture == null ? profileNoPhoto : croppedPicture;
+    const checkPhoto = () => props.userProfile.userProfilePhoto == null || '' ? profileNoPhoto : props.userProfile.userProfilePhoto;
 
     //user Data
     var [showUserNameInput, setShowUserNameInput] = useState(false);
@@ -112,26 +120,43 @@ const MyAccountPage: React.FC<Props> = (props) => {
     const handleStatePlaceInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeStatePlaceService, 5);
     const handleStateBirthInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeBirthService, 6);
 
+
+    useEffect(()=> {
+        setShowPage(true);
+        console.log(props.userProfile)
+    }, []);
+    
+
+
+
     return (
-        <div>
-            {showCropPictureWindow ?
-                <ChangePictureSystem
-                    handleCroppedPicture={handleCroppedPicture}
-                    handleShowCropPictureWindow={handleShowCropPictureWindow} /> : null}
+        <>
+
 
 
             <div className={MyAccountPageStyle.pageContainer}>
 
                 <NavigationBar
-                    user={props.user}
+                    photo={checkPhoto()!}
                     handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
                 />
+        <CSSTransition
+            in={showPage}
+            timeout={1000}
+            classNames="fade"
+            mountOnEnter
+        >
 
                 <div className="content-container">
 
+                {showCropPictureWindow ?
+                    <ChangePictureSystem
+                        handleCroppedPicture={handleCroppedPicture}
+                        handleShowCropPictureWindow={handleShowCropPictureWindow} /> : null}
+
 
                     <div className={MyAccountPageStyle.profileContainer}>
-
+    
                         <div className={MyAccountPageStyle.userProfileImgBox}>
                             <div className={MyAccountPageStyle.userProfileImg}>
                                 <img src={checkPhoto()!} alt="profile" />
@@ -150,7 +175,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* username */}
                             <InputChangeSystem
                                 label="Nome de Usuário"
-                                PropertyValue={props.user.username}
+                                PropertyValue={props.userProfile.user.username}
                                 showInput={showUserNameInput}
                                 handleExitChange={handleShowUserNameInput}
                                 handleAcceptChange={handleUserNameInputAcceptChange}
@@ -162,7 +187,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Primeiro nome */}
                             <InputChangeSystem
                                 label="Primeiro nome"
-                                PropertyValue={props.user.firstname}
+                                PropertyValue={props.userProfile.user.firstname}
                                 showInput={showFirstNameInput}
                                 handleExitChange={handleShowFirstNameInput}
                                 handleAcceptChange={handleUserFirstNameInputAcceptChange}
@@ -173,7 +198,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Sobrenome */}
                             <InputChangeSystem
                                 label="Sobrenome"
-                                PropertyValue={props.user.lastname}
+                                PropertyValue={props.userProfile.user.lastname}
                                 showInput={showLastNameInput}
                                 handleExitChange={handleShowLastNameInput}
                                 handleAcceptChange={handleUserLastNameInputAcceptChange}
@@ -183,7 +208,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Email */}
                             <InputChangeSystem
                                 label="E-mail"
-                                PropertyValue={props.user.email}
+                                PropertyValue={props.userProfile.user.email}
                                 showInput={showEmailInput}
                                 handleExitChange={handleShowEmailInput}
                                 handleAcceptChange={handleEmailInputAcceptChange}
@@ -194,7 +219,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Telefone */}
                             <InputChangeSystem
                                 label="Telefone"
-                                PropertyValue={props.user.phone}
+                                PropertyValue={props.userProfile.user.phone}
                                 showInput={showPhoneInput}
                                 handleExitChange={handleShowPhoneInput}
                                 handleAcceptChange={handlePhoneInputAcceptChange}
@@ -207,7 +232,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Estado */}
                             <SelectChangeSystem
                                 label="Estado"
-                                PropertyValue={props.user.stateplace}
+                                PropertyValue={props.userProfile.user.stateplace}
                                 SelectListProperties={estados.UF}
                                 showInput={showStatePlaceInput}
                                 handleExitChange={handleShowStatePlaceInput}
@@ -219,7 +244,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
                             {/* Estado */}
                             <DateChangeSystem
                                 label="Data de nascimento"
-                                PropertyValue={props.user.birth}
+                                PropertyValue={props.userProfile.user.birth}
                                 showInput={showBirthInput}
                                 handleExitChange={handleShowBirthInput}
                                 handleAcceptChange={handleStateBirthInputAcceptChange}
@@ -232,10 +257,10 @@ const MyAccountPage: React.FC<Props> = (props) => {
                     </div>
 
                 </div>
-
+                </CSSTransition>
             </div>
 
-        </ div>
+        </ >
 
     )
 }

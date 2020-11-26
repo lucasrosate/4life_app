@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 const UserSchema = require('../models/UserModel');
-var dropboxV2Api = require('dropbox-v2-api');
+const PhotoSchema = require('../models/PhotoModel');
 
 const User = mongoose.model('User', UserSchema)
 const UserView = require('../views/UserView');
 
-const convertImage = require('../functions/decodeImage');
+const Photo = mongoose.model('Photo', PhotoSchema)
+const PhotoView = require('../views/PhotoView');
+
+const { uploadFile, getTemporaryPictureLink } = require('../services/DropboxServices');
+const decodePicture = require('../functions/decodePicture');
 
 
 require('dotenv').config;
@@ -36,8 +40,6 @@ getUploadToken = async (req, res) => {
 
 
 changeUserProperty = async (req, res) => {
-
-
 
     User.findOne({
         username: req.body.username,
@@ -92,7 +94,7 @@ changeUserProperty = async (req, res) => {
         })
 }
 
-const uploadProfilePicture = (req, res) => {
+uploadProfilePicture = async (req, res) => {
     const username = req.body.username
     var encodedPicture = req.body.encodedPicture;
 
@@ -104,29 +106,98 @@ const uploadProfilePicture = (req, res) => {
         if (!user) return { message: "usuário não encontrado" }
 
 
-        console.log(convertImage(encodedPicture,user._id));
+        //const ImgInfo = convertPicture(encodedPicture, user._id);
 
-        // const dropbox = dropboxV2Api.authenticate({
-        //     token: process.env.DROPBOX_ACCESS_TOKEN
-        // });
+        // dados que retornam = arquivo e o nome do arquivo
+        const pictureData = decodePicture(encodedPicture, user._id);
 
-        // const msgResponse = dropbox({
-        //     resource: fr,
-        //     parameters: {
-        //         path: `/dropbox/path/to/${user._id} ${Date.now}`
-        //     }
-        // }, (err, result) => {
-        //     if (err) return err;
-        //     return result;
-        // });
-        return res.status(200).send('ok');
+        // const statusUpload = await uploadFile(ImgInfo.pictureFile);
+
+        // envia arquivo e o nome para a função que irá upar no DropBox o arquivo
+        const pictureFileUploadStatus =
+            await uploadFile(pictureData.picture, pictureData.pictureName);
+
+        console.log(pictureFileUploadStatus);
+
+
+        if (pictureFileUploadStatus.status === 200) {
+            Photo.findOne({
+                _user: user
+            }, async (err, photo) => {
+                if (err) return err;
+
+                if (!photo) {
+                    const newPhoto = new Photo({
+                        filename: pictureData.pictureName,
+                        _user: user
+                    })
+                    newPhoto.save()
+
+                } else {
+                    photo.filename = pictureData.pictureName;
+                    photo.temporaryLink.src = await getTemporaryPictureLink(photo.filename, 'profilePictures');
+                    photo.temporaryLink.created_at = Date.now();
+                    photo.save();
+                }
+
+            })
+        }
     });
+    return res.status(200).send('ok');
+
 }
+
+getProfilePicture = async (req, res) => {
+    user.findOne({
+        username: req.body.username,
+    }, async (err, user) => {
+        if (err) return res.status(400).json({ message: err, showPhoto: false, url: '' });
+
+        if (!user) {
+            return res.status(401).json({ message: "usuário não encontrado", showPhoto: false, url: '' });
+        } else {
+            Photo.findOne({
+                _user: user._id
+            }, async (err, photo) => {
+                if (err) return res.status(400).json(err);
+
+                if (!photo) return res.json(404).json({ message: "usuário sem foto", hasPhoto: false, url: '' })
+
+                else {
+                    var expired_at = photo.temporaryLink.created_at;
+
+                    if(expired_at) expired_at.setHours(expired_at.getHours() + 4);
+                    const now = Date.now();
+                    
+                    var url;
+
+                    if (now > expired_at || expired_at === undefined) {
+                        url = await getTemporaryPictureLink(photo.filename, 'profilePictures');
+                        photo.temporaryLink.src = url;
+                        photo.temporaryLink.created_at = now;
+                        photo.save();
+                    } else {
+                        url = photo.temporaryLink.src;
+                    }
+
+
+                    console.log(url);
+                    return res.status(200).json({ message: "usuário com foto", hasPhoto: true, url: url })
+                }
+            })
+        }
+    })
+}
+
+
+
+
 
 module.exports = {
     isloggedin,
     getUserInfo,
     getUploadToken,
     changeUserProperty,
-    uploadProfilePicture
+    uploadProfilePicture,
+    getProfilePicture
 }

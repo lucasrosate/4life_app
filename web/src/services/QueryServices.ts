@@ -1,7 +1,7 @@
 import api from './apis';
 import { UserInterface, UserResponseInterface } from '../interfaces/UserInterface';
 
-async function getUserInfo() {
+const getUserInfo = async () => {
     if (!Boolean(localStorage.getItem("isLoggedIn"))) return false;
 
     const username = localStorage.getItem("username");
@@ -57,4 +57,18 @@ async function getUserInfo() {
 
 }
 
-export default getUserInfo;
+
+const getProfilePhotoLink = async () => {
+    return api.post('getprofilepicture', {
+        username: localStorage.getItem('username'),
+        token: localStorage.getItem('auth-token')
+    })
+    .then(res => res.data)
+    //.then(res => res.data.status === 200? res.data.url : '')
+    .catch(err => '');
+}
+
+export  {
+    getUserInfo,
+    getProfilePhotoLink
+}

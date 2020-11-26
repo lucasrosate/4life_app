@@ -1,5 +1,7 @@
 .container {
-    margin: auto;
+    position: fixed;
+    top: 2%;
+    right: 0px;
     width: 400px;
     height: auto;
     display: flex;
@@ -7,6 +9,11 @@
     border-radius: 10px;
     padding: 30px 40px 40px 30px;
     background-color: rgb(255, 255, 255);
+    margin-right: calc(6% - 30px);
+}
+
+.logContainer {
+    top: 30%;
 }
 
 .signupFormContainer {
@@ -89,7 +96,7 @@ label>span {
 }
 
 .arrowleft:hover {
-    background: #425ff1;
+    background: #79acf8;
 }
 
 .stateplace {
@@ -99,4 +106,12 @@ label>span {
 .error {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        position: relative;
+        right: 20%;
+        top: 30%;
+    }
 }

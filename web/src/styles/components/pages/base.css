@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #0e36fd;
-    --primary-color-lighter: #2146fd;
+    --primary-color: #5698fa;
+    --primary-color-lighter: #79acf8;
     --background-color-1: #FBFBFE;
     --background-color-2: #F5F5F8;
     --text-color: #3D3D3D;
@@ -54,15 +54,35 @@
 
 .error {
     margin-top: 10px;
-    color: rgb(202, 39, 39);
+    color: rgb(240, 61, 61);
 }
 
 .success {
     margin-top: 10px;
     text-align: center;
-    color: rgb(39, 202, 93);
+    color: rgb(64, 216, 114);
 }
 
 .content-container {
-    margin-top: 70px;
+    margin-top: 80px;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.fade-enter {
+    opacity: .05;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 600ms ease
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
 }

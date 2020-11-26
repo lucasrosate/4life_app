@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LoginForm from '../LoginForm';
 import RegistrationForm from '../RegistrationForm';
 import LandingPageStyle from '../../styles/components/pages/LandingPage.module.css';
-import personLanding from '../../assets/images/personLanding.svg';
-import Fade from '@material-ui/core/Fade';
+import CSSTransition from 'react-transition-group/CSSTransition';
 const { useState } = React;
+
 
 
 interface Props {
@@ -13,6 +13,9 @@ interface Props {
 
 const LandingPage: React.FC<Props> = (props: Props) => {
 
+    const timeTransition = 1500;
+
+    const [showPage, setShowPage] = useState(false); 
     const [showLoginForm, setShowLoginForm] = useState(true);
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
     const [messageFromRegistration, setMessageFromRegistration] = useState('');
@@ -28,47 +31,77 @@ const LandingPage: React.FC<Props> = (props: Props) => {
         setShowRegistrationForm(true);
     }
 
+    useEffect(()=> {
+        setShowPage(true);
+    }, []);
+
     return (
-        <div className={LandingPageStyle.backgroundLandingPage}>
-    
-                <div className={LandingPageStyle.landingPage}>
+        <>
+            <CSSTransition
+                in={showPage}
+                timeout={1000}
+                classNames="fade"
+                mountOnEnter
+            >
 
-                    <div className={LandingPageStyle.landingContainer}>
-                        <div className={LandingPageStyle.infoPage}>
-                            <h1>4life</h1>
-                            <h2>Já pensou se você pudesse controlar todos os problemas do seu dia a dia na palma da sua mão? Pois é, agora é possível</h2>
+                <div className={LandingPageStyle.backgroundLandingPage}>
+
+                    <div className={LandingPageStyle.landingPage}>
+
+                        <div className={LandingPageStyle.landingContainer}>
+                            <div className={LandingPageStyle.infoPage}>
+                                <h1>4life</h1>
+                                <h2>Já pensou se você pudesse controlar todos os problemas do seu dia a dia na palma da sua mão? Pois é, agora é possível</h2>
+
+                            </div>
+
+
+                            <div className={LandingPageStyle.userformPage}>
+                                <div id="loginForm">
+                                    <CSSTransition
+                                        in={showLoginForm}
+                                        timeout={1000}
+                                        classNames="fade"
+                                        mountOnEnter
+                                        unmountOnExit
+                                    >
+                                        <LoginForm
+                                            showRegistrationFormFunction={showRegistrationFormFunction}
+                                            messageFromRegistration={messageFromRegistration}
+                                            handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
+                                        />
+                                    </CSSTransition>
+
+
+
+
+                                </div>
+
+                                <div id="registrationForm">
+                                    <CSSTransition
+                                        in={showRegistrationForm}
+                                        timeout={1000}
+                                        classNames="fade"
+                                        mountOnEnter
+                                        unmountOnExit
+                                    >
+                                        <RegistrationForm
+                                            showLoginFormFunction={showLoginFormFunction}
+                                        />
+                                    </CSSTransition>
+
+
+                                </div>
+
+                            </div >
                         </div>
-
-
-                        <div className={LandingPageStyle.userformPage}>
-                            <div id="loginForm">
-  
-                            {showLoginForm ?
-                                    <LoginForm
-                                        showRegistrationFormFunction={showRegistrationFormFunction}
-                                        messageFromRegistration={messageFromRegistration}
-                                        handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
-                                    />
-                                    : null}
-
-                            </div>
-
-                            <div id="registrationForm">
-                                {showRegistrationForm ?
-                                    <RegistrationForm
-                                        showLoginFormFunction={showLoginFormFunction}
-                                    />
-                                    : null}
-                            </div>
-
-                        </div >
+                        <polygon className={LandingPageStyle.TrianglePolygon} points="0,0 0,100 100,0" />
                     </div>
-                    <polygon className={LandingPageStyle.TrianglePolygon} points="0,0 0,100 100,0" />
+
+
                 </div>
-
-
-        </div>
-
+            </CSSTransition>
+        </>
     )
 }
 

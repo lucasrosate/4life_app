@@ -26,6 +26,11 @@ function NavigationBar(props: any) {
             },
 
             {
+                path: '/task',
+                name: 'TAREFAS'
+            },
+
+            {
                 path: '/entertainment',
                 name: 'ENTRETENIMENTO'
             },
@@ -68,7 +73,7 @@ function NavigationBar(props: any) {
 
                 <div className={NavigationBarStyle.userAllInfo}>
                     <span className={NavigationBarStyle.userBox}>
-                        <img src={profilePhoto} alt="profile" />
+                        <img src={props.photo} alt="profile" />
                     </span>
 
                     <span className={NavigationBarStyle.accountInfo}

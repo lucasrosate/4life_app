@@ -1,21 +1,20 @@
-.changePictureWindowBackground {
-    background-color: rgb(0, 0, 0, .60);
+.Container {
+    z-index: 1;
     width: 100%;
     height: 100%;
-    position: absolute;
+    background-color: rgb(0, 0, 0, .40);
+    position: fixed;
     transform: translateY(-10px);
-    z-index: 0;
 }
 
 .changePictureContentContainer {
-    transform: translateY(10%);
+    transform: translateY(3%);
     align-items: center;
 }
 
 .changePicturePositionContainer {
     width: 100%;
     height: 60%;
-
 }
 
 .changePictureContainer {
@@ -23,6 +22,7 @@
     height: 800px;
     background-color: white;
     border-radius: 20px;
+    z-index: 3;
 }
 
 .exitButtonContainer {
@@ -50,16 +50,13 @@
     height: 65%;
     width: 100%;
     z-index: 1;
-
 }
-
 
 .cropPictureTools {
     width: 80%;
     height: 100px;
     display: flex;
     align-items: center;
-
 }
 
 .cropPictureTools label,
@@ -72,10 +69,8 @@
     cursor: pointer;
     background: var(--primary-color);
     padding: 8px 30px;
-
     border-radius: 10px;
     color: white;
-
     transition: 0.4s;
 }
 
@@ -83,7 +78,6 @@
     padding: 0;
     width: 200px;
     height: 40px;
-
 }
 
 .cropPictureTools button {
@@ -100,7 +94,6 @@
 .cropPictureTools button:hover {
     background-color: var(--primary-color-lighter);
 }
-
 
 .ZoomSliderContainer {
     margin-top: 20px;

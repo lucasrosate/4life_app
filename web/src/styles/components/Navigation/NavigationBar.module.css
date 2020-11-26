@@ -62,6 +62,7 @@
 
 .userBox img {
     width: 45px;
+    border-radius: 50%;
     height: auto;
 }
 
@@ -81,7 +82,7 @@
 .userUserName {
     color: var(--primary-color);
     font-weight: 600;
-    font-size: 120%;
+    font-size: 100%;
     width: 100px;
     display: flex;
     align-items: center;
