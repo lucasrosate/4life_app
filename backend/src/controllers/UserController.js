@@ -8,7 +8,7 @@ const UserView = require('../views/UserView');
 const Photo = mongoose.model('Photo', PhotoSchema)
 const PhotoView = require('../views/PhotoView');
 
-const { uploadFile, getTemporaryPictureLink } = require('../services/DropboxServices');
+const { uploadFile, getTemporaryPictureLink, deleteFile } = require('../services/DropboxServices');
 const decodePicture = require('../functions/decodePicture');
 
 
@@ -115,9 +115,7 @@ uploadProfilePicture = async (req, res) => {
 
         // envia arquivo e o nome para a função que irá upar no DropBox o arquivo
         const pictureFileUploadStatus =
-            await uploadFile(pictureData.picture, pictureData.pictureName);
-
-        console.log(pictureFileUploadStatus);
+            await uploadFile('profilePictures', pictureData.pictureName, pictureData.picture);
 
 
         if (pictureFileUploadStatus.status === 200) {
@@ -134,8 +132,10 @@ uploadProfilePicture = async (req, res) => {
                     newPhoto.save()
 
                 } else {
+                    await deleteFile('profilePictures', photo.filename);
+
                     photo.filename = pictureData.pictureName;
-                    photo.temporaryLink.src = await getTemporaryPictureLink(photo.filename, 'profilePictures');
+                    photo.temporaryLink.src = await getTemporaryPictureLink('profilePictures', photo.filename);
                     photo.temporaryLink.created_at = Date.now();
                     photo.save();
                 }
@@ -148,7 +148,7 @@ uploadProfilePicture = async (req, res) => {
 }
 
 getProfilePicture = async (req, res) => {
-    user.findOne({
+    User.findOne({
         username: req.body.username,
     }, async (err, user) => {
         if (err) return res.status(400).json({ message: err, showPhoto: false, url: '' });
@@ -166,9 +166,9 @@ getProfilePicture = async (req, res) => {
                 else {
                     var expired_at = photo.temporaryLink.created_at;
 
-                    if(expired_at) expired_at.setHours(expired_at.getHours() + 4);
+                    if (expired_at) expired_at.setHours(expired_at.getHours() + 4);
                     const now = Date.now();
-                    
+
                     var url;
 
                     if (now > expired_at || expired_at === undefined) {
@@ -181,15 +181,12 @@ getProfilePicture = async (req, res) => {
                     }
 
 
-                    console.log(url);
                     return res.status(200).json({ message: "usuário com foto", hasPhoto: true, url: url })
                 }
             })
         }
     })
 }
-
-
 
 
 

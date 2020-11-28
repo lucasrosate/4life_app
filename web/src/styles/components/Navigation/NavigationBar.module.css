@@ -37,6 +37,7 @@
     text-align: center;
     width: 140px;
     padding: 18px;
+    padding-bottom: 15px;
     border-bottom: 5px solid rgb(0, 0, 0, 0);
 }
 
@@ -61,7 +62,7 @@
 }
 
 .userBox img {
-    width: 45px;
+    width: 40px;
     border-radius: 50%;
     height: auto;
 }
@@ -75,7 +76,6 @@
 }
 
 .accountInfo ul li div {
-    margin-top: 0.9%;
     z-index: 0;
 }
 
@@ -83,7 +83,12 @@
     color: var(--primary-color);
     font-weight: 600;
     font-size: 100%;
-    width: 100px;
+    height: 100%;
+    width: 120px;
     display: flex;
     align-items: center;
+}
+
+.userUserName svg {
+    margin-left: 4px;
 }

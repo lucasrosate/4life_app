@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go'
 import NavigationBarStyle from '../../styles/components/Navigation/NavigationBar.module.css';
 
-import profilePhoto from '../../assets/images/nophoto.svg';
+import profileNoPhoto from '../../assets/images/nophoto.svg';
 import AccountOptions from './AccountOptions';
 
 const { useState } = React;
@@ -43,7 +43,7 @@ function NavigationBar(props: any) {
     const documentURL = useLocation().pathname;
 
     const doBold: CSSProperties = {
-        borderBottom: "5px solid #2F4EF0",
+        borderBottom: "5px solid #5698fa",
 
     }
 
@@ -73,14 +73,14 @@ function NavigationBar(props: any) {
 
                 <div className={NavigationBarStyle.userAllInfo}>
                     <span className={NavigationBarStyle.userBox}>
-                        <img src={props.photo} alt="profile" />
+                        <img src={localStorage.getItem('profile-picture-url') || profileNoPhoto} alt="profile" />
                     </span>
 
                     <span className={NavigationBarStyle.accountInfo}
                         onClick={() => setAccMenu(!accMenu)}
                     >
                         <ul>
-                            <li className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={24} /> : <GoChevronUp size={24} />}</li>
+                            <li className={NavigationBarStyle.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
                             <li><div>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn} /> : null}</div></li>
                         </ul>
 

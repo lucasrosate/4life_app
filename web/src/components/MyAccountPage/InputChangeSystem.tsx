@@ -67,7 +67,7 @@ export default function ChangeButtonSystem(props: Props) {
 
 
     useEffect(() => {
-        setColor(props.color === undefined ? "#79acf8" : props.color);
+        setColor(props.color === undefined ? "#5698fa" : props.color);
     }, [])
 
 
@@ -82,7 +82,6 @@ export default function ChangeButtonSystem(props: Props) {
         } else {
             if (!(errorMessages.includes(error1)))
                 setErrorMessages(errorMessages.concat(error1));
-            console.log(errorMessages.includes(error1))
         }
 
         props.handleExitChange();
@@ -118,7 +117,7 @@ export default function ChangeButtonSystem(props: Props) {
                                         let s = e.target.value;
                                         if(props.trim) s = s.trim();
                                         if(props.onlyNumber) s = s.replace(/\D/g, '');
-                                        console.log(props.onlyNumber);
+
                                         return setNewPropertyParentValue(s);
                                     }
                                     }

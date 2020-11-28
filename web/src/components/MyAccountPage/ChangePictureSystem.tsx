@@ -31,7 +31,6 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
 
 
 
-
     const _handleShowCrop = () => props.handleShowCropPictureWindow();
 
     var [picture, setPicture] = useState<Object | null>(null);

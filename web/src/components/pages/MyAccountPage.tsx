@@ -17,12 +17,13 @@ import {
     changeBirthService,
 } from '../../services/changeAccountDataService';
 
+import { getProfilePhotoLink } from '../../services/QueryServices';
+
 //Estilos
 import MyAccountPageStyle from '../../styles/components/pages/MyAccountPage.module.css';
 import profileNoPhoto from '../../assets/images/nophoto.svg';
 import ChangePictureSystem from '../MyAccountPage/ChangePictureSystem';
 import uploadFilesService from '../../services/uploadFilesService';
-
 //Lista de estados
 let estados: Estados = require('../../assets/files/estados.json');
 
@@ -38,10 +39,11 @@ interface Props {
             stateplace: string,
             birth: string
         },
-        userProfilePhoto:string
+        userProfilePhoto: string
     },
     handleChangeIsLoggedIn: Function,
-    updateUserInfo: Function
+    updateUserProfilePicture: Function,
+    updateUserData: Function
 }
 
 
@@ -57,24 +59,40 @@ const { useState, useEffect } = React;
 const MyAccountPage: React.FC<Props> = (props) => {
 
     //Page
-    const [showPage, setShowPage] = useState(false); 
+    const [showPage, setShowPage] = useState(false);
 
     //Picture
-    var [croppedPicture, setCroppedPicture] = useState<string | null>(null);
+    var [croppedPicture, setCroppedPicture] = useState<string>('');
     var [showCropPictureWindow, setShowCropPictureWindow] = useState(false);
+    var [profilePhoto, setProfilePhoto] = useState<string | null>(null);
 
     const handleShowCropPictureWindow = () => setShowCropPictureWindow(!showCropPictureWindow);
 
-    const handleCroppedPicture = (croppedPicture: any, encodedCroppedPicture: any) => {
+    const handleCroppedPicture = async (croppedPic: any, encodedCroppedPicture: any) => {
         if (croppedPicture !== null) {
-            setCroppedPicture(croppedPicture);
-            uploadFilesService(encodedCroppedPicture);
+            await uploadFilesService(encodedCroppedPicture);
+            await props.updateUserProfilePicture();
+
+            var changed = false;
+
+            while (!changed) {
+                const data = await getProfilePhotoLink();
+                await new Promise(r => setTimeout(r, 2000));
+                if (data.url !== localStorage.getItem('profile-picture-url')) {
+                    changed = true;
+                    localStorage.setItem('profile-picture-url', data.url);
+                    setProfilePhoto(localStorage.getItem('profile-picture-url'));
+                }
+
+            }
+
+
         }
 
 
     };
 
-    const checkPhoto = () => props.userProfile.userProfilePhoto == null || '' ? profileNoPhoto : props.userProfile.userProfilePhoto;
+
 
     //user Data
     var [showUserNameInput, setShowUserNameInput] = useState(false);
@@ -98,7 +116,7 @@ const MyAccountPage: React.FC<Props> = (props) => {
     const checkChangeSuccess = async (newVal: string, changeFunction: Function, option: number) => {
         const data = await changeFunction(newVal, option)
         if (data.success && option === 0) localStorage.setItem("username", newVal);
-        if (data.success) props.updateUserInfo();
+        if (data.success) props.updateUserData();
     }
 
     //CONTEXTO
@@ -121,12 +139,10 @@ const MyAccountPage: React.FC<Props> = (props) => {
     const handleStateBirthInputAcceptChange = async (newEmail: string) => checkChangeSuccess(newEmail, changeBirthService, 6);
 
 
-    useEffect(()=> {
+    useEffect(() => {
         setShowPage(true);
-        console.log(props.userProfile)
+        setProfilePhoto(localStorage.getItem('profile-picture-url'));
     }, []);
-    
-
 
 
     return (
@@ -137,126 +153,140 @@ const MyAccountPage: React.FC<Props> = (props) => {
             <div className={MyAccountPageStyle.pageContainer}>
 
                 <NavigationBar
-                    photo={checkPhoto()!}
+                    photo={croppedPicture}
                     handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
                 />
-        <CSSTransition
-            in={showPage}
-            timeout={1000}
-            classNames="fade"
-            mountOnEnter
-        >
+                <CSSTransition
+                    in={showPage}
+                    timeout={1000}
+                    classNames="fade"
+                    mountOnEnter
+                >
 
-                <div className="content-container">
+                    <div className="content-container">
+                        <CSSTransition
+                            in={showCropPictureWindow}
+                            timeout={400}
+                            classNames={{
+                                enter: MyAccountPageStyle.AnimationEnter,
+                                enterActive: MyAccountPageStyle.AnimationEnterActive,
+                                exit: MyAccountPageStyle.AnimationExit,
+                                exitActive: MyAccountPageStyle.AnimationExitActive
+                            }}
+                            mountOnEnter
+                            unmountOnExit
+                        >
+                            
+                            <ChangePictureSystem
+                                handleCroppedPicture={handleCroppedPicture}
+                                handleShowCropPictureWindow={handleShowCropPictureWindow} />
 
-                {showCropPictureWindow ?
-                    <ChangePictureSystem
-                        handleCroppedPicture={handleCroppedPicture}
-                        handleShowCropPictureWindow={handleShowCropPictureWindow} /> : null}
+                        </CSSTransition>
 
 
-                    <div className={MyAccountPageStyle.profileContainer}>
-    
-                        <div className={MyAccountPageStyle.userProfileImgBox}>
-                            <div className={MyAccountPageStyle.userProfileImg}>
-                                <img src={checkPhoto()!} alt="profile" />
 
-                                <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
+                        <div className={MyAccountPageStyle.profileContainer}>
+
+                            <div className={MyAccountPageStyle.userProfileImgBox}>
+                                <div className={MyAccountPageStyle.userProfileImg}>
+                                    <img src={profilePhoto || profileNoPhoto} alt="profile" />
+
+                                    <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
+                                </div>
+
+                                <div className={MyAccountPageStyle.userprofileImgInfo}>
+                                    <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
+
+                                </div>
+
                             </div>
 
-                            <div className={MyAccountPageStyle.userprofileImgInfo}>
-                                <p>Para mudar a foto de perfil, a imagem deve ser no formato .png, .jpg ou .jpeg e pesar no máximo 1 mb.</p>
+                            <div className={MyAccountPageStyle.userInfoContainer}>
+                                {/* username */}
+                                <InputChangeSystem
+                                    label="Nome de Usuário"
+                                    PropertyValue={props.userProfile.user.username}
+                                    showInput={showUserNameInput}
+                                    handleExitChange={handleShowUserNameInput}
+                                    handleAcceptChange={handleUserNameInputAcceptChange}
+                                    trim={true}
+
+                                />
+
+
+                                {/* Primeiro nome */}
+                                <InputChangeSystem
+                                    label="Primeiro nome"
+                                    PropertyValue={props.userProfile.user.firstname}
+                                    showInput={showFirstNameInput}
+                                    handleExitChange={handleShowFirstNameInput}
+                                    handleAcceptChange={handleUserFirstNameInputAcceptChange}
+                                />
+
+
+
+                                {/* Sobrenome */}
+                                <InputChangeSystem
+                                    label="Sobrenome"
+                                    PropertyValue={props.userProfile.user.lastname}
+                                    showInput={showLastNameInput}
+                                    handleExitChange={handleShowLastNameInput}
+                                    handleAcceptChange={handleUserLastNameInputAcceptChange}
+                                />
+
+
+                                {/* Email */}
+                                <InputChangeSystem
+                                    label="E-mail"
+                                    PropertyValue={props.userProfile.user.email}
+                                    showInput={showEmailInput}
+                                    handleExitChange={handleShowEmailInput}
+                                    handleAcceptChange={handleEmailInputAcceptChange}
+                                />
+
+
+
+                                {/* Telefone */}
+                                <InputChangeSystem
+                                    label="Telefone"
+                                    PropertyValue={props.userProfile.user.phone}
+                                    showInput={showPhoneInput}
+                                    handleExitChange={handleShowPhoneInput}
+                                    handleAcceptChange={handlePhoneInputAcceptChange}
+                                    onlyNumber={true}
+                                    minLength={8}
+                                    maxLength={9}
+                                />
+
+
+                                {/* Estado */}
+                                <SelectChangeSystem
+                                    label="Estado"
+                                    PropertyValue={props.userProfile.user.stateplace}
+                                    SelectListProperties={estados.UF}
+                                    showInput={showStatePlaceInput}
+                                    handleExitChange={handleShowStatePlaceInput}
+                                    handleAcceptChange={handleStatePlaceInputAcceptChange}
+                                />
+
+
+
+                                {/* Estado */}
+                                <DateChangeSystem
+                                    label="Data de nascimento"
+                                    PropertyValue={props.userProfile.user.birth}
+                                    showInput={showBirthInput}
+                                    handleExitChange={handleShowBirthInput}
+                                    handleAcceptChange={handleStateBirthInputAcceptChange}
+                                />
+
 
                             </div>
 
-                        </div>
-
-                        <div className={MyAccountPageStyle.userInfoContainer}>
-                            {/* username */}
-                            <InputChangeSystem
-                                label="Nome de Usuário"
-                                PropertyValue={props.userProfile.user.username}
-                                showInput={showUserNameInput}
-                                handleExitChange={handleShowUserNameInput}
-                                handleAcceptChange={handleUserNameInputAcceptChange}
-                                trim={true}
-
-                            />
-
-
-                            {/* Primeiro nome */}
-                            <InputChangeSystem
-                                label="Primeiro nome"
-                                PropertyValue={props.userProfile.user.firstname}
-                                showInput={showFirstNameInput}
-                                handleExitChange={handleShowFirstNameInput}
-                                handleAcceptChange={handleUserFirstNameInputAcceptChange}
-                            />
-
-
-
-                            {/* Sobrenome */}
-                            <InputChangeSystem
-                                label="Sobrenome"
-                                PropertyValue={props.userProfile.user.lastname}
-                                showInput={showLastNameInput}
-                                handleExitChange={handleShowLastNameInput}
-                                handleAcceptChange={handleUserLastNameInputAcceptChange}
-                            />
-
-
-                            {/* Email */}
-                            <InputChangeSystem
-                                label="E-mail"
-                                PropertyValue={props.userProfile.user.email}
-                                showInput={showEmailInput}
-                                handleExitChange={handleShowEmailInput}
-                                handleAcceptChange={handleEmailInputAcceptChange}
-                            />
-
-
-
-                            {/* Telefone */}
-                            <InputChangeSystem
-                                label="Telefone"
-                                PropertyValue={props.userProfile.user.phone}
-                                showInput={showPhoneInput}
-                                handleExitChange={handleShowPhoneInput}
-                                handleAcceptChange={handlePhoneInputAcceptChange}
-                                onlyNumber={true}
-                                minLength={9}
-                                maxLength={9}
-                            />
-
-
-                            {/* Estado */}
-                            <SelectChangeSystem
-                                label="Estado"
-                                PropertyValue={props.userProfile.user.stateplace}
-                                SelectListProperties={estados.UF}
-                                showInput={showStatePlaceInput}
-                                handleExitChange={handleShowStatePlaceInput}
-                                handleAcceptChange={handleStatePlaceInputAcceptChange}
-                            />
-
-
-
-                            {/* Estado */}
-                            <DateChangeSystem
-                                label="Data de nascimento"
-                                PropertyValue={props.userProfile.user.birth}
-                                showInput={showBirthInput}
-                                handleExitChange={handleShowBirthInput}
-                                handleAcceptChange={handleStateBirthInputAcceptChange}
-                            />
-
 
                         </div>
-
 
                     </div>
-
-                </div>
                 </CSSTransition>
             </div>
 

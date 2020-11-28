@@ -1,3 +1,6 @@
+.pageContainer {
+    width: 100vw;
+}
 .profileContainer {
     width: 60vw;
     min-width: 600px;
@@ -65,4 +68,21 @@
 
 .userProfileImg button:focus {
     outline: none;
+}
+
+
+.AnimationEnter {
+    opacity: 0;
+    transform: translateY(-1000px);
+}
+.AnimationEnterActive {
+  opacity: 1;
+  transition: opacity 300ms ease, transform 400ms ease;
+}
+.AnimationExit {
+    opacity: 1;
+}
+.AnimationExitActive {
+    opacity: 0;
+    transition: opacity 100ms ease;
 }

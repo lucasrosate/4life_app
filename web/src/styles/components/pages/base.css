@@ -1,13 +1,19 @@
 :root {
     --primary-color: #5698fa;
     --primary-color-lighter: #79acf8;
-    --background-color-1: #FBFBFE;
-    --background-color-2: #F5F5F8;
+    --background-color-1: #fafafa;
+    --background-color-2: #f5f5f5;
+
     --text-color: #3D3D3D;
     --background-field-color: rgb(251, 251, 251);
     --background-field-color-darker: rgb(240, 238, 238);
     --border-color: rgb(232, 232, 232, .5);
     --secondary-border-color: rgb(221, 221, 221);
+}
+
+.root-container {
+    width: 100vw;
+    overflow-y: hidden;
 }
 
 * {
@@ -64,6 +70,7 @@
 }
 
 .content-container {
+    margin: 0;
     margin-top: 80px;
     width: 100vw;
     overflow: hidden;
@@ -86,3 +93,5 @@
     opacity: 0;
     transform: scale(0.9);
 }
+
+

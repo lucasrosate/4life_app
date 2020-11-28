@@ -1,0 +1,56 @@
+.dashboardContainer {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    grid-template-columns: 3fr 1fr;
+    gap: 10px;
+    width: 80vw;
+    height: 90vh;
+}
+
+.boardContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.healthBoard {
+    background-color: var(--background-color-1);
+}
+
+.healthBoard h1 {
+    font-size: 150%;
+    color: rgb(169, 230, 154);
+}
+
+.taskBoard {
+    background-color: var(--background-color-2);
+}
+
+.taskBoard h1 {
+    font-size: 150%;
+    color: rgb(128, 168, 221);
+}
+
+.cashflowBoard {
+    background-color: var(--background-color-2);
+}
+
+.cashflowBoard h1 {
+    font-size: 150%;
+    color: rgb(189, 194, 162);
+}
+
+
+.entertainmentBoard {
+    background-color: var(--background-color-1);
+
+}
+
+.entertainmentBoard h1 {
+    font-size: 150%;
+    color: rgb(224, 143, 143);
+}
+
+.dashboardContentContainer {
+    padding: 15px;
+}
