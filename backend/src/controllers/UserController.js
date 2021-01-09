@@ -9,7 +9,7 @@ const Photo = mongoose.model('Photo', PhotoSchema)
 const PhotoView = require('../views/PhotoView');
 
 const { uploadFile, getTemporaryPictureLink, deleteFile } = require('../services/DropboxServices');
-const decodePicture = require('../functions/decodePicture');
+const decodePicture = require('../common/functions/decodePicture');
 
 
 require('dotenv').config;
