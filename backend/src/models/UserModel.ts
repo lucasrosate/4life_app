@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
-const {Schema}= require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose, { mongo, Mongoose } from "mongoose";
+import bcrypt from 'bcrypt';
+import { IUser } from "../../interfaces";
 
+interface IUserModel extends mongoose.Document, IUser { };
 
-const UserSchema = new Schema ({
+const UserSchema = new mongoose.Schema({
     firstname: {
         type: String,
         require: true
@@ -33,7 +34,7 @@ const UserSchema = new Schema ({
         unique: 1,
         maxlength: 255
     },
-    
+
     state: {
         type: String,
         require: true,
@@ -54,19 +55,16 @@ const UserSchema = new Schema ({
 
 })
 
-mongoose.model('User', UserSchema);
+UserSchema.pre("save", function (this: IUserModel, next) {
+    const user = this;
 
-UserSchema.pre('save', function(next) {
-    var user = this;
-    if (this.isModified('password') || this.isNew) {
+    if (this.isModified("password") || this.isNew) {
         bcrypt.genSalt(10, function (err, salt) {
-            if (err) {
-                return next(err);
-            }
-            bcrypt.hash(user.password, salt, function(err, hash) {
-                if (err) {
-                    return next(err);
-                }
+            if (err) return next(err);
+
+
+            bcrypt.hash(user.password, salt, function (err, hash) {
+                if (err) return next(err);
 
                 user.password = hash;
                 next();
@@ -78,7 +76,7 @@ UserSchema.pre('save', function(next) {
 });
 
 
+const User: mongoose.Model<IUserModel> = mongoose.model<IUserModel>("User", UserSchema);
 
 
-
-module.exports = UserSchema;
+export default User;

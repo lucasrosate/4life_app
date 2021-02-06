@@ -1,4 +1,6 @@
-const UserView = (user) => {
+import { IUser } from "../../interfaces";
+
+const UserView = (user: IUser) => {
     return {
         firstname: user.firstname,
         lastname: user.lastname,
@@ -10,4 +12,4 @@ const UserView = (user) => {
     }
 }
 
-module.exports = UserView;
+export default UserView;

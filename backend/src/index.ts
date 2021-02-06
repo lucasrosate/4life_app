@@ -1,13 +1,17 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const AuthRoutes = require('./routes/AuthRoutes');
-const UserRoutes = require('./routes/UserRoutes');
+import express from 'express';
+import mongoose from 'mongoose';
+import AuthRoutes from './routes/AuthRoutes';
+import UserRoutes from './routes/UserRoutes';
+
+import {Request, Response} from 'express';
+import { CallbackType } from '../interfaces';
+
 
 require('dotenv').config();
 
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(process.env.MONGO_URL as string, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -20,7 +24,7 @@ mongoose.connect(process.env.MONGO_URL, {
 const port = process.env.SERVER_PORT
 const app = express();
 
-app.use(function (req, res, next) {
+app.use(function (req: Request, res: Response, next: CallbackType) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");

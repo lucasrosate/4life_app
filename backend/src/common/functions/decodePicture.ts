@@ -1,7 +1,9 @@
 
 // Função para localizar o formadto da imagem que foi upada e também retirar o termo data:image/png;FORMATO_DA_IMAGEM, para a imagem ser apresentada como foi enviada
 
-const formatEncodedAndGetFormat = (encodedPicture) => {
+import { decode } from "jsonwebtoken";
+
+const formatEncodedAndGetFormat = (encodedPicture: string) => {
     const s = encodedPicture.slice(0, 40);
 
     var result = {
@@ -25,10 +27,10 @@ const formatEncodedAndGetFormat = (encodedPicture) => {
 // Decodificar a imagem passada, que está em formato 'base64'
 
 // Logo depois a imagem criada é criada com o seguinte nome (user._id + horário agora + formato tirado da função formatEncodedAndGetFormat)
-const decodePicture = (encodedPicture, uniqueValue) => {
+const decodePicture = (encodedPicture: string, uniqueValue: string) => {
     const result = formatEncodedAndGetFormat(encodedPicture);
 
-    var picture = Buffer.from(result.newEncodedPicture, 'base64');
+    var picture: Buffer = Buffer.from(result.newEncodedPicture, 'base64');
 
     const now = Date.now().toLocaleString('pt-br');
 
@@ -43,4 +45,4 @@ const decodePicture = (encodedPicture, uniqueValue) => {
     return { picture: picture, pictureName: pictureName };
 }
 
-module.exports = decodePicture;
+export default decodePicture;

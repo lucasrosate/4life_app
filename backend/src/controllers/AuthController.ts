@@ -1,15 +1,15 @@
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../models/UserModel'
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-UserSchema = require('../models/UserModel')
+import { Request, Response} from 'express';
+import {IUser} from '../../interfaces';
 
 require('dotenv').config();
 
-const User = mongoose.model('User', UserSchema)
 
-signup = async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
     const
         {
             firstname,
@@ -32,11 +32,7 @@ signup = async (req, res) => {
         email: email,
         state: state,
         phone: phone
-    },
-        (err) => {
-            if (err) return res.status(200).json({ message: "Erro no recebimento." })
-
-        });
+    });
 
     try {
         await user.save();
@@ -48,7 +44,7 @@ signup = async (req, res) => {
 }
 
 
-signin = async (req, res) => {
+export const signin = async (req: Request, res: Response) => {
 
     if (req.body.password == undefined) return res.status(401).json({ message: "password does not exist. It must contain username and password" });
 
@@ -58,6 +54,8 @@ signin = async (req, res) => {
     }, async (err, user) => {
         if (err) return res.status(401).json({ message: err });
 
+        var pass: string;
+
         if (!user) {
             return res.status(401).json({ message: "Usuário não existente." });
         } else {
@@ -65,9 +63,9 @@ signin = async (req, res) => {
             const isPassValid = await bcrypt.compare(pass, user.password);
 
             if (isPassValid) {
-                const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
+                const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET as string);
 
-                user_data = {
+                const user_data = {
                     firstname: user.firstname,
                     lastname: user.lastname,
                     username: user.username,
@@ -90,8 +88,3 @@ signin = async (req, res) => {
     })
 }
 
-
-module.exports = {
-    signin,
-    signup
-}

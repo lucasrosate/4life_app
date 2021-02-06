@@ -1,25 +1,21 @@
-const mongoose = require('mongoose');
-const UserSchema = require('../models/UserModel');
-const PhotoSchema = require('../models/PhotoModel');
+import mongoose from 'mongoose';
+import User from '../models/UserModel';
+import Photo from '../models/PhotoModel';
 
-const User = mongoose.model('User', UserSchema)
-const UserView = require('../views/UserView');
+import {uploadFile, getTemporaryPictureLink, deleteFile} from '../services/DropboxServices';
+import UserView from '../views/UserView';
+import decodePicture from '../common/functions/decodePicture';
 
-const Photo = mongoose.model('Photo', PhotoSchema)
-const PhotoView = require('../views/PhotoView');
-
-const { uploadFile, getTemporaryPictureLink, deleteFile } = require('../services/DropboxServices');
-const decodePicture = require('../common/functions/decodePicture');
-
+import {Request, Response} from 'express';
 
 require('dotenv').config;
 
-isloggedin = async (req, res) => {
+export const isloggedin = async (req: Request, res: Response) => {
     return res.status(200).json({ ans: true });
 }
 
-getUserInfo = async (req, res) => {
-    user = User.findOne({ username: req.body.username },
+export const getUserInfo = async (req: Request, res: Response) => {
+    User.findOne({ username: req.body.username },
         async (err, user) => {
             if (err) return res.status(401).json({ message: "Erro na busca." })
 
@@ -33,13 +29,13 @@ getUserInfo = async (req, res) => {
 }
 
 
-getUploadToken = async (req, res) => {
+export const getUploadToken = async (req: Request, res: Response) => {
     return res.status(200).json({ token: process.env.UPLOAD_ACCESS_TOKEN_SECRET })
 }
 
 
 
-changeUserProperty = async (req, res) => {
+export const changeUserProperty = async (req: Request, res: Response) => {
 
     User.findOne({
         username: req.body.username,
@@ -94,7 +90,7 @@ changeUserProperty = async (req, res) => {
         })
 }
 
-uploadProfilePicture = async (req, res) => {
+export const uploadProfilePicture = async (req: Request, res: Response) => {
     const username = req.body.username
     var encodedPicture = req.body.encodedPicture;
 
@@ -115,12 +111,12 @@ uploadProfilePicture = async (req, res) => {
 
         // envia arquivo e o nome para a função que irá upar no DropBox o arquivo
         const pictureFileUploadStatus =
-            await uploadFile('profilePictures', pictureData.pictureName, pictureData.picture);
+            await uploadFile('profilePictures', pictureData.pictureName, String(pictureData.picture));
 
 
         if (pictureFileUploadStatus.status === 200) {
             Photo.findOne({
-                _user: user
+                _user: user.id
             }, async (err, photo) => {
                 if (err) return err;
 
@@ -132,11 +128,11 @@ uploadProfilePicture = async (req, res) => {
                     newPhoto.save()
 
                 } else {
-                    await deleteFile('profilePictures', photo.filename);
+                    await deleteFile('profilePictures', photo.filename as string);
 
                     photo.filename = pictureData.pictureName;
                     photo.temporaryLink.src = await getTemporaryPictureLink('profilePictures', photo.filename);
-                    photo.temporaryLink.created_at = Date.now();
+                    photo.temporaryLink.created_at = String(Date.now());
                     photo.save();
                 }
 
@@ -147,7 +143,7 @@ uploadProfilePicture = async (req, res) => {
 
 }
 
-getProfilePicture = async (req, res) => {
+export const getProfilePicture = async (req: Request, res: Response) => {
     User.findOne({
         username: req.body.username,
     }, async (err, user) => {
@@ -164,17 +160,17 @@ getProfilePicture = async (req, res) => {
                 if (!photo) return res.json(404).json({ message: "usuário sem foto", hasPhoto: false, url: '' })
 
                 else {
-                    var expired_at = photo.temporaryLink.created_at;
+                    var expired_at = new Date(photo.temporaryLink.created_at as string);
 
                     if (expired_at) expired_at.setHours(expired_at.getHours() + 4);
-                    const now = Date.now();
+                    const now = new Date(Date.now())
 
                     var url;
 
                     if (now > expired_at || expired_at === undefined) {
-                        url = await getTemporaryPictureLink(photo.filename, 'profilePictures');
+                        url = await getTemporaryPictureLink(photo.filename as string, 'profilePictures');
                         photo.temporaryLink.src = url;
-                        photo.temporaryLink.created_at = now;
+                        photo.temporaryLink.created_at = String(now);
                         photo.save();
                     } else {
                         url = photo.temporaryLink.src;
@@ -189,12 +185,3 @@ getProfilePicture = async (req, res) => {
 }
 
 
-
-module.exports = {
-    isloggedin,
-    getUserInfo,
-    getUploadToken,
-    changeUserProperty,
-    uploadProfilePicture,
-    getProfilePicture
-}

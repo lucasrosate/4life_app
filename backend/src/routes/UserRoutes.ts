@@ -7,7 +7,7 @@ const { isloggedin, getUserInfo, getUploadToken, changeUserProperty, uploadProfi
 
 
 
-routes = express.Router();
+const routes = express.Router();
 
 routes.post('/isloggedin', verifyUser, isloggedin);
 routes.post('/getuserinfo', verifyUser, getUserInfo);
@@ -16,4 +16,4 @@ routes.post('/changeuserproperty', verifyUser, changeUserProperty);
 routes.post('/uploadprofilepicture', verifyUser, uploadProfilePicture);
 routes.post('/getprofilepicture', verifyUser, getProfilePicture);
 
-module.exports = routes;
+export default routes;
