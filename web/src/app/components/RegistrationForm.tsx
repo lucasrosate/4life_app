@@ -2,11 +2,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import style from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
+import { IStates, IUser, UserState } from '../../../interfaces';
+import * as userAction from '../store/actions/userActions';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import docEstados from '../assets/files/estados.json';
-import { IStates } from '../../../interfaces';
 
-const estados: IStates = typeof(docEstados) == 'string'? JSON.parse(docEstados): null;
+import { StoreState } from '../../../interfaces';
+
+const estados: IStates = require('../assets/files/estados.json');
 
 const { useState } = React;
 
@@ -16,15 +19,35 @@ interface Props {
 }
 
 const RegistrationForm: React.FC<Props> = (props: Props) => {
+    const dispatch = useDispatch();
+    const store = useStore();
 
     var [error, setError] = useState('');
     var [phoneNumber, setPhoneNumber] = useState("");
-    const { register, watch, handleSubmit, errors } = useForm();
+    var responseMessage = useSelector((state: StoreState) => state.userReducer.responseMessage)
+    const { register, watch, handleSubmit } = useForm<any>();
 
-    async function onSubmit(data: any) {
-    }
+    const onSubmit =
+        handleSubmit(({ firstname, lastname, username, email, password1, stateplace, phonenumber }) => {
+            if (firstname && lastname && username && email && password1 && stateplace && phonenumber)
+                dispatch(
+                    userAction.createAccount({
+                        firstname: firstname,
+                        lastname: lastname,
+                        username: username,
+                        email: email,
+                        password: password1,
+                        state: stateplace,
+                        phone: phonenumber
+                    }));
 
-    // Validação de senhas   - onFocusOut(onBlur) haverá uma validação para saber se as senhas 1 e 2 se coincidem e se ambas tem mais de 8 caracteres
+            console.log(responseMessage);
+        })
+
+
+
+
+    // Validação de senhas-onFocusOut(onBlur) haverá uma validação para saber se as senhas 1 e 2 se coincidem e se ambas tem mais de 8 caracteres
     const validatePassword = () => {
         const password1 = watch('password1', (newPassword1: string) => newPassword1);
         const password2 = watch('password2', (newPassword2: string) => newPassword2);
@@ -41,13 +64,12 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
 
     return (
         <div className="container">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={onSubmit}>
                 <div className={`container ${style.container}  ${style.signupFormContainer}`}>
 
                     <h1>Registrar</h1>
                     <label htmlFor="firstname"><span className={style.signupLabel}>Primeiro nome</span></label>
                     <input type="text" className="input signupform firstname" placeholder="Primeiro Nome" name="firstname" ref={register({ required: true, maxLength: 80 })} />
-                    <div>{errors.name}</div>
 
                     <label htmlFor="lastname"><span className={style.signupLabel}>Sobrenome</span></label>
                     <input type="text" className="input signupform lastname" placeholder="Sobrenome" name="lastname" ref={register({ required: true, maxLength: 100 })} />
@@ -79,7 +101,7 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
                         {estados.UF.map((uf, index) => <option key={index} value={uf.name}>{`${uf.name} - ${uf.abbrev}`}</option>)}
                     </select>
 
-                    <div className={`error ${style.error}`}>{error}</div>
+                    <div className={`error ${style.error}`}>{responseMessage}</div>
 
                     <div className={`${style.buttonsRegistration}`}>
                         <GoArrowLeft fill="white" size={24} className={style.arrowleft} onClick={handleShowLoginFormFunction} />

@@ -21,11 +21,20 @@ export interface IUser {
 
 export type UserAction = {
     type: string,
-    payload: string
+    payload: any
 }
 
 export type UserState = {
     user: IUser,
+    formSubmitted: boolean,
+    loading: boolean,
+    responseMessage: string
 }
 
-export type dispatchType = (args: UserAction) => UserAction;
+type DispatchType = (args: ArticleAction) => ArticleAction;
+
+
+export type StoreState = {
+    userReducer:UserState
+
+}

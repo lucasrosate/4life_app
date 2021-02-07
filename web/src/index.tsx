@@ -10,7 +10,7 @@ ReactDOM.render(
   <div>
     <Provider store={store}>
       <App />
-      <Provider />
+    </Provider>
   </div>,
 
   document.getElementById('root')

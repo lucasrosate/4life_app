@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
     //O usuário está logado?
     localStorage.getItem('isLoggedIn')
-    var [isLoggedIn, setIsLoggedIn] = useState(Boolean(true));
+    var [isLoggedIn, setIsLoggedIn] = useState(Boolean(false));
 
 
 
@@ -31,7 +31,7 @@ const App: React.FC = () => {
         <div className="root-container">
 
             <BrowserRouter>
-            <NavigationBar />
+            {isLoggedIn? <NavigationBar />: null}
                 <Switch>
                     <Route exact path="/" render={() => (
                         isLoggedIn ?
