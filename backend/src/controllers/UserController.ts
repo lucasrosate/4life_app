@@ -1,17 +1,16 @@
-import mongoose from 'mongoose';
 import User from '../models/UserModel';
 import Photo from '../models/PhotoModel';
 
-import {uploadFile, getTemporaryPictureLink, deleteFile} from '../services/DropboxServices';
+import { uploadFile, getTemporaryPictureLink, deleteFile } from '../services/DropboxServices';
 import UserView from '../views/UserView';
 import decodePicture from '../common/functions/decodePicture';
 
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 
 require('dotenv').config;
 
 export const isloggedin = async (req: Request, res: Response) => {
-    return res.status(200).json({ ans: true });
+    return res.status(200).json({ isAuthenticated: true });
 }
 
 export const getUserInfo = async (req: Request, res: Response) => {
@@ -20,9 +19,9 @@ export const getUserInfo = async (req: Request, res: Response) => {
             if (err) return res.status(401).json({ message: "Erro na busca." })
 
             if (!user) {
-                return res.status(200).json({ message: "Usuário não encontrado." });
+                return res.status(200).json({ isAuthenticated: false, message: "Usuário não encontrado." });
             } else {
-                return res.status(200).json({ user: UserView(user) });
+                return res.status(200).json({ isAuthenticated: true, user: UserView(user), message: "Usuário encontrado" });
             }
         });
 

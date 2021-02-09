@@ -1,16 +1,21 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response} from 'express';
+import User from '../models/UserModel';
 
 import {CallbackType} from '../../interfaces';
 
 const verifyUser = (req: Request, res: Response, next: CallbackType) => {
-    const token = req.body!.token;
+    console.log(req);
+
+    const token = req.body.token;
 
     if (!token) return res.status(401).json({ message: "Access denied." });
 
     try {
         const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-        req.user = verified;
+
+        console.log(verified);
+        
         next();
 
     } catch (err) {
@@ -18,4 +23,4 @@ const verifyUser = (req: Request, res: Response, next: CallbackType) => {
     }
 }
 
-module.exports = verifyUser;
+export default verifyUser;

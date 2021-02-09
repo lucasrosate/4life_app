@@ -1,9 +1,15 @@
 const express = require('express');
 
-const verifyUser = require('../middlewares/verifyToken');
+import verifyUser from '../middlewares/verifyUser';
 
-
-const { isloggedin, getUserInfo, getUploadToken, changeUserProperty, uploadProfilePicture, getProfilePicture } = require('../controllers/UserController');
+import {
+    isloggedin,
+    getUserInfo,
+    getUploadToken,
+    changeUserProperty,
+    uploadProfilePicture,
+    getProfilePicture
+} from '../controllers/UserController';
 
 
 
