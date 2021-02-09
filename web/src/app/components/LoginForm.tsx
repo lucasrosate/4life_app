@@ -1,36 +1,40 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
+import { loginAccount } from '../store/actions/userActions';
 
 import style from '../styles/components/AccountForm.module.css';
 
-const { useState } = React;
 
 
 interface Props {
     showRegistrationFormFunction: Function,
-    messageFromRegistration: string,
-    handleChangeIsLoggedIn: Function,
+    userLogggedIn: Function,
+    responseMessage: string
 }
 
 const LoginForm: React.FC<Props> = (props: Props) => {
 
-    const history = useHistory();
-    const { register, handleSubmit } = useForm();
-    var [error, setError] = useState('');
+    const { register, handleSubmit } = useForm<any>();
+    const dispatch = useDispatch();
 
     const handleShowRegistrationFormFunction = (responseMessage: any) => props.showRegistrationFormFunction(responseMessage);
 
-    const handleSignin = () => {
+    const submitLogin =
+        handleSubmit( async ({ username, password }) => {
+            if(username && password) {
+                await dispatch(loginAccount(username, password));
 
-    }
-    
+                if(localStorage.getItem("username") && localStorage.getItem("auth-token"))
+                   props.userLogggedIn();
+            }
+        });
 
     return (
 
         <div className={`${style.container} ${style.logContainer}`} >
-            <form action="" onSubmit={handleSubmit(handleSignin)}>
+            <form action="" onSubmit={submitLogin}>
                 <div className={`${style.userForm} ${style.loginFormContainer}`}>
                     <div className="">
                         <h1>Fazer login</h1>
@@ -43,9 +47,8 @@ const LoginForm: React.FC<Props> = (props: Props) => {
                         <input className="input password" type="password" name="password" id="password" ref={register({ required: true, maxLength: 24 })} />
                     </div>
 
-                    <h4>ou <a onClick={handleShowRegistrationFormFunction}>crie uma conta.</a></h4>
-                    <div className="success box-success">{props.messageFromRegistration}</div>
-                    <div className={`error ${style.error}`}>{error}</div>
+                    <h4>ou <span onClick={handleShowRegistrationFormFunction}>crie uma conta.</span></h4>
+                    <div className={`error ${style.error}`}>{props.responseMessage}</div>
                     <button className={`btn ${style.btn}`} type="submit">Entrar</button>
 
                 </div>

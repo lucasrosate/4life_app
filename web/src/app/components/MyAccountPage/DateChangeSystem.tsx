@@ -1,6 +1,5 @@
 import React, { CSSProperties } from 'react';
 import { useForm } from 'react-hook-form';
-import PropTypes from 'prop-types';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import style from '../../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 

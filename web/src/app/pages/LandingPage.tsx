@@ -1,33 +1,34 @@
 import React, { useEffect } from 'react';
+import {useSelector} from 'react-redux';
+
 import LoginForm from '../components/LoginForm';
 import RegistrationForm from '../components/RegistrationForm';
 import style from '../styles/pages/LandingPage.module.css';
 import CSSTransition from 'react-transition-group/CSSTransition';
+import { StoreState } from '../../../interfaces';
 const { useState } = React;
 
 
 
-interface Props {
-    handleChangeIsLoggedIn: Function,
-}
-
-const LandingPage: React.FC<Props> = (props: Props) => {
+const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
 
     const [showPage, setShowPage] = useState(false); 
     const [showLoginForm, setShowLoginForm] = useState(true);
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
-    const [messageFromRegistration, setMessageFromRegistration] = useState('');
 
-    const showLoginFormFunction = (responseMessage: any) => {
+    var responseMessage = useSelector((state: StoreState) => state.userReducer.responseMessage);
+
+
+    const showLoginFormFunction = () => {
         setShowLoginForm(true);
         setShowRegistrationForm(false);
-        setMessageFromRegistration(responseMessage);
     }
 
-    const showRegistrationFormFunction = (responseMessage: any) => {
+    const showRegistrationFormFunction = () => {
         setShowLoginForm(false);
         setShowRegistrationForm(true);
     }
+
 
     useEffect(()=> {
         setShowPage(true);
@@ -64,9 +65,9 @@ const LandingPage: React.FC<Props> = (props: Props) => {
                                         unmountOnExit
                                     >
                                         <LoginForm
+                                            userLogggedIn={userLoggedIn}
                                             showRegistrationFormFunction={showRegistrationFormFunction}
-                                            messageFromRegistration={messageFromRegistration}
-                                            handleChangeIsLoggedIn={props.handleChangeIsLoggedIn}
+                                            responseMessage={responseMessage}
                                         />
                                     </CSSTransition>
 
@@ -85,6 +86,7 @@ const LandingPage: React.FC<Props> = (props: Props) => {
                                     >
                                         <RegistrationForm
                                             showLoginFormFunction={showLoginFormFunction}
+                                            responseMessage={responseMessage}
                                         />
                                     </CSSTransition>
 
@@ -93,7 +95,6 @@ const LandingPage: React.FC<Props> = (props: Props) => {
 
                             </div >
                         </div>
-                        <polygon className={style.TrianglePolygon} points="0,0 0,100 100,0" />
                     </div>
 
 

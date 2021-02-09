@@ -2,15 +2,17 @@ import React, { CSSProperties } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+import AccountOptions from './AccountOptions';
+
 import { GoChevronDown, GoChevronUp } from 'react-icons/go'
 import style from '../../styles/components/Navigation/NavigationBar.module.css';
 
 import profileNoPhoto from '../../assets/images/nophoto.svg';
-import AccountOptions from './AccountOptions';
+
 
 const { useState } = React;
 
-function NavigationBar(props: any) {
+const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut }) => {
 
     //Rotas do navbar
     const [routes] = useState(
@@ -73,7 +75,9 @@ function NavigationBar(props: any) {
 
                 <div className={style.userAllInfo}>
                     <span className={style.userBox}>
-                        <img src={localStorage.getItem('profile-picture-url') || profileNoPhoto} alt="profile" />
+                        {localStorage.getItem('profile-picture-url') ? 
+                        <img src={localStorage.getItem('profile-picture-url') as string} alt="profile" /> : 
+                        <svg>{profileNoPhoto}</svg>}
                     </span>
 
                     <span className={style.accountInfo}
@@ -81,7 +85,7 @@ function NavigationBar(props: any) {
                     >
                         <ul>
                             <li className={style.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
-                            <li><div>{accMenu ? <AccountOptions handleChangeIsLoggedIn={props.handleChangeIsLoggedIn} /> : null}</div></li>
+                            <li><div>{accMenu ? <AccountOptions userLoggedOut={userLoggedOut} /> : null}</div></li>
                         </ul>
 
 

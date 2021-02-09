@@ -1,13 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
+import * as userAction from '../store/actions/userActions';
+import { useDispatch } from 'react-redux';
+import { IStates } from '../../../interfaces';
 import style from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
-import { IStates, IUser, UserState } from '../../../interfaces';
-import * as userAction from '../store/actions/userActions';
-import { useDispatch, useSelector, useStore } from 'react-redux';
-
-
-import { StoreState } from '../../../interfaces';
 
 const estados: IStates = require('../assets/files/estados.json');
 
@@ -15,16 +13,16 @@ const { useState } = React;
 
 
 interface Props {
-    showLoginFormFunction: Function
+    showLoginFormFunction: Function,
+    responseMessage: string
 }
 
 const RegistrationForm: React.FC<Props> = (props: Props) => {
     const dispatch = useDispatch();
-    const store = useStore();
 
-    var [error, setError] = useState('');
     var [phoneNumber, setPhoneNumber] = useState("");
-    var responseMessage = useSelector((state: StoreState) => state.userReducer.responseMessage)
+    var [passwordError, setPasswordError] = useState<string>("");
+
     const { register, watch, handleSubmit } = useForm<any>();
 
     const onSubmit =
@@ -40,9 +38,7 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
                         state: stateplace,
                         phone: phonenumber
                     }));
-
-            console.log(responseMessage);
-        })
+        });
 
 
 
@@ -53,9 +49,9 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
         const password2 = watch('password2', (newPassword2: string) => newPassword2);
 
         if ((password1 === password2) && (password1.length >= 8 && password2.length >= 8)) {
-            setError('');
+            setPasswordError('');
         } else {
-            setError('As senhas devem ser iguais e com caracter e com pelo menos 8 caracteres');
+            setPasswordError('As senhas devem ser iguais e com caracter e com pelo menos 8 caracteres');
         }
     }
 
@@ -96,12 +92,14 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
                     <label htmlFor="password2"><span className={style.signupLabel}>Repita a senha</span></label>
                     <input type="password" className="input signupform password2" placeholder="Senha" name="password2" onBlur={validatePassword} ref={register({ required: true, maxLength: 24 })} />
 
+                    <div className="password-error">{passwordError}</div>
+
                     <label htmlFor="stateplace"><span className={style.signupLabel}>Estado</span></label>
                     <select name="stateplace" className="input signupform stateplace " ref={register}>
                         {estados.UF.map((uf, index) => <option key={index} value={uf.name}>{`${uf.name} - ${uf.abbrev}`}</option>)}
                     </select>
 
-                    <div className={`error ${style.error}`}>{responseMessage}</div>
+                    <div className={`error ${style.error}`}>{props.responseMessage}</div>
 
                     <div className={`${style.buttonsRegistration}`}>
                         <GoArrowLeft fill="white" size={24} className={style.arrowleft} onClick={handleShowLoginFormFunction} />

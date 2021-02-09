@@ -31,10 +31,9 @@ export type UserState = {
     responseMessage: string
 }
 
-type DispatchType = (args: ArticleAction) => ArticleAction;
+export type DispatchType = (args: ArticleAction) => ArticleAction;
 
 
 export type StoreState = {
     userReducer:UserState
-
 }

@@ -40,7 +40,7 @@ const NotFoundPage: React.FC = () => {
                 <div style={errorStyle}>
                     <h1 style={errorMessage}>
                         Erro 404: A página que você deseja visualizar não foi encontrada.
-            </h1>
+                    </h1>
                     <FcGlobe size={800} />
                 </div>
             </CSSTransition>
