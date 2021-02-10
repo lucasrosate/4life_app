@@ -6,7 +6,7 @@ const dbx = new Dropbox({
 });
 
 // função para upar o arquivo
-export const uploadFile = async (path: string, filename: string, picture: string) => {
+export const uploadFile = async (path: string, filename: string, picture: Buffer) => {
 
     // files upload recebe
     //'path', nome do destino na nuvem dropBox para enviar o arquivo

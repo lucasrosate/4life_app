@@ -5,7 +5,6 @@ import User from '../models/UserModel';
 import {CallbackType} from '../../interfaces';
 
 const verifyUser = (req: Request, res: Response, next: CallbackType) => {
-    console.log(req);
 
     const token = req.body.token;
 
