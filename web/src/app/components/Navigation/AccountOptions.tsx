@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import style from '../../styles/components/Navigation/AccountOptions.module.css';
 
 const AccountOptions: React.FC<{userLoggedOut: Function}> = ({userLoggedOut}) => {
@@ -9,6 +9,7 @@ const AccountOptions: React.FC<{userLoggedOut: Function}> = ({userLoggedOut}) =>
     const logout = () => {
         localStorage.removeItem("auth-token");
         localStorage.removeItem("username");
+        localStorage.removeItem("profile-picture-url");
         userLoggedOut();
 
         history.push("");

@@ -62,7 +62,8 @@
 }
 
 .userBox img {
-    width: 40px;
+    margin-top: 5px;
+    width: 35px;
     border-radius: 50%;
     height: auto;
 }

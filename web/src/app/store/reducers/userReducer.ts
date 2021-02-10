@@ -1,20 +1,9 @@
 
 import { IUser, UserAction, UserState } from "../../../../interfaces";
 import * as actionTypes from '../types/userManagementType';
-
-import api from '../../api/api';
 import { Reducer } from "redux";
 
 
-interface IApiDataResponse {
-    success: boolean,
-    message: string
-}
-
-interface ILogAction {
-    success: boolean,
-    message?: string
-}
 const userInitialState: UserState = {
     user: {
         firstname: "",
@@ -23,7 +12,8 @@ const userInitialState: UserState = {
         password: "",
         email: "",
         state: "",
-        phone: ""
+        phone: "",
+        profilePhoto: ""
     },
     formSubmitted: false,
     loading: true,
@@ -35,7 +25,7 @@ const userInitialState: UserState = {
 export const userReducer: Reducer<UserState, UserAction> =
     (state: UserState = userInitialState, userAction: UserAction) => {
         switch (userAction.type) {
-            case actionTypes.USER_CREATE_ACCOUNT:
+            case actionTypes.LOADING:
                 return {
                     ...state,
                     loading: true
@@ -55,11 +45,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                     loading: false
                 }
 
-            case actionTypes.USER_LOGIN:
-                return {
-                    ...state,
-                    loading: true
-                };
 
             case actionTypes.USER_LOGIN_SUCCESS:
                 return {
@@ -75,12 +60,46 @@ export const userReducer: Reducer<UserState, UserAction> =
                     loading: false
                 }
 
-            case actionTypes.USER_UPDATE_DATA:
+            case actionTypes.USER_UPDATE_DATA_SUCCESS:
                 const user: IUser = userAction.payload;
-
+                console.log(user);
                 return {
                     ...state,
                     user: user
+                }
+
+            case actionTypes.USER_UPDATE_DATA_FAILED:
+
+                return {
+                    ...state
+                }
+
+            case actionTypes.USER_UPDATE_PROFILE_PICTURE_SUCCESS:
+                return {
+                    ...state,
+                    user: {
+                        ...state.user,
+                        profilePhoto: localStorage.getItem("profile-picture-url")
+                    }
+                }
+
+            case actionTypes.USER_UPDATE_PROFILE_PICTURE_FAILED:
+                return {
+                    ...state
+                }
+
+            case actionTypes.USER_UPLOAD_PROFILE_PICTURE_SUCCESS:
+                return {
+                    ...state,
+                    user: {
+                        ...state.user,
+                        profilePhoto: localStorage.getItem("profile-picture-url")
+                    }
+                }
+
+            case actionTypes.USER_UPLOAD_PROFILE_PICTURE_FAILED:
+                return {
+                    ...state
                 }
 
             default: return state;

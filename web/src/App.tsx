@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import api from './app/api/api';
 import NavigationBar from './app/components/Navigation/NavigationBar';
@@ -13,15 +14,14 @@ import MyAccountPage from './app/pages/MyAccountPage';
 
 import './app/styles/global.css';
 
-import { updateUserData } from './app/store/actions/userActions';
-
-
+import { updateUserData, updateProfilePicture } from './app/store/actions/userActions';
 
 const App: React.FC = () => {
 
     //O usuário está logado?
     localStorage.getItem('isLoggedIn')
     var [isLoggedIn, setIsLoggedIn] = useState(false);
+    const dispatch = useDispatch();
 
     // triggering isLoggedIn status
     useEffect(() => {
@@ -35,12 +35,12 @@ const App: React.FC = () => {
                         username: username,
                         token: token
                     });
-
                     console.log(res.data);
-
                     if (res.data.isAuthenticated) {
                         setIsLoggedIn(true);
-                        updateUserData(res.data.user);
+                        dispatch(updateUserData());
+                        dispatch(updateProfilePicture());
+
                     }
                 } catch (error) {
                     setIsLoggedIn(false);
@@ -48,13 +48,12 @@ const App: React.FC = () => {
             } else {
                 setIsLoggedIn(false);
             }
-
-
         }
 
-        verifyUser();
-
-    }, []);
+        if (!isLoggedIn) {
+            verifyUser();
+        }
+    }, [dispatch, isLoggedIn]);
 
     const userLoggedIn = () => setIsLoggedIn(true);
     const userLoggedOut = () => setIsLoggedIn(false);
@@ -74,43 +73,44 @@ const App: React.FC = () => {
 
                     <Route exact path="/home"
                         render={() => (
-                            isLoggedIn ? <HomePage /> : <NotFoundPage />
+                            isLoggedIn ? <HomePage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
                     <Route exact path="/health"
                         render={() => (
                             isLoggedIn ?
-                                <HealthPage /> : <NotFoundPage />
+                                <HealthPage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
                     <Route exact path="/cash"
                         render={() => (
-                            isLoggedIn ? <CashFlowPage /> : <NotFoundPage />
+                            isLoggedIn ? <CashFlowPage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
                     <Route exact path="/task"
                         render={() => (
                             isLoggedIn ?
-                                <TaskPage /> : <NotFoundPage />
+                                <TaskPage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
 
                     <Route exact path="/entertainment"
                         render={() => (
-                            isLoggedIn ? <EntertainmentPage /> : <NotFoundPage />
+                            isLoggedIn ? <EntertainmentPage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
                     <Route exact path="/myaccount"
                         render={() => (
-                            isLoggedIn ? <MyAccountPage /> : <NotFoundPage />
+                            isLoggedIn ? <MyAccountPage /> : <LandingPage userLoggedIn={userLoggedIn} />
                         )}
                     />
 
+                    <Route component={NotFoundPage} />
                 </Switch>
 
             </BrowserRouter>

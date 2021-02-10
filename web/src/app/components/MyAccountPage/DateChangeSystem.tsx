@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react';
 import { useForm } from 'react-hook-form';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
-import style from '../../../styles/components/MyAccount/ChangeButtonSystem.module.css';
+import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
 const {useState, useEffect} = React;
 
@@ -18,12 +18,6 @@ interface Props {
     //showInput Status (Se true, aparece o input com a opção aceitar/recusar)
     showInput: boolean,
 
-    //Função a ser chamada do parent caso seja recusado a mudança
-    handleExitChange: Function,
-
-    //Função a ser chamada do parent caso seja aceito a mudança
-    handleAcceptChange: Function,
-
     //Tamanho dos ícones (padrão: 18 px)
     size?: number,
 
@@ -37,6 +31,8 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     const { handleSubmit } = useForm();
 
+    
+
 
     const size = props.size === undefined ? 18 : props.size;
     const label = props.label === undefined ? "" : props.label;
@@ -44,7 +40,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     var [color, setColor] = useState("")
     var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
-    var [errorMessages, setErrorMessages] = useState<string[]>([]);
+    var [toggleOption, setToggleOption] = useState<boolean>(false);
 
 
 
@@ -59,15 +55,17 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         borderLeftColor: color,
     }
 
-    const handleChangeProperty = async () => {
+    const onSubmit = handleSubmit(({ field }) => {
 
-        if (newPropertyParentValue.length > 0) {
-            props.handleAcceptChange(newPropertyParentValue);
-        }
+    });
 
-        props.handleExitChange();
+    const handleSubmitChange = () => {
+
     }
 
+    const handleExitChange = () => {
+
+    }
 
 
     return (
@@ -78,14 +76,14 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                 <span>
                     {/* ON SUBMIT, CLICANDO EM GO CHECK -> handleChangeProperty */}
-                    <form onSubmit={handleSubmit(handleChangeProperty)}>
+                    <form onSubmit={onSubmit}>
 
                         {/* Mostrar ?
                             true -> mostra o input juntamente com os botões de aceitar/recusar
                             false -> mostra o botão de alterar
                         */}
 
-                        {props.showInput ?
+                        {toggleOption ?
                             <span className={style.changeButtonContainer}>
 
                                 {/* Input */}
@@ -125,7 +123,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     <button type="button" className={style.buttonInv}>
                                         <GoX fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
-                                            onClick={() => props.handleExitChange()}
+                                            onClick={() => handleExitChange()}
                                             size={size}
                                         />
                                     </button>
@@ -143,7 +141,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <button type="button" className={style.buttonInv}>
                                     <GoPencil fill={color}
                                         className={style.goIcon}
-                                        onClick={() => props.handleExitChange()}
+                                        onClick={() => handleExitChange()}
                                         size={size}
                                     />
                                 </button>
@@ -154,7 +152,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
             </div>
 
             <div className={style.errorContainer}>
-                <h2>{errorMessages}</h2>
+
             </div>
 
         </div>

@@ -1,5 +1,4 @@
 
-import Store from 'redux';
 
 export interface IStates {
     UF: [{
@@ -16,7 +15,13 @@ export interface IUser {
     email: string,
     state:string,
     phone: string,
-    birth?: string
+    birth?: string,
+    profilePhoto?: string | null
+}
+
+export interface IRoute {
+    path: string,
+    name: string
 }
 
 export type UserAction = {

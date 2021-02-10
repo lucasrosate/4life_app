@@ -1,9 +1,9 @@
 import React, { CSSProperties } from 'react';
 import { useForm } from 'react-hook-form';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
-import style from '../../../styles/components/MyAccount/ChangeButtonSystem.module.css';
+import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
-const {useState, useEffect} = React;
+const { useState, useEffect } = React;
 
 interface Props {
     //Propriedade (Ex: username,firstname, etc)
@@ -11,12 +11,6 @@ interface Props {
 
     //showInput Status (Se true, aparece o input com a opção aceitar/recusar)
     showInput: boolean,
-
-    //Função a ser chamada do parent caso seja recusado a mudança
-    handleExitChange: Function,
-
-    //Função a ser chamada do parent caso seja aceito a mudança
-    handleAcceptChange: Function,
 
     //Label a ser mostrada
     label?: string,
@@ -48,19 +42,18 @@ interface Props {
 const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
-    const { handleSubmit } = useForm();
+    const { handleSubmit } = useForm<any>();
 
 
     const size = props.size === undefined ? 18 : props.size;
     const label = props.label === undefined ? "" : props.label;
     const minLength = props.minLength === undefined ? 3 : props.minLength;
     const maxLength = props.maxLength === undefined ? 24 : props.maxLength;
-    const error1 = "Campo vazio."
 
 
     var [color, setColor] = useState("")
     var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
-    var [errorMessages, setErrorMessages] = useState<string[]>([]);
+    var [toggleOption, setToggleOption] = useState<boolean>(false);
 
 
 
@@ -75,17 +68,17 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         borderLeftColor: color,
     }
 
-    const handleChangeProperty = async () => {
-        if (newPropertyParentValue.length > 0) {
-            props.handleAcceptChange(newPropertyParentValue);
-        } else {
-            if (!(errorMessages.includes(error1)))
-                setErrorMessages(errorMessages.concat(error1));
-        }
+    const onSubmit = handleSubmit(({ field }) => {
 
-        props.handleExitChange();
+    });
+
+    const handleSubmitChange = () => {
+
     }
 
+    const handleExitChange = () => {
+
+    }
 
 
     return (
@@ -96,26 +89,27 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                 <span>
                     {/* ON SUBMIT, CLICANDO EM GO CHECK -> handleChangeProperty */}
-                    <form onSubmit={handleSubmit(handleChangeProperty)}>
+                    <form onSubmit={onSubmit}>
 
                         {/* Mostrar ?
                             true -> mostra o input juntamente com os botões de aceitar/recusar
                             false -> mostra o botão de alterar
                         */}
 
-                        {props.showInput ?
+                        {toggleOption ?
                             <span className={style.changeButtonContainer}>
 
                                 {/* Input */}
                                 <input type="text" className={style.userDataInfoInput}
+                                    name="field"
                                     placeholder="Preencha este campo"
                                     minLength={minLength}
                                     maxLength={maxLength}
                                     value={newPropertyParentValue}
                                     onChange={e => {
                                         let s = e.target.value;
-                                        if(props.trim) s = s.trim();
-                                        if(props.onlyNumber) s = s.replace(/\D/g, '');
+                                        if (props.trim) s = s.trim();
+                                        if (props.onlyNumber) s = s.replace(/\D/g, '');
 
                                         return setNewPropertyParentValue(s);
                                     }
@@ -149,7 +143,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     <button type="button" className={style.buttonInv}>
                                         <GoX fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
-                                            onClick={() => props.handleExitChange()}
+                                            onClick={() => handleExitChange()}
                                             size={size}
                                         />
                                     </button>
@@ -167,7 +161,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <button type="button" className={style.buttonInv}>
                                     <GoPencil fill={color}
                                         className={style.goIcon}
-                                        onClick={() => props.handleExitChange()}
+                                        onClick={() => handleExitChange()}
                                         size={size}
                                     />
                                 </button>
@@ -178,7 +172,6 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
             </div>
 
             <div className={style.errorContainer}>
-                <h2>{errorMessages}</h2>
             </div>
 
         </div>

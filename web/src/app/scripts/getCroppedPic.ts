@@ -5,9 +5,6 @@ interface PixelCrop {
     height: number
 }
 
-interface OnLoadAble {
-    onload: any;
- }
 
 function onLoadPicture (pictureURL: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {

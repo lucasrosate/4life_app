@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -8,36 +8,40 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go'
 import style from '../../styles/components/Navigation/NavigationBar.module.css';
 
 import profileNoPhoto from '../../assets/images/nophoto.svg';
+import { IRoute, StoreState } from '../../../../interfaces';
+import { useSelector } from 'react-redux';
 
 
 const { useState } = React;
 
+//Rotas do navbar
+const routes: IRoute[] = [
+    {
+        path: '/health',
+        name: 'SAÚDE'
+    },
+
+    {
+        path: '/cash',
+        name: 'FINANÇAS'
+    },
+
+    {
+        path: '/task',
+        name: 'TAREFAS'
+    },
+
+    {
+        path: '/entertainment',
+        name: 'ENTRETENIMENTO'
+    },
+
+];
+
 const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut }) => {
 
-    //Rotas do navbar
-    const [routes] = useState(
-        [
-            {
-                path: '/health',
-                name: 'SAÚDE'
-            },
-
-            {
-                path: '/cash',
-                name: 'FINANÇAS'
-            },
-
-            {
-                path: '/task',
-                name: 'TAREFAS'
-            },
-
-            {
-                path: '/entertainment',
-                name: 'ENTRETENIMENTO'
-            },
-
-        ])
+    var [isValidURL, setIsValidURL] = useState(false);
+    const profilePictureUrl = useSelector((state: StoreState) => state.userReducer.user.profilePhoto);
 
     const [accMenu, setAccMenu] = useState(false);
 
@@ -62,40 +66,64 @@ const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut })
         return <ul>{routeList}</ul>
     }
 
+
+    useEffect(() => {
+
+        for (let i = 0; i < routes.length; i++) {
+            if (routes[i].path === documentURL) {
+                return setIsValidURL(true);
+            }
+        }
+
+        if (documentURL === "/") return setIsValidURL(true);
+        if (documentURL === "/home") return setIsValidURL(true);
+        if (documentURL === "/myaccount") return setIsValidURL(true);
+        return setIsValidURL(false);
+
+
+    }, [documentURL])
+
     return (
-        <nav className={style.navHeader}>
-            <div className={style.menuContainer}>
-                <Link to="/home" ><h2>4life</h2></Link>
 
-                <div className={style.RoutesOptions}>
-                    <ul>
-                        <NavBarList />
-                    </ul>
-                </div>
+        <>
+            {
+                isValidURL ?
 
-                <div className={style.userAllInfo}>
-                    <span className={style.userBox}>
-                        {localStorage.getItem('profile-picture-url') ? 
-                        <img src={localStorage.getItem('profile-picture-url') as string} alt="profile" /> : 
-                        <svg>{profileNoPhoto}</svg>}
-                    </span>
+                    <nav className={style.navHeader}>
+                        <div className={style.menuContainer}>
+                            <Link to="/home" ><h2>4life</h2></Link>
 
-                    <span className={style.accountInfo}
-                        onClick={() => setAccMenu(!accMenu)}
-                    >
-                        <ul>
-                            <li className={style.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
-                            <li><div>{accMenu ? <AccountOptions userLoggedOut={userLoggedOut} /> : null}</div></li>
-                        </ul>
+                            <div className={style.RoutesOptions}>
+                                <ul>
+                                    <NavBarList />
+                                </ul>
+                            </div>
 
+                            <div className={style.userAllInfo}>
+                                <span className={style.userBox}>
+                                    <img src={profilePictureUrl ? profilePictureUrl : profileNoPhoto} alt="profile" />
 
-                    </span>
-                </div>
+                                </span>
 
-            </div>
+                                <span className={style.accountInfo}
+                                    onClick={() => setAccMenu(!accMenu)}
+                                >
+                                    <ul>
+                                        <li className={style.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
+                                        <li><div>{accMenu ? <AccountOptions userLoggedOut={userLoggedOut} /> : null}</div></li>
+                                    </ul>
 
 
-        </nav>
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </nav>
+                    : null}
+        </>
+
     )
 }
 

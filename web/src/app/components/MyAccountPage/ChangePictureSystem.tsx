@@ -1,16 +1,26 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
+import {uploadUserPicture} from '../../store/actions/userActions';
+
 import getCroppedPic from '../../scripts/getCroppedPic';
+import { withStyles } from '@material-ui/core/styles';
+
 import Cropper from 'react-easy-crop';
 import Slider from '@material-ui/core/Slider'
 import { GoX } from "react-icons/go";
-import style from '../../../styles/components/MyAccount/ChangePictureSystem.module.css';
-import '../../../styles/components/MyAccount/ReactEasyCropContainer.css';
-import { withStyles } from '@material-ui/core/styles';
+import style from '../../styles/components/MyAccount/ChangePictureSystem.module.css';
+import '../../styles/components/MyAccount/ReactEasyCropContainer.css';
+
+interface ICoord {
+    x: number,
+    y: number
+}
+
 
 const { useState, useCallback } = React;
 
 interface Props {
-    handleCroppedPicture: Function,
     handleShowCropPictureWindow: Function,
 }
 
@@ -32,54 +42,57 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
 
     const _handleShowCrop = () => props.handleShowCropPictureWindow();
 
-    var [picture, setPicture] = useState<Object | null>(null);
+    var dispatch = useDispatch();
+
+    var [picture, setPicture] = useState<string>("");
+    var [pictureFile, setPictureFile] = useState<File | null>(null);
     var [showEasyCrop, setShowEasyCrop] = useState<boolean>(false);
-    var [crop, setCrop] = useState<any>({ x: 0, y: 0 });
+    var [crop, setCrop] = useState<ICoord>({ x: 0, y: 0 });
     var [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     var [rotation, setRotation] = useState<number>(0);
     var [zoom, setZoom] = useState<number>(1);
 
 
-    const uploadPicture = (e: any) => {
-        if (e.target.files[0] !== undefined) {
-            setPicture(e.target.files[0])
-            setShowEasyCrop(!showEasyCrop);
-        }
-    };
-
+    const uploadPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPicture(URL.createObjectURL(e.target.files? e.target.files[0]: ""));
+        setPictureFile(e.target.files? e.target.files[0]: null);
+       setShowEasyCrop(true);
+    }
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, [])
 
-    const exportCroppedPicture = useCallback(async () => {
-        if (picture === null) return;
-        var _cropped;
+    const exportCroppedPicture = async () => {
+        console.log(pictureFile);
 
+        if (pictureFile === null) return;
+
+        var cropped;
 
         try {
-            _cropped = await getCroppedPic(
-                picture,
+            cropped = await getCroppedPic(
+                pictureFile,
                 croppedAreaPixels,
                 rotation
             )
         } catch (e) {
             throw (e);
         }
-        props.handleCroppedPicture(_cropped.croppedPicture, _cropped.encodedCroppedPicture);
+
+        await dispatch(uploadUserPicture(cropped));
         props.handleShowCropPictureWindow();
 
-    }, [props, picture, croppedAreaPixels, rotation])
+    }
 
-
-    const onCropChange = (newCrop: Object) => setCrop(newCrop);
-    const onZoomChange = (newZoom: number) => setZoom(newZoom);
-    const onSlideZoomChange = (e: any, value: number) => { setZoom(value) };
-    const onSlideRotationChange = (e: any, value: number) => { setRotation(value) };
+    const onCropChange = (newCrop: ICoord) => setCrop(newCrop);
+    const onZoomChange = (newZoom: number) => {console.log(zoom); setZoom(newZoom)};
+    const onSlideZoomChange = (e: any, value: any) => { console.log(value); setZoom(value) };
+    const onSlideRotationChange = (e: any, value: any) => { setRotation(value) };
 
 
 
     return (
-        <div className={style.Container}>
+        <div className={style.Container}>  
             <div className={style.changePictureWindowBackground} onClick={_handleShowCrop} />
             <div className={style.changePictureContentContainer}>
                 <div className={style.changePicturePositionContainer}>
@@ -92,13 +105,14 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                         <div className={style.PictureField}>
                             {
                                 showEasyCrop ?
-
                                     <Cropper
-                                        image={URL.createObjectURL(picture!)}
+                                        image={picture!}
                                         zoom={zoom}
+                                        restrictPosition={true}
                                         rotation={rotation}
                                         crop={crop}
                                         aspect={1}
+     
                                         onZoomChange={onZoomChange}
                                         onCropChange={onCropChange}
                                         onCropComplete={onCropComplete}
@@ -115,7 +129,7 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                                 min={1}
                                 max={4}
                                 step={.1}
-                                onChange={() => onSlideZoomChange}
+                                onChange={(e, value) => onSlideZoomChange(e,value)}
                                 marks
                             />
 
@@ -124,7 +138,7 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                                 defaultValue={0}
                                 min={-180}
                                 max={180}
-                                onChange={() => onSlideRotationChange}
+                                onChange={(e, value) => onSlideRotationChange(e, value)}
                             />
 
                         </div>
@@ -135,7 +149,7 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
                                 id="inputProfileImgFile"
                                 type="file"
                                 accept=".jpg, .jpeg, .png"
-                                onChange={(e) => uploadPicture(e)}
+                                onChange={uploadPicture}
                                 hidden />
                             <label htmlFor="inputProfileImgFile">Trocar a foto</label>
 
