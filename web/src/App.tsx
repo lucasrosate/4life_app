@@ -14,7 +14,7 @@ import MyAccountPage from './app/pages/MyAccountPage';
 
 import './app/styles/global.css';
 
-import { updateUserData, updateProfilePicture } from './app/store/actions/userActions';
+import { getProfilePicture, getUserData } from './app/store/actions/userActions';
 
 const App: React.FC = () => {
 
@@ -35,11 +35,11 @@ const App: React.FC = () => {
                         username: username,
                         token: token
                     });
-                    console.log(res.data);
+        
                     if (res.data.isAuthenticated) {
                         setIsLoggedIn(true);
-                        dispatch(updateUserData());
-                        dispatch(updateProfilePicture());
+                        dispatch(getUserData());
+                        dispatch(getProfilePicture());
 
                     }
                 } catch (error) {

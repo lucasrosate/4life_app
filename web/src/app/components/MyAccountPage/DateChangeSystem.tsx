@@ -13,7 +13,7 @@ interface Props {
     color?: string
 
     //Propriedade (Ex: username,firstname, etc)
-    PropertyValue: string,
+    propertyValue: string,
 
     //showInput Status (Se true, aparece o input com a opção aceitar/recusar)
     showInput: boolean,
@@ -101,7 +101,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <span className={style.optionsGo}>
 
                                     {/* Botão aceitar - Verde = username diferente do atual, Cinza = username igual */}
-                                    {props.PropertyValue === newPropertyParentValue ?
+                                    {props.propertyValue === newPropertyParentValue ?
                                         <button type="button" className={style.buttonInv}>
                                             <GoCheck fill="gray"
                                                 className={style.goIcon}
@@ -135,7 +135,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
                             <span className={style.changeButtonContainer}>
-                                <span className={style.userDataInfo}>{props.PropertyValue}</span>
+                                <span className={style.userDataInfo}>{props.propertyValue}</span>
 
                                 {/* Botão para selecionar troca */}
                                 <button type="button" className={style.buttonInv}>

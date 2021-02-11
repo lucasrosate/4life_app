@@ -18,7 +18,6 @@ const userInitialState: UserState = {
     formSubmitted: false,
     loading: true,
     responseMessage: ""
-
 }
 
 
@@ -60,21 +59,20 @@ export const userReducer: Reducer<UserState, UserAction> =
                     loading: false
                 }
 
-            case actionTypes.USER_UPDATE_DATA_SUCCESS:
+            case actionTypes.USER_GET_DATA_SUCCESS:
                 const user: IUser = userAction.payload;
-                console.log(user);
                 return {
                     ...state,
                     user: user
                 }
 
-            case actionTypes.USER_UPDATE_DATA_FAILED:
+            case actionTypes.USER_GET_DATA_FAILED:
 
                 return {
                     ...state
                 }
 
-            case actionTypes.USER_UPDATE_PROFILE_PICTURE_SUCCESS:
+            case actionTypes.USER_GET_PROFILE_PICTURE_SUCCESS:
                 return {
                     ...state,
                     user: {
@@ -83,7 +81,7 @@ export const userReducer: Reducer<UserState, UserAction> =
                     }
                 }
 
-            case actionTypes.USER_UPDATE_PROFILE_PICTURE_FAILED:
+            case actionTypes.USER_GET_PROFILE_PICTURE_FAILED:
                 return {
                     ...state
                 }
@@ -98,6 +96,86 @@ export const userReducer: Reducer<UserState, UserAction> =
                 }
 
             case actionTypes.USER_UPLOAD_PROFILE_PICTURE_FAILED:
+                return {
+                    ...state
+                }
+                
+
+            case actionTypes.USER_UPDATE_DATA_SUCCESS:
+                const option = userAction.payload.option;
+                const newValue = userAction.payload.newValue;
+
+                switch (option) {
+                    case "EDIT_USERNAME":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                username: newValue
+                            }
+                        }
+
+                    case "EDIT_FIRSTNAME":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                firstname: newValue
+                            }
+                        }
+
+                    case "EDIT_LASTNAME":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                firstname: newValue
+                            }
+                        }
+                    case "EDIT_EMAIL":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                firstname: newValue
+                            }
+                        }
+
+                    case "EDIT_PHONE":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                phone: newValue
+                            }
+                        }
+
+                    case "EDIT_STATE":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                state: newValue
+                            }
+                        }
+
+                    case "EDIT_BIRTH":
+                        return {
+                            ...state,
+                            user: {
+                                ...state.user,
+                                birth: newValue
+                            }
+                        }
+
+                    default:
+                        return {
+                            ...state
+                        }
+                }
+                break;
+
+            case actionTypes.USER_UPDATE_DATA_FAILED:
                 return {
                     ...state
                 }

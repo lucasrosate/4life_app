@@ -27,9 +27,12 @@ const MyAccountPage: React.FC = () => {
     var user: IUser = useSelector((state: StoreState) => state.userReducer.user);
     var profilePictureUrl = useSelector((state: StoreState) => state.userReducer.user.profilePhoto);
 
+
+    //console.log(profilePictureUrl);
+
     var [showCropPictureWindow, setShowCropPictureWindow] = useState(false);
 
-    
+
     const handleShowCropPictureWindow = () => setShowCropPictureWindow(!showCropPictureWindow);
 
 
@@ -74,7 +77,7 @@ const MyAccountPage: React.FC = () => {
 
                             <div className={style.userProfileImgBox}>
                                 <div className={style.userProfileImg}>
-                                    <img src={profilePictureUrl? profilePictureUrl: profileNoPhoto} alt="profile" />
+                                    <img src={profilePictureUrl ? profilePictureUrl : profileNoPhoto} alt="profile" />
 
                                     <button onClick={handleShowCropPictureWindow}>Mudar foto de perfil</button>
                                 </div>
@@ -89,36 +92,42 @@ const MyAccountPage: React.FC = () => {
                                 {/* username */}
                                 <InputChangeSystem
                                     label="Nome de Usuário"
-                                    PropertyValue={user.username}
+                                    option={"username"}
+                                    propertyValue={user.username}
                                     trim={true}
                                     showInput={true}
+                                    
                                 />
 
                                 {/* Primeiro nome */}
                                 <InputChangeSystem
                                     label="Primeiro nome"
-                                    PropertyValue={user.firstname}
+                                    option={"firstname"}
+                                    propertyValue={user.firstname}
                                     showInput={true}
                                 />
 
                                 {/* Sobrenome */}
                                 <InputChangeSystem
                                     label="Sobrenome"
-                                    PropertyValue={user.lastname}
+                                    option={"lastname"}
+                                    propertyValue={user.lastname}
                                     showInput={true}
                                 />
 
                                 {/* Email */}
-                          <InputChangeSystem
+                                <InputChangeSystem
                                     label="E-mail"
-                                    PropertyValue={user.email}
+                                    option={"email"}
+                                    propertyValue={user.email}
                                     showInput={true}
                                 />
 
                                 {/* Telefone */}
                                 <InputChangeSystem
                                     label="Telefone"
-                                    PropertyValue={user.phone}
+                                    option={"phone"}
+                                    propertyValue={user.phone}
                                     showInput={true}
                                     onlyNumber={true}
                                     minLength={8}
@@ -129,17 +138,17 @@ const MyAccountPage: React.FC = () => {
                                 {/* Estado */}
                                 <SelectChangeSystem
                                     label="Estado"
-                                    PropertyValue={user.state}
+                                    propertyValue={user.state}
                                     SelectListProperties={estados.UF}
                                     showInput={true}
-                                /> 
+                                />
 
 
 
                                 {/* Estado */}
                                 <DateChangeSystem
                                     label="Data de nascimento"
-                                    PropertyValue={user.birth || "1900-01-01T00:00:00.000+00:00"}
+                                    propertyValue={user.birth || "1900-01-01T00:00:00.000+00:00"}
                                     showInput={true}
                                 />
 

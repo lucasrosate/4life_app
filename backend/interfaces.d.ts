@@ -6,7 +6,7 @@ export interface IUser {
     username: string,
     password: string,
     email: string,
-    state:string,
+    state: string,
     phone: string,
     birth?: Date
 }
@@ -21,3 +21,8 @@ export interface IPhoto {
     }
 
 }
+
+export interface ITemporaryLink { 
+    link: string, 
+    status: number
+} 

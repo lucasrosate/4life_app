@@ -1,5 +1,7 @@
 import React, { CSSProperties } from 'react';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { updateUserData } from '../../store/actions/userActions';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
@@ -7,7 +9,10 @@ const { useState, useEffect } = React;
 
 interface Props {
     //Propriedade (Ex: username,firstname, etc)
-    PropertyValue: string,
+    propertyValue: string,
+
+    //option
+    option: string,
 
     //showInput Status (Se true, aparece o input com a opção aceitar/recusar)
     showInput: boolean,
@@ -38,7 +43,6 @@ interface Props {
 
 }
 
-
 const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
@@ -50,9 +54,11 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
     const minLength = props.minLength === undefined ? 3 : props.minLength;
     const maxLength = props.maxLength === undefined ? 24 : props.maxLength;
 
+    const dispatch = useDispatch();
+
 
     var [color, setColor] = useState("")
-    var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
+    var [fieldValue, setFieldValue] = useState(props.propertyValue);
     var [toggleOption, setToggleOption] = useState<boolean>(false);
 
 
@@ -60,7 +66,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         setColor(props.color === undefined ? "#5698fa" : props.color);
-    }, [])
+    }, [props.color]);
 
 
 
@@ -68,16 +74,20 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         borderLeftColor: color,
     }
 
-    const onSubmit = handleSubmit(({ field }) => {
-
+    const onSubmit = handleSubmit(() => {
+        if (props.propertyValue !== fieldValue && fieldValue.length > 5) {
+            setFieldValue(fieldValue);
+            dispatch(updateUserData(fieldValue, props.option));
+        }
     });
 
-    const handleSubmitChange = () => {
 
+    const handleEditChange = () => {
+        setToggleOption(!toggleOption);
     }
 
     const handleExitChange = () => {
-
+        setToggleOption(!toggleOption);
     }
 
 
@@ -101,36 +111,36 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                                 {/* Input */}
                                 <input type="text" className={style.userDataInfoInput}
-                                    name="field"
+                                    name="fieldNewValue"
                                     placeholder="Preencha este campo"
                                     minLength={minLength}
                                     maxLength={maxLength}
-                                    value={newPropertyParentValue}
+                                    value={fieldValue}
                                     onChange={e => {
                                         let s = e.target.value;
                                         if (props.trim) s = s.trim();
                                         if (props.onlyNumber) s = s.replace(/\D/g, '');
 
-                                        return setNewPropertyParentValue(s);
+                                        return setFieldValue(s);
                                     }
                                     }
                                 />
 
-
-
                                 <span className={style.optionsGo}>
 
                                     {/* Botão aceitar - Verde = username diferente do atual, Cinza = username igual */}
-                                    {props.PropertyValue === newPropertyParentValue ?
+                                    {props.propertyValue === fieldValue ?
                                         <button type="button" className={style.buttonInv}>
-                                            <GoCheck fill="gray"
+                                            <GoCheck
+                                                fill="gray"
                                                 className={style.goIcon}
                                                 size={size}
                                             />
                                         </button> :
 
                                         <button type="submit" className={style.buttonInv}>
-                                            <GoCheck fill="rgb(39, 202, 93)"
+                                            <GoCheck
+                                                fill="rgb(39, 202, 93)"
                                                 className={style.goIcon}
                                                 type="submit"
                                                 size={size}
@@ -141,7 +151,8 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                                     {/* Botão de cancelar a troca */}
                                     <button type="button" className={style.buttonInv}>
-                                        <GoX fill="rgb(202, 39, 39)"
+                                        <GoX
+                                            fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
                                             onClick={() => handleExitChange()}
                                             size={size}
@@ -155,13 +166,14 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
                             <span className={style.changeButtonContainer}>
-                                <span className={style.userDataInfo}>{props.PropertyValue}</span>
+                                <span className={style.userDataInfo}>{props.propertyValue}</span>
 
                                 {/* Botão para selecionar troca */}
                                 <button type="button" className={style.buttonInv}>
-                                    <GoPencil fill={color}
+                                    <GoPencil
+                                        fill={color}
                                         className={style.goIcon}
-                                        onClick={() => handleExitChange()}
+                                        onClick={() => handleEditChange()}
                                         size={size}
                                     />
                                 </button>

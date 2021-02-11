@@ -74,7 +74,7 @@ export const loginAccount = (username: string, password: string) => {
 }
 
 
-export const updateUserData = () => {
+export const getUserData = () => {
     return async (dispatch: Dispatch<UserAction>) => {
         dispatch({
             type: actionType.LOADING,
@@ -87,15 +87,17 @@ export const updateUserData = () => {
                 token: localStorage.getItem("auth-token")
             });
 
+            //console.log(res);
+
             if (res.data.isAuthenticated) {
                 dispatch({
-                    type: actionType.USER_UPDATE_DATA_SUCCESS,
+                    type: actionType.USER_GET_DATA_SUCCESS,
                     payload: res.data.user
                 });
 
             } else {
                 dispatch({
-                    type: actionType.USER_UPDATE_DATA_FAILED,
+                    type: actionType.USER_GET_DATA_FAILED,
                     payload: ""
                 });
             }
@@ -108,7 +110,7 @@ export const updateUserData = () => {
     }
 }
 
-export const updateProfilePicture = () => {
+export const getProfilePicture = () => {
     return async (dispatch: Dispatch<UserAction>) => {
 
         dispatch({
@@ -127,19 +129,19 @@ export const updateProfilePicture = () => {
                 localStorage.setItem("profile-picture-url", res.data.url);
 
                 return dispatch({
-                    type: actionType.USER_UPDATE_PROFILE_PICTURE_SUCCESS,
+                    type: actionType.USER_GET_PROFILE_PICTURE_SUCCESS,
                     payload: res.data.message
                 });
             }
         } catch (error) {
             return dispatch({
-                type: actionType.USER_UPDATE_PROFILE_PICTURE_FAILED,
+                type: actionType.USER_GET_PROFILE_PICTURE_FAILED,
                 payload: ""
             });
         }
 
         return dispatch({
-            type: actionType.USER_UPDATE_PROFILE_PICTURE_FAILED,
+            type: actionType.USER_GET_PROFILE_PICTURE_FAILED,
             payload: ""
         });
 
@@ -155,7 +157,7 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
         });
 
         try {
-            const res = await api.post('/uploadprofilepicture', {
+            const res = await api.post("/uploadprofilepicture", {
                 username: localStorage.getItem("username"),
                 token: localStorage.getItem("auth-token"),
                 encodedPicture: cropped.encodedCroppedPicture
@@ -171,17 +173,56 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
                 });
             } else {
                 return dispatch({
-                    type: actionType.USER_UPDATE_PROFILE_PICTURE_FAILED,
+                    type: actionType.USER_GET_PROFILE_PICTURE_FAILED,
                     payload: ""
                 });
             }
 
         } catch (error) {
             return dispatch({
-                type: actionType.USER_UPDATE_PROFILE_PICTURE_FAILED,
+                type: actionType.USER_GET_PROFILE_PICTURE_FAILED,
                 payload: ""
             });
         }
     }
 }
 
+
+export const updateUserData = (newValue: string, option: string) => {
+    return async (dispatch: Dispatch<UserAction>) => {
+
+        try {
+            dispatch({
+                type: actionType.LOADING,
+                payload: ""
+            });
+
+            const res = await api.post("/changeuserproperty", {
+                username: localStorage.getItem("username"),
+                token: localStorage.getItem("auth-token"),
+                newValue: newValue,
+                option: option
+            });
+
+            if (res.data.success) {
+                return dispatch({
+                    type: actionType.USER_UPDATE_DATA_SUCCESS,
+                    payload: { newValue: newValue, option: option }
+                });
+            } else {
+                return dispatch({
+                    type: actionType.USER_UPDATE_DATA_FAILED,
+                    payload: ""
+                });
+            }
+        } catch(error) {
+            return dispatch({
+                type: actionType.USER_UPDATE_DATA_FAILED,
+                payload: ""
+            });
+        }
+
+
+        
+    }
+}

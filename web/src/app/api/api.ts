@@ -9,8 +9,6 @@ headers.append("Content-Type", "image/jpeg");
 headers.append("Cache-Control", "public");
 headers.append("Cache-Control", "max-age=604800");
 
-
-
 const api = axios.create({
     baseURL: "http://localhost:3333/",
     headers: headers

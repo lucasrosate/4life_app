@@ -6,7 +6,7 @@ import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.c
 const { useState, useEffect } = React;
 
 interface Props {
-    PropertyValue: string,
+    propertyValue: string,
 
     //Lista de propriedades (Ex: estados)
     SelectListProperties: [
@@ -113,7 +113,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <span className={style.optionsGo}>
 
                                     {/* Botão aceitar - Verde = username diferente do atual, Cinza = username igual */}
-                                    {props.PropertyValue === newPropertyParentValue ?
+                                    {props.propertyValue === newPropertyParentValue ?
                                         <button type="button" className={style.buttonInv}>
                                             <GoCheck fill="gray"
                                                 className={style.goIcon}
@@ -147,7 +147,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
                             <span className={style.changeButtonContainer}>
-                                <span className={style.userDataInfo}>{props.PropertyValue}</span>
+                                <span className={style.userDataInfo}>{props.propertyValue}</span>
 
                                 {/* Botão para selecionar troca */}
                                 <button type="button" className={style.buttonInv}>

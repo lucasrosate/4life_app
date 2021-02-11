@@ -5,7 +5,8 @@ import { uploadFile, getTemporaryPictureLink, deleteFile } from '../services/Dro
 import UserView from '../views/UserView';
 import decodePicture from '../common/functions/decodePicture';
 
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
+import { ITemporaryLink } from '../../interfaces';
 
 require('dotenv').config;
 
@@ -16,7 +17,7 @@ export const isloggedin = async (req: Request, res: Response) => {
 export const getUserInfo = async (req: Request, res: Response) => {
     User.findOne({ username: req.body.username },
         async (err, user) => {
-            if (err) return res.status(401).json({isAuthenticated: false, message: "Erro na busca." })
+            if (err) return res.status(401).json({ isAuthenticated: false, message: "Erro na busca." })
 
             if (!user) {
                 return res.status(200).json({ isAuthenticated: false, message: "Usuário não encontrado." });
@@ -35,13 +36,12 @@ export const getUploadToken = async (req: Request, res: Response) => {
 
 
 export const changeUserProperty = async (req: Request, res: Response) => {
-
     User.findOne({
         username: req.body.username,
     },
         async (err, user) => {
-            const newVal = req.body.newVal;
-            const option = req.body.option;
+            const newValue: string = req.body.newValue;
+            const option: string = req.body.option;
 
             if (err) return res.status(401).json({ success: false, message: "Erro ao se conectar com o servidor." })
 
@@ -51,32 +51,32 @@ export const changeUserProperty = async (req: Request, res: Response) => {
             } else {
 
                 switch (option) {
-                    case 0:
-                        user.username = newVal;
+                    case "EDIT_USERNAME":
+                        user.username = newValue;
                         break;
 
-                    case 1:
-                        user.firstname = newVal;
+                    case "EDIT_FIRSTNAME":
+                        user.firstname = newValue;
                         break;
 
-                    case 2:
-                        user.lastname = newVal;
+                    case "EDIT_LASTNAME":
+                        user.lastname = newValue;
                         break;
 
-                    case 3:
-                        user.email = newVal;
+                    case "EDIT_EMAIL":
+                        user.email = newValue;
                         break;
 
-                    case 4:
-                        user.phone = newVal;
+                    case "EDIT_PHONE":
+                        user.phone = newValue;
                         break;
 
-                    case 5:
-                        user.state = newVal;
+                    case "EDIT_STATE":
+                        user.state = newValue;
                         break;
 
-                    case 6:
-                        user.birth = newVal;
+                    case "EDIT_BIRTH":
+                        user.birth = new Date(newValue);
                         break;
                 }
 
@@ -89,7 +89,6 @@ export const changeUserProperty = async (req: Request, res: Response) => {
 }
 
 export const uploadProfilePicture = async (req: Request, res: Response) => {
-    console.log("entrou")
     const username = req.body.username
     var encodedPicture = req.body.encodedPicture;
 
@@ -126,15 +125,17 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
                     const newPhoto = new Photo({
                         filename: pictureData.pictureName,
                         _user: user
-                    })
-                    newPhoto.save()
+                    });
+                    newPhoto.save();
 
                 } else {
                     await deleteFile('profilePictures', photo.filename as string);
 
+                    const responseTemporaryLink: ITemporaryLink
+                        = await getTemporaryPictureLink('profilePictures', photo.filename as string);
                     photo.filename = pictureData.pictureName;
-                    photo.temporaryLink.src = await getTemporaryPictureLink('profilePictures', photo.filename);
-                    photo.temporaryLink.created_at = String(Date.now());
+                    photo.temporaryLink.src = responseTemporaryLink.link;
+                    photo.temporaryLink.created_at = Date.now().toString();
                     photo.save();
                 }
 
@@ -155,7 +156,11 @@ export const getProfilePicture = async (req: Request, res: Response) => {
         if (err) return res.status(400).json({ message: err, hasPhoto: false, url: '' });
 
         if (!user) {
-            return res.status(401).json({ message: "Usuário não encontrado", hasPhoto: false, url: '' });
+            return res.status(401).json({
+                message: "Usuário não encontrado",
+                hasPhoto: false,
+                url: ''
+            });
         } else {
             Photo.findOne({
                 _user: user._id
@@ -165,25 +170,40 @@ export const getProfilePicture = async (req: Request, res: Response) => {
                 if (!photo) { return res.status(200).json({ message: "Usuário sem foto", hasPhoto: false, url: '' }); }
 
                 else {
-                    var expired_at = new Date(photo.temporaryLink.created_at as string);
-
-                    if (expired_at) expired_at.setHours(expired_at.getHours() + 4);
+                    var will_expire_at = new Date(photo.temporaryLink.created_at as string);
+                    // console.log(will_expire_at)
+                    if (will_expire_at) will_expire_at.setMinutes(will_expire_at.getMinutes() + 60);
                     const now = new Date(Date.now());
 
-                    var url;
+                    var responseTemporaryLink: ITemporaryLink = { link: "", status: 404 };
 
-                    if (now > expired_at || expired_at === undefined) {
-                        url = await getTemporaryPictureLink(photo.filename as string, 'profilePictures');
-                        if (url.status !== 409) {
-                            photo.temporaryLink.src = url;
-                            photo.temporaryLink.created_at = String(now);
+                    // console.log(now);
+                    // console.log(will_expire_at);
+                    // console.log(now < will_expire_at)
+
+                    if (now > will_expire_at || will_expire_at === undefined) {
+                        // console.log(photo);
+                        if (photo.filename)
+                            responseTemporaryLink = await getTemporaryPictureLink('profilePictures', photo.filename);
+
+                        // console.log(responseTemporaryLink);
+
+                        if (responseTemporaryLink.status !== 409) {
+                            photo.temporaryLink.src = responseTemporaryLink.link;
+                            photo.temporaryLink.created_at = now.toString();
                             photo.save();
+
+                        } else {
+                            return res.status(200).json({
+                                message: "Usuário sem foto",
+                                hasPhoto: false,
+                                url: ""
+                            });
                         }
-                        return res.status(200).json({ message: "Usuário sem foto", hasPhoto: false, url: url });
                     } else {
-                        url = photo.temporaryLink.src;
+                        responseTemporaryLink.link = photo.temporaryLink.src as string;
                     }
-                    return res.status(200).json({ message: "Usuário com foto", hasPhoto: true, url: url });
+                    return res.status(200).json({ message: "Usuário com foto", hasPhoto: true, url: responseTemporaryLink.link });
                 }
             })
         }
