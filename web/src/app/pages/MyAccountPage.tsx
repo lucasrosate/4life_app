@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ChangePictureSystem from '../components/MyAccountPage/ChangePictureSystem';
 import InputChangeSystem from '../components/MyAccountPage/InputChangeSystem';
 import SelectChangeSystem from '../components/MyAccountPage/SelectChangeSystem';
+import PhoneChangeSystem from '../components/MyAccountPage/PhoneChangeSystem';
 import DateChangeSystem from '../components/MyAccountPage/DateChangeSystem';
 
 
@@ -124,7 +125,7 @@ const MyAccountPage: React.FC = () => {
                                 />
 
                                 {/* Telefone */}
-                                <InputChangeSystem
+                                <PhoneChangeSystem
                                     label="Telefone"
                                     option={"EDIT_PHONE"}
                                     propertyValue={user.phone}

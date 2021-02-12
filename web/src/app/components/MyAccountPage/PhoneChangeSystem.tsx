@@ -1,9 +1,11 @@
 import React, { CSSProperties } from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { updateUserData } from '../../store/actions/userActions';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import { StoreState } from '../../../../interfaces';
 
 const { useState, useEffect } = React;
@@ -43,6 +45,58 @@ interface Props {
     maxLength?: number,
 
 }
+
+const PhoneInputContainer = styled.div`
+    width: 380px;
+
+    
+    .PhoneInput {
+        padding-bottom: 4px;
+        border-bottom: 1px solid rgb(221, 221, 221);
+        width: 90%;
+
+        display: flex;
+        align-items: center;
+
+        .PhoneInputCountry {
+            display: flex;
+            align-items: center;
+
+            select {
+                width: 75px;
+                color: gray;
+                margin-right: 9px;
+                color: gray;
+                background-color: rgb(251, 251, 251);
+                border: none;
+                height: 35px;
+                font-family: 'Dosis', sans-serif;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            div img {
+                width: 25px;
+            }
+        }
+
+        input {
+            margin-left: 4px;
+            width: 210px;
+            color: gray;
+            background-color: rgb(251, 251, 251);
+            border: none;
+            height: 35px;
+            font-family: 'Dosis', sans-serif;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+`
 
 const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
@@ -87,18 +141,18 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                 return state.userReducer.responseError.birth;
         }
     });
-    
+
     const styleBorder: CSSProperties = {
         borderLeftColor: color,
     }
 
     const onSubmit = handleSubmit(async () => {
-        if (props.propertyValue !== fieldValue && fieldValue.length > 4) {
-            setFieldValue(fieldValue);
+
+        console.log(props.propertyValue !== fieldValue && fieldValue.length >= 8);
+        if (props.propertyValue !== fieldValue && isValidPhoneNumber(fieldValue)) {
             dispatch(updateUserData(fieldValue, props.option));
         }
     });
-
 
     const handleToggleField = () => {
         setToggleOption(!toggleOption);
@@ -110,7 +164,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         setToggleOption(false);
-    }, [props.propertyValue])
+    }, [props.propertyValue]);
 
 
     return (
@@ -130,23 +184,15 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                         {toggleOption ?
                             <span className={style.changeButtonContainer}>
+                                <PhoneInputContainer>
+                                    <PhoneInput
+                                        placeholder={"Preencha com o seu número"}
+                                        value={fieldValue}
+                                        onChange={setFieldValue}
+                                        defaultCountry={"BR"}
+                                    />
+                                </PhoneInputContainer>
 
-                                {/* Input */}
-                                <input type="text" className={style.userDataInfoInput}
-                                    name="fieldNewValue"
-                                    placeholder="Preencha este campo"
-                                    minLength={minLength}
-                                    maxLength={maxLength}
-                                    value={fieldValue}
-                                    onChange={e => {
-                                        let s = e.target.value;
-                                        if (props.trim) s = s.trim();
-                                        if (props.onlyNumber) s = s.replace(/\D/g, '');
-
-                                        return setFieldValue(s);
-                                    }
-                                    }
-                                />
 
                                 <span className={style.optionsGo}>
 
@@ -164,7 +210,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                             <GoCheck
                                                 fill="rgb(39, 202, 93)"
                                                 className={style.goIcon}
-                                                type="submit"
+
                                                 size={size}
                                             />
                                         </button>
@@ -188,7 +234,9 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
                             <span className={style.changeButtonContainer}>
-                                <span className={style.userDataInfo}>{props.propertyValue}</span>
+                                <span className={style.userDataInfo}>
+                                    {`${props.propertyValue.slice(0, 3)} ${props.propertyValue.slice(3, 5)} ${props.propertyValue.slice(5)}`}
+                                </span>
 
                                 {/* Botão para selecionar troca */}
                                 <button type="button" className={style.buttonInv}>

@@ -1,8 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
 import * as userAction from '../store/actions/userActions';
 import { useDispatch } from 'react-redux';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+
+import styled from 'styled-components';
 import { IStates } from '../../../interfaces';
 import style from '../styles/components/AccountForm.module.css';
 import { GoArrowLeft } from "react-icons/go";
@@ -17,6 +19,60 @@ interface Props {
     responseMessage: string
 }
 
+
+const PhoneInputContainer = styled.div`
+    width: 345px;
+
+    
+    .PhoneInput {
+        width: 90%;
+
+        display: flex;
+        align-items: center;
+
+        .PhoneInputCountry {
+            display: flex;
+            align-items: center;
+
+            select {
+                width: 75px;
+                color: gray;
+                margin-right: 9px;
+                color: gray;
+                background-color: #f3f4fc;
+                border-radius: 4px;
+                border: none;
+                height: 35px;
+                font-family: 'Dosis', sans-serif;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            div img {
+                width: 25px;
+            }
+        }
+
+        input {
+            margin-left: 4px;
+            padding-left: 2px;
+            width: 210px;
+            color: gray;
+            background-color: #f3f4fc;
+            border-radius: 4px;
+            border: none;
+            height: 35px;
+            font-family: 'Dosis', sans-serif;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+`
+
 const RegistrationForm: React.FC<Props> = (props: Props) => {
     const dispatch = useDispatch();
 
@@ -26,8 +82,8 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
     const { register, watch, handleSubmit } = useForm<any>();
 
     const onSubmit =
-        handleSubmit(({ firstname, lastname, username, email, password1, stateplace, phonenumber }) => {
-            if (firstname && lastname && username && email && password1 && stateplace && phonenumber)
+        handleSubmit(({ firstname, lastname, username, email, password1, stateplace }) => {
+            if (firstname && lastname && username && email && password1 && stateplace && isValidPhoneNumber(phoneNumber))
                 dispatch(
                     userAction.createAccount({
                         firstname: firstname,
@@ -36,7 +92,7 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
                         email: email,
                         password: password1,
                         state: stateplace,
-                        phone: phonenumber
+                        phone: phoneNumber
                     }));
         });
 
@@ -76,15 +132,17 @@ const RegistrationForm: React.FC<Props> = (props: Props) => {
                     <label htmlFor="email"><span className={style.signupLabel}>E-mail</span></label>
                     <input type="text" className="input signupform email" placeholder="Email" name="email" ref={register({ required: true, pattern: /^\S+@\S+$/i })} />
 
+
                     <label htmlFor="phonenumber"><span className={style.signupLabel}>Telefone</span></label>
-                    <input type="tel" className="input signupform phone" placeholder="Número de telefone" name="phonenumber"
-                        ref={register({ required: true, maxLength: 12, pattern: /^(\(?\d{2}\)?\s)?(\d{4,5}-?\d{4})/i })}
-                        value={phoneNumber}
-                        onChange={(e) => {
-                            const letterTrim = e.target.value.replace(/\D/g, "");
-                            setPhoneNumber(letterTrim);
-                        }}
-                    />
+                    <PhoneInputContainer>
+                        <PhoneInput
+                            placeholder={"Preencha com o seu número"}
+                            value={phoneNumber}
+                            onChange={setPhoneNumber}
+                            defaultCountry={"BR"}
+                        />
+                    </PhoneInputContainer>
+
 
                     <label htmlFor="password1"><span className={style.signupLabel}>Senha</span></label>
                     <input type="password" className="input signupform password1" placeholder="Senha" name="password1" onBlur={validatePassword} ref={register({ required: true, maxLength: 24 })} />

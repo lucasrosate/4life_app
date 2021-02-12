@@ -69,7 +69,6 @@ export const changeUserProperty = async (req: Request, res: Response) => {
 
                 switch (option) {
                     case "EDIT_USERNAME":
-                        console.log(newValue);
                         const userExist = await User.findOne({ username: newValue });
 
                         if (userExist) {
@@ -109,10 +108,15 @@ export const changeUserProperty = async (req: Request, res: Response) => {
                 }
 
                 user.save((err, user) => {
-                    if (err) return res.status(200).json({
+                    if (err) {
+                        console.log(err);
+                        return res.status(200).json({
                         success: false,
-                        message: "Já existe."
-                    });
+                        message: "Erro durante o salvemento."
+                    });}
+
+                   
+
                     return res.status(200).json({
                         success: true,
                         message: "Alterado com sucesso."
@@ -225,7 +229,7 @@ export const getProfilePicture = async (req: Request, res: Response) => {
 
                     if ((now > will_expire_at || will_expire_at === undefined) || photo.temporaryLink.src === "") {
 
-                        if (photo.filename && photo.filename.startsWith("http")) {
+                        if (photo.filename) {
                             responseTemporaryLink = await getTemporaryPictureLink('profilePictures', photo.filename);
                         }
 

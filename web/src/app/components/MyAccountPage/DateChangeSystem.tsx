@@ -1,11 +1,11 @@
 import React, { CSSProperties } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import { updateUserData } from '../../store/actions/userActions';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
-const {useState, useEffect} = React;
+const { useState, useEffect } = React;
 
 interface Props {
     option: string,
@@ -39,9 +39,11 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
     const dispatch = useDispatch();
 
     var [color, setColor] = useState("")
-    var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
     var [fieldValue, setFieldValue] = useState<string>(props.propertyValue);
+    var [formattedFieldValue, setFormattedFieldValue] = useState<Date>(new Date());
+    var [oldDate, setOldDate] = useState<Date>(new Date());
     var [toggleOption, setToggleOption] = useState<boolean>(false);
+    var [errorMessage, setErrorMessage] = useState<string>("");
 
 
 
@@ -58,14 +60,11 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
     const onSubmit = handleSubmit(() => {
-        console.log(fieldValue)
-        console.log(props.propertyValue);
-        console.log(props.option);
-
-        if (props.propertyValue !== fieldValue) {
+        if (oldDate < formattedFieldValue) {
             setFieldValue(fieldValue);
             dispatch(updateUserData(fieldValue, props.option));
-
+        } else {
+            setErrorMessage("A data deve ser inferior à hoje.")
         }
     });
 
@@ -73,7 +72,12 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         setToggleOption(!toggleOption);
     }
 
-
+    useEffect(() => {
+        const date = new Date(props.propertyValue);
+        setToggleOption(false);
+        setOldDate(date);
+        setErrorMessage("");
+    }, [props.propertyValue])
 
 
     return (
@@ -99,9 +103,11 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     placeholder="Preencha este campo"
                                     minLength={10}
                                     maxLength={10}
-                                    value={newPropertyParentValue}
                                     size={size}
-                                    onChange={(e) => setFieldValue(e.target.value)}
+                                    onChange={(e) => {
+                                        setFieldValue(e.target.value);
+                                        setFormattedFieldValue(new Date(fieldValue));
+                                    }}
                                 />
 
 
@@ -109,7 +115,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <span className={style.optionsGo}>
 
                                     {/* Botão aceitar - Verde = username diferente do atual, Cinza = username igual */}
-                                    {props.propertyValue === newPropertyParentValue ?
+                                    {oldDate === formattedFieldValue ?
                                         <button type="button" className={style.buttonInv}>
                                             <GoCheck fill="gray"
                                                 className={style.goIcon}
@@ -138,12 +144,12 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
                                 </span>
-
-                            </span> :
-
-
+                            </span>
+                            :
                             <span className={style.changeButtonContainer}>
-                                <span className={style.userDataInfo}>{props.propertyValue}</span>
+                                <span className={style.userDataInfo}>
+                                    {`${oldDate?.getUTCDate()}/${oldDate?.getUTCMonth()}/${oldDate?.getUTCFullYear()}`}
+                                </span>
 
                                 {/* Botão para selecionar troca */}
                                 <button type="button" className={style.buttonInv}>
@@ -160,7 +166,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
             </div>
 
             <div className={style.errorContainer}>
-
+                <h2>{errorMessage}</h2>
             </div>
 
         </div>

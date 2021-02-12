@@ -187,18 +187,20 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
 export const updateUserData = (newValue: string, option: string) => {
     return async (dispatch: Dispatch<UserAction>) => {
 
-        try {
-            dispatch({
-                type: actionType.LOADING,
-                payload: ""
-            });
+        dispatch({
+            type: actionType.LOADING,
+            payload: ""
+        });
 
+        try {
             const res = await api.post("/changeuserproperty", {
                 username: localStorage.getItem("username"),
                 token: localStorage.getItem("auth-token"),
                 newValue: newValue,
                 option: option
             });
+
+            console.log(res);
 
             if (res.data.success) {
                 return dispatch({
