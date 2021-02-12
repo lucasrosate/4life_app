@@ -18,7 +18,7 @@ It's an basic app for taking care your routine.
 
 
 ### LocalSetup
-1. Clone this repo
+1. Clone this repo.
 2. Open two terminals, one in ```web``` folder and the other in ```backend``` folder.
 3. Before run you must config .env from backend folder. For this you must fill .env with this variables.
 ```
