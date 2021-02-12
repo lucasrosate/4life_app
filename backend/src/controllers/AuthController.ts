@@ -23,7 +23,10 @@ export const signup = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10).catch((error) => { throw error });
 
     if (!firstname || !lastname || !username || !password || !email || !state || !phone)
-        return res.status(200).json({ success: false, message: "Nem todos os campos foram registrados." });
+        return res.status(200).json({
+            success: false,
+            message: "Nem todos os campos foram registrados."
+        });
 
 
     const hashedPassword = await bcrypt.hash(password, salt).catch((error) => { throw error });
@@ -42,16 +45,24 @@ export const signup = async (req: Request, res: Response) => {
     try {
         await user.save();
     } catch (err) {
-        return res.status(409).json({ success: false, message: "Esse usuário já existe, tente novamente." });
+        return res.status(409).json({
+            success: false,
+            message: "Esse usuário já existe, tente novamente."
+        });
     }
 
-    return res.status(200).json({ success: true, message: "Registrado com sucesso." });
+    return res.status(200).json({
+        success: true,
+        message: "Registrado com sucesso."
+    });
 }
 
 
 export const signin = async (req: Request, res: Response) => {
 
-    if (req.body.password == undefined) return res.status(401).json({ message: "A senha não existe. Ela deve ser preenchida." });
+    if (req.body.password == undefined) return res.status(401).json({
+        message: "A senha não existe. Ela deve ser preenchida."
+    });
 
 
     User.findOne({
@@ -73,10 +84,16 @@ export const signin = async (req: Request, res: Response) => {
                 return res.status(200)
                     .header('Access-Control-Expose-Headers', 'auth-token')
                     .header('auth-token', token)
-                    .json({ success: true, message: "Successo." });
+                    .json({
+                        success: true,
+                        message: "Successo."
+                    });
             } else {
                 return res.status(401)
-                    .json({ success: false, message: "Senha inválida." });
+                    .json({
+                        success: false,
+                        message: "Senha inválida."
+                    });
             }
 
 

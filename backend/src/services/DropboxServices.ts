@@ -20,15 +20,18 @@ export const uploadFile = async (path: string, filename: string, picture: Buffer
 }
 
 export const getTemporaryPictureLink = async (path: string, filename: string) => {
-    console.log(filename);
+    console.log(path, filename);
     try {
         const res = await dbx.filesGetTemporaryLink({
             path: `/${path}/${filename}`
         });
-        return { link: res.result.link, status: res.status };
+
+        //console.log(res.result.link);
+
+        return { link: res.result.link, status: res.status, error: ""};
 
     } catch (error) {
-        return { link: "", status: 409 };
+        return { link: "", status: 409, error: error };
     }
 
 }
