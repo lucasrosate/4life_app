@@ -31,9 +31,9 @@ export type UserAction = {
 
 export type UserState = {
     user: IUser,
-    formSubmitted: boolean,
     loading: boolean,
-    responseMessage: string
+    responseMessage: string,
+    responseError: IUser
 }
 
 export type DispatchType = (args: ArticleAction) => ArticleAction;

@@ -92,7 +92,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* username */}
                                 <InputChangeSystem
                                     label="Nome de Usuário"
-                                    option={"username"}
+                                    option={"EDIT_USERNAME"}
                                     propertyValue={user.username}
                                     trim={true}
                                     showInput={true}
@@ -102,7 +102,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Primeiro nome */}
                                 <InputChangeSystem
                                     label="Primeiro nome"
-                                    option={"firstname"}
+                                    option={"EDIT_FIRSTNAME"}
                                     propertyValue={user.firstname}
                                     showInput={true}
                                 />
@@ -110,7 +110,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Sobrenome */}
                                 <InputChangeSystem
                                     label="Sobrenome"
-                                    option={"lastname"}
+                                    option={"EDIT_LASTNAME"}
                                     propertyValue={user.lastname}
                                     showInput={true}
                                 />
@@ -118,7 +118,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Email */}
                                 <InputChangeSystem
                                     label="E-mail"
-                                    option={"email"}
+                                    option={"EDIT_EMAIL"}
                                     propertyValue={user.email}
                                     showInput={true}
                                 />
@@ -126,7 +126,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Telefone */}
                                 <InputChangeSystem
                                     label="Telefone"
-                                    option={"phone"}
+                                    option={"EDIT_PHONE"}
                                     propertyValue={user.phone}
                                     showInput={true}
                                     onlyNumber={true}
@@ -138,6 +138,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Estado */}
                                 <SelectChangeSystem
                                     label="Estado"
+                                    option={"EDIT_STATE"}
                                     propertyValue={user.state}
                                     SelectListProperties={estados.UF}
                                     showInput={true}
@@ -148,6 +149,7 @@ const MyAccountPage: React.FC = () => {
                                 {/* Estado */}
                                 <DateChangeSystem
                                     label="Data de nascimento"
+                                    option={"EDIT_BIRTH"}
                                     propertyValue={user.birth || "1900-01-01T00:00:00.000+00:00"}
                                     showInput={true}
                                 />

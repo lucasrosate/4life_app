@@ -63,8 +63,6 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
     }, [])
 
     const exportCroppedPicture = async () => {
-        console.log(pictureFile);
-
         if (pictureFile === null) return;
 
         var cropped;

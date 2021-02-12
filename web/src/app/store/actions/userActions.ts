@@ -1,9 +1,8 @@
 import { Dispatch } from 'react';
 import { IUser, UserAction } from '../../../../interfaces';
 import * as actionType from '../types/userManagementType';
-import store, { dispatch } from '../store';
+import store from '../store';
 import api from '../../api/api';
-import { Url } from 'url';
 
 export const createAccount = (user: IUser) => {
     return async (dispatch: Dispatch<UserAction>) => {
@@ -87,8 +86,6 @@ export const getUserData = () => {
                 token: localStorage.getItem("auth-token")
             });
 
-            //console.log(res);
-
             if (res.data.isAuthenticated) {
                 dispatch({
                     type: actionType.USER_GET_DATA_SUCCESS,
@@ -164,7 +161,6 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
             });
 
             if (res.data.success) {
-
                 localStorage.setItem("profile-picture-url", cropped.croppedPicture)
 
                 return dispatch({
@@ -209,13 +205,14 @@ export const updateUserData = (newValue: string, option: string) => {
                     type: actionType.USER_UPDATE_DATA_SUCCESS,
                     payload: { newValue: newValue, option: option }
                 });
+
             } else {
                 return dispatch({
-                    type: actionType.USER_UPDATE_DATA_FAILED,
-                    payload: ""
+                    type: actionType.USER_UPDATE_DATA_FAILED, 
+                    payload: { option: option }
                 });
             }
-        } catch(error) {
+        } catch (error) {
             return dispatch({
                 type: actionType.USER_UPDATE_DATA_FAILED,
                 payload: ""
@@ -223,6 +220,6 @@ export const updateUserData = (newValue: string, option: string) => {
         }
 
 
-        
+
     }
 }

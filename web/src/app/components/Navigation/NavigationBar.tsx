@@ -42,6 +42,7 @@ const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut })
 
     var [isValidURL, setIsValidURL] = useState(false);
     const profilePictureUrl = useSelector((state: StoreState) => state.userReducer.user.profilePhoto);
+    const username = useSelector((state: StoreState) => state.userReducer.user.username);
 
     const [accMenu, setAccMenu] = useState(false);
 
@@ -109,7 +110,7 @@ const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut })
                                     onClick={() => setAccMenu(!accMenu)}
                                 >
                                     <ul>
-                                        <li className={style.userUserName}>{`${localStorage.getItem('username')}`}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
+                                        <li className={style.userUserName}>{username}{!accMenu ? <GoChevronDown size={20} /> : <GoChevronUp size={20} />}</li>
                                         <li><div>{accMenu ? <AccountOptions userLoggedOut={userLoggedOut} /> : null}</div></li>
                                     </ul>
 

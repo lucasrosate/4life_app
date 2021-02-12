@@ -1,11 +1,15 @@
 import React, { CSSProperties } from 'react';
+import { useDispatch} from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
+import { updateUserData } from '../../store/actions/userActions';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
 const {useState, useEffect} = React;
 
 interface Props {
+    option: string,
+
     //Label a ser mostrada
     label?: string
 
@@ -28,18 +32,15 @@ interface Props {
 
 const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
-
-    const { handleSubmit } = useForm();
-
-    
-
-
     const size = props.size === undefined ? 18 : props.size;
     const label = props.label === undefined ? "" : props.label;
 
+    const { handleSubmit } = useForm();
+    const dispatch = useDispatch();
 
     var [color, setColor] = useState("")
     var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
+    var [fieldValue, setFieldValue] = useState<string>(props.propertyValue);
     var [toggleOption, setToggleOption] = useState<boolean>(false);
 
 
@@ -55,17 +56,24 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         borderLeftColor: color,
     }
 
-    const onSubmit = handleSubmit(({ field }) => {
 
+    const onSubmit = handleSubmit(() => {
+        console.log(fieldValue)
+        console.log(props.propertyValue);
+        console.log(props.option);
+
+        if (props.propertyValue !== fieldValue) {
+            setFieldValue(fieldValue);
+            dispatch(updateUserData(fieldValue, props.option));
+
+        }
     });
 
-    const handleSubmitChange = () => {
-
+    const handleToggleField = () => {
+        setToggleOption(!toggleOption);
     }
 
-    const handleExitChange = () => {
 
-    }
 
 
     return (
@@ -93,7 +101,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     maxLength={10}
                                     value={newPropertyParentValue}
                                     size={size}
-                                    onChange={(e) => setNewPropertyParentValue(e.target.value)}
+                                    onChange={(e) => setFieldValue(e.target.value)}
                                 />
 
 
@@ -123,7 +131,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     <button type="button" className={style.buttonInv}>
                                         <GoX fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
-                                            onClick={() => handleExitChange()}
+                                            onClick={() => handleToggleField()}
                                             size={size}
                                         />
                                     </button>
@@ -141,7 +149,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <button type="button" className={style.buttonInv}>
                                     <GoPencil fill={color}
                                         className={style.goIcon}
-                                        onClick={() => handleExitChange()}
+                                        onClick={() => handleToggleField()}
                                         size={size}
                                     />
                                 </button>

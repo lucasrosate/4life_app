@@ -1,9 +1,11 @@
 import React, { CSSProperties } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { updateUserData } from '../../store/actions/userActions';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
+import { Store } from 'redux';
+import { StoreState } from '../../../../interfaces';
 
 const { useState, useEffect } = React;
 
@@ -58,37 +60,65 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
     var [color, setColor] = useState("")
-    var [fieldValue, setFieldValue] = useState(props.propertyValue);
+    var [fieldValue, setFieldValue] = useState<string>(props.propertyValue);
     var [toggleOption, setToggleOption] = useState<boolean>(false);
+    var responseErrorMessage = useSelector((state: StoreState) => {
+        const option = props.option;
+
+        switch (option) {
+            case "EDIT_USERNAME":
+                return state.userReducer.responseError.username;
+
+            case "EDIT_FIRSTNAME":
+                return state.userReducer.responseError.firstname;
+
+            case "EDIT_LASTNAME":
+                return state.userReducer.responseError.firstname;
+
+            case "EDIT_EMAIL":
+                return state.userReducer.responseError.email;
+
+            case "EDIT_PHONE":
+                return state.userReducer.responseError.phone;
+
+            case "EDIT_STATE":
+                return state.userReducer.responseError.state;
+
+            case "EDIT_BIRTH":
+                return state.userReducer.responseError.birth;
+        }
+    });
+    
+    const styleBorder: CSSProperties = {
+        borderLeftColor: color,
+    }
+
+    const onSubmit = handleSubmit(async () => {
+        if (props.propertyValue !== fieldValue && fieldValue.length > 4) {
+            setFieldValue(fieldValue);
+
+            Promise.all([
+                dispatch(updateUserData(fieldValue, props.option)),
+                () => {
+                    console.log(fieldValue, props.propertyValue)
+                }
+            ]);
+
+        }
+    });
 
 
-
+    const handleToggleField = () => {
+        setToggleOption(!toggleOption);
+    }
 
     useEffect(() => {
         setColor(props.color === undefined ? "#5698fa" : props.color);
     }, [props.color]);
 
-
-
-    const styleBorder: CSSProperties = {
-        borderLeftColor: color,
-    }
-
-    const onSubmit = handleSubmit(() => {
-        if (props.propertyValue !== fieldValue && fieldValue.length > 5) {
-            setFieldValue(fieldValue);
-            dispatch(updateUserData(fieldValue, props.option));
-        }
-    });
-
-
-    const handleEditChange = () => {
-        setToggleOption(!toggleOption);
-    }
-
-    const handleExitChange = () => {
-        setToggleOption(!toggleOption);
-    }
+    useEffect(() => {
+        setToggleOption(false);
+    }, [props.propertyValue])
 
 
     return (
@@ -154,7 +184,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                         <GoX
                                             fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
-                                            onClick={() => handleExitChange()}
+                                            onClick={() => handleToggleField()}
                                             size={size}
                                         />
                                     </button>
@@ -173,7 +203,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     <GoPencil
                                         fill={color}
                                         className={style.goIcon}
-                                        onClick={() => handleEditChange()}
+                                        onClick={() => handleToggleField()}
                                         size={size}
                                     />
                                 </button>
@@ -184,6 +214,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
             </div>
 
             <div className={style.errorContainer}>
+                <h2>{responseErrorMessage}</h2>
             </div>
 
         </div>

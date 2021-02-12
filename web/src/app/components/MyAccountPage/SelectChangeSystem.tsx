@@ -1,5 +1,7 @@
 import React, { CSSProperties } from 'react';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { updateUserData } from '../../store/actions/userActions';
 import { GoPencil, GoCheck, GoX } from 'react-icons/go';
 import style from '../../styles/components/MyAccount/ChangeButtonSystem.module.css';
 
@@ -7,6 +9,8 @@ const { useState, useEffect } = React;
 
 interface Props {
     propertyValue: string,
+
+    option: string
 
     //Lista de propriedades (Ex: estados)
     SelectListProperties: [
@@ -41,6 +45,8 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
     const { handleSubmit } = useForm();
+    const dispatch = useDispatch();
+
 
 
     const size = props.size === undefined ? 18 : props.size;
@@ -48,14 +54,15 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
     var [color, setColor] = useState("")
-    var [newPropertyParentValue, setNewPropertyParentValue] = useState("");
+
+    var [fieldValue, setFieldValue] = useState<string>(props.propertyValue);
     var [toggleOption, setToggleOption] = useState<boolean>(false);
 
 
 
     useEffect(() => {
         setColor(props.color === undefined ? "#5698fa" : props.color);
-    }, [])
+    }, []);
 
 
 
@@ -63,16 +70,22 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
         borderLeftColor: color,
     }
 
-    const onSubmit = handleSubmit(({ field }) => {
 
+    const onSubmit = handleSubmit(() => {
+        console.log(fieldValue)
+        console.log(props.propertyValue);
+        console.log(props.option);
+
+        if (props.propertyValue !== fieldValue) {
+            setFieldValue(fieldValue);
+            dispatch(updateUserData(fieldValue, props.option));
+
+        }
     });
 
-    const handleSubmitChange = () => {
 
-    }
-
-    const handleExitChange = () => {
-
+    const handleToggleField = () => {
+        setToggleOption(!toggleOption);
     }
 
 
@@ -96,9 +109,9 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
                                 {/* Input */}
                                 <select name="statePlace" className={style.userDataInfoSelect}
-                                    value={newPropertyParentValue}
-                                    onChange={e => { setNewPropertyParentValue(e.target.value) }}>
-
+                                    value={fieldValue}
+                                    onChange={(e) => { setFieldValue(e.target.value)}}
+                                >
                                     {
                                         props.SelectListProperties.map((SelectListProperty, index) =>
                                             <option key={index}>
@@ -113,7 +126,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <span className={style.optionsGo}>
 
                                     {/* Botão aceitar - Verde = username diferente do atual, Cinza = username igual */}
-                                    {props.propertyValue === newPropertyParentValue ?
+                                    {props.propertyValue === fieldValue ?
                                         <button type="button" className={style.buttonInv}>
                                             <GoCheck fill="gray"
                                                 className={style.goIcon}
@@ -135,7 +148,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                     <button type="button" className={style.buttonInv}>
                                         <GoX fill="rgb(202, 39, 39)"
                                             className={style.goIcon}
-                                            onClick={() => handleExitChange()}
+                                            onClick={() => handleToggleField()}
                                             size={size}
                                         />
                                     </button>
@@ -153,7 +166,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
                                 <button type="button" className={style.buttonInv}>
                                     <GoPencil fill={color}
                                         className={style.goIcon}
-                                        onClick={() => handleExitChange()}
+                                        onClick={() => handleToggleField()}
                                         size={size}
                                     />
                                 </button>

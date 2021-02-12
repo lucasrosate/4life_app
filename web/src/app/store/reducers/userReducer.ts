@@ -15,9 +15,18 @@ const userInitialState: UserState = {
         phone: "",
         profilePhoto: ""
     },
-    formSubmitted: false,
     loading: true,
-    responseMessage: ""
+    responseMessage: "",
+    responseError: {
+        firstname: "",
+        lastname: "",
+        username: "",
+        password: "",
+        email: "",
+        state: "",
+        phone: "",
+        profilePhoto: ""
+    }
 }
 
 
@@ -99,19 +108,23 @@ export const userReducer: Reducer<UserState, UserAction> =
                 return {
                     ...state
                 }
-                
+
 
             case actionTypes.USER_UPDATE_DATA_SUCCESS:
-                const option = userAction.payload.option;
                 const newValue = userAction.payload.newValue;
 
-                switch (option) {
+                switch (userAction.payload.option) {
                     case "EDIT_USERNAME":
+                        localStorage.setItem("username", newValue);
                         return {
                             ...state,
                             user: {
                                 ...state.user,
                                 username: newValue
+                            },
+                            responseError: {
+                                ...state.responseError,
+                                username: ""
                             }
                         }
 
@@ -176,8 +189,68 @@ export const userReducer: Reducer<UserState, UserAction> =
                 break;
 
             case actionTypes.USER_UPDATE_DATA_FAILED:
-                return {
-                    ...state
+
+                switch (userAction.payload.option) {
+                    case "EDIT_USERNAME":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError,
+                                username: "Esse nome de usuário já existe."
+                            }
+                        }
+
+                    case "EDIT_FIRSTNAME":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+
+                    case "EDIT_LASTNAME":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+                    case "EDIT_EMAIL":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+
+                    case "EDIT_PHONE":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+
+                    case "EDIT_STATE":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+
+                    case "EDIT_BIRTH":
+                        return {
+                            ...state,
+                            responseError: {
+                                ...state.responseError
+                            }
+                        }
+
+                    default:
+                        return {
+                            ...state
+                        }
                 }
 
             default: return state;
