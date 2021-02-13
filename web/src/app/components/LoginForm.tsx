@@ -27,16 +27,11 @@ const LoginForm: React.FC<Props> = (props: Props) => {
         handleSubmit(async ({ username, password }) => {
             if (username && password) {
                 await dispatch(loginAccount(username, password));
-                if(localStorage.getItem("username") && localStorage.getItem("auth-token")) {
-                    props.userLoggedIn()
+                if (localStorage.getItem("username") && localStorage.getItem("auth-token")) {
+                    props.userLoggedIn();
                     dispatch(getUserData());
                     dispatch(getProfilePicture());
-                } else {
-                    setResponseMessage("Erro: senha incorreta.")
                 }
-
-            } else {
-                setResponseMessage("Erro: ambos os campos devem ser preenchidos.")
             }
         });
 

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
@@ -7,10 +7,6 @@ import AuthRoutes from './routes/AuthRoutes';
 import UserRoutes from './routes/UserRoutes';
 
 import {Request, Response} from 'express';
-import { CallbackType } from '../interfaces';
-
-
-
 
 require('dotenv').config();
 
@@ -32,7 +28,7 @@ const app = express();
 app.use(cors())
 
 
-app.use(function (req: Request, res: Response, next: CallbackType) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");

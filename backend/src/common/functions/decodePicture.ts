@@ -18,7 +18,6 @@ const decodePicture = (base64Picture: string, uniqueValue: string) => {
     const matches = getFileFormat(base64Picture);
     
     if(matches?.length !== 3) {
-        console.log("Erro: imagem inválida.")
         return {picture: Buffer.from(base64Picture) , pictureName: ""}
     }
 

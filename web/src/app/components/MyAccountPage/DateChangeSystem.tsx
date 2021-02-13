@@ -50,7 +50,7 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         setColor(props.color === undefined ? "#5698fa" : props.color);
-    }, [])
+    }, [props.color])
 
 
 

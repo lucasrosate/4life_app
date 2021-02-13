@@ -25,8 +25,6 @@ export const getTemporaryPictureLink = async (path: string, filename: string) =>
             path: `/${path}/${filename}`
         });
 
-        //console.log(res.result.link);
-
         return { link: res.result.link, status: res.status, error: ""};
 
     } catch (error) {

@@ -8,7 +8,10 @@ const UserView = (user: IUser) => {
         email: user.email,
         state: user.state,
         phone: user.phone,
-        birth: user.birth
+        birth: user.birth,
+        authentication: {
+            isValid: user.authentication.isValid
+        }
     }
 }
 

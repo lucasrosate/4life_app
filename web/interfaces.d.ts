@@ -16,7 +16,10 @@ export interface IUser {
     state:string,
     phone: string,
     birth?: string,
-    profilePhoto?: string | null
+    profilePhoto?: string | null,
+    authentication?: {
+        isValid?: boolean
+    }
 }
 
 export interface IRoute {
@@ -34,7 +37,17 @@ export type UserState = {
     loading: boolean,
     responseMessage: string,
     successForms: boolean,
-    responseError: IUser
+    responseError: {
+        firstname: string,
+        lastname: string,
+        username: string,
+        password: string,
+        email: string,
+        state:string,
+        phone: string,
+        birth?: string,
+        profilePhoto?: string,
+    }
 }
 
 export type DispatchType = (args: ArticleAction) => ArticleAction;

@@ -20,7 +20,6 @@ import './app/styles/global.css';
 const App: React.FC = () => {
 
     //O usuário está logado?
-    localStorage.getItem('isLoggedIn')
     var [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
 

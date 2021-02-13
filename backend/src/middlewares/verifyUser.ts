@@ -1,24 +1,34 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response} from 'express';
-import User from '../models/UserModel';
+import { NextFunction, Request, Response } from 'express';
+import { DocumentQuery } from 'mongoose';
+import User, { IUserModel } from '../models/UserModel';
 
-import {CallbackType} from '../../interfaces';
-
-const verifyUser = (req: Request, res: Response, next: CallbackType) => {
-
-    const token = req.body.token;
-
-    if (!token) return res.status(401).json({ message: "Access denied." });
-
+const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+        const user = await User.findOne({ username: req.body.username });
 
-        if(verified)
-            next();
+        if (!user)
+            return res.status(200).json({ isAuthenticated: false, message: "Esse usuário não existe" });
 
-    } catch (err) {
-        res.status(403).json({ message: "Invalid token" });
+        const token = req.body.token;
+        if (!token) return res.status(401).json({ isAuthenticated: false, message: "Acesso negado." });
+
+        try {
+            const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+
+            if (verified) {
+                res.locals.user = user;
+                next();
+            }
+
+        } catch (error) {
+            res.status(403).json({ isAuthenticated: false, message: "Passe inválido." });
+        }
+
+    } catch (error) {
+        return res.status(401).json({ isAuthenticated: false, message: "Erro durante a busca do usuário.", error: error });
     }
 }
+
 
 export default verifyUser;

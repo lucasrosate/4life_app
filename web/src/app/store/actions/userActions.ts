@@ -51,7 +51,7 @@ export const loginAccount = (username: string, password: string) => {
             });
 
 
-            if (res.data.success) {
+            if (res.data.isAuthenticated) {
                 localStorage.setItem('username', username);
                 localStorage.setItem('auth-token', res.headers['auth-token']);
 
@@ -163,7 +163,7 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
                 encodedPicture: cropped.encodedCroppedPicture
             });
 
-            if (res.data.success) {
+            if (res.data.isAuthenticated) {
                 localStorage.setItem("profile-picture-url", cropped.croppedPicture)
 
                 return dispatch({
@@ -203,7 +203,7 @@ export const updateUserData = (newValue: string, option: string) => {
                 option: option
             });
 
-            if (res.data.success) {
+            if (res.data.isAuthenticated) {
                 return dispatch({
                     type: actionType.USER_UPDATE_DATA_SUCCESS,
                     payload: { newValue: newValue, option: option }

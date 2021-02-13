@@ -123,23 +123,23 @@
 /* window component transition */
 .fade-window-enter {
     opacity: .1;
-    transform: scale(.6);
+    transform: translateY(100px);
 }
 
 .fade-window-enter-active {
     opacity: 1;
-    transition: scale(1);
+    transform: translateY(0);
     transition: opacity 400ms ease, transform 200ms ease;
 }
 
 .fade-window-exit {
     opacity: 1;
-    transition: scale(1);
+    transform: translateY(0);
 }
 
 .fade-window-exit-active {
     opacity: .1;
-    transform: scale(.6);
+    transform: translateY(100px);
     transition: opacity 400ms ease, transform 200ms ease;
 
 }

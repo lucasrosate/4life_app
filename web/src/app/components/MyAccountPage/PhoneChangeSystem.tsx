@@ -36,13 +36,7 @@ interface Props {
     onlyNumber?: boolean,
 
     //Erro a ser passado caso haja algum problema durante a execução da função
-    errorMessage?: string,
-
-    //Default: 3
-    minLength?: number,
-
-    //Default: 24
-    maxLength?: number,
+    errorMessage?: string
 
 }
 
@@ -106,8 +100,6 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
     const size = props.size === undefined ? 18 : props.size;
     const label = props.label === undefined ? "" : props.label;
-    const minLength = props.minLength === undefined ? 3 : props.minLength;
-    const maxLength = props.maxLength === undefined ? 24 : props.maxLength;
 
     const dispatch = useDispatch();
 

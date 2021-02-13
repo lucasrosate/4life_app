@@ -1,5 +1,3 @@
-export interface CallbackType { (): void }
-
 export interface IUser {
     firstname: string,
     lastname: string,
@@ -9,6 +7,11 @@ export interface IUser {
     state: string,
     phone: string,
     birth?: Date
+    authentication: {
+        isValid: boolean,
+        temporaryLink: string,
+        created_at: Date
+    }
 }
 
 export interface IDiet {
@@ -30,7 +33,7 @@ export interface IPhoto {
 
 }
 
-export interface ITemporaryLink { 
-    link: string, 
+export interface ITemporaryLink {
+    link: string,
     status: number
-} 
+}

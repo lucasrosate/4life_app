@@ -128,8 +128,6 @@ const MyAccountPage: React.FC = () => {
                                     propertyValue={user.phone}
                                     showInput={true}
                                     onlyNumber={true}
-                                    minLength={8}
-                                    maxLength={9}
                                 />
 
 

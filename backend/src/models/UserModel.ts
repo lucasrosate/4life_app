@@ -2,7 +2,7 @@ import mongoose, { mongo, Mongoose } from "mongoose";
 import bcrypt from 'bcrypt';
 import { IUser } from "../../interfaces";
 
-interface IUserModel extends mongoose.Document, IUser { };
+export interface IUserModel extends mongoose.Document, IUser { };
 
 const UserSchema = new mongoose.Schema({
     firstname: {
@@ -51,7 +51,23 @@ const UserSchema = new mongoose.Schema({
     birth: {
         type: Date,
         require: false,
+    },
+
+    authentication: {
+        isValid: {
+            type: Boolean,
+            require: true
+        },
+        temporaryLink: {
+            type: String,
+            require: false
+        },
+        created_at: {
+            type: Date,
+            require: false
+        }
     }
+
 
 });
 

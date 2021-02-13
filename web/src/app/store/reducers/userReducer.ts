@@ -13,7 +13,10 @@ const userInitialState: UserState = {
         email: "",
         state: "",
         phone: "",
-        profilePhoto: ""
+        profilePhoto: "",
+        authentication: {
+            isValid: false
+        }
     },
     loading: true,
     successForms: false,

@@ -1,12 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose, { DocumentQuery } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../models/UserModel'
+import User, { IUserModel } from '../models/UserModel'
 
 import { Request, Response } from 'express';
 
 require('dotenv').config();
-
 
 export const signup = async (req: Request, res: Response) => {
     const
@@ -24,13 +23,11 @@ export const signup = async (req: Request, res: Response) => {
 
     if (!firstname || !lastname || !username || !password || !email || !state || !phone)
         return res.status(200).json({
-            success: false,
+            isAuthenticated: false,
             message: "Nem todos os campos foram registrados."
         });
 
-
     const hashedPassword = await bcrypt.hash(password, salt).catch((error) => { throw error });
-
 
     const user = new User({
         firstname: firstname,
@@ -45,26 +42,23 @@ export const signup = async (req: Request, res: Response) => {
     try {
         await user.save();
     } catch (err) {
-        console.log(err)
         return res.status(200).json({
-            success: false,
+            isAuthenticated: false,
             message: "Esse usuário já existe, tente novamente."
         });
     }
 
     return res.status(200).json({
-        success: true,
+        isAuthenticated: true,
         message: "Registrado com sucesso."
     });
 }
 
 
 export const signin = async (req: Request, res: Response) => {
-
     if (req.body.password == undefined) return res.status(401).json({
         message: "A senha não existe. Ela deve ser preenchida."
     });
-
 
     User.findOne({
         username: req.body.username
@@ -74,7 +68,10 @@ export const signin = async (req: Request, res: Response) => {
         var password: string;
 
         if (!user) {
-            return res.status(401).json({ message: "Usuário não existente." });
+            return res.status(401).json({
+                isAuthenticated: false,
+                message: "Usuário não existente."
+            });
         } else {
             password = req.body.password;
             const isPassValid = await bcrypt.compare(password, user.password);
@@ -86,19 +83,30 @@ export const signin = async (req: Request, res: Response) => {
                     .header('Access-Control-Expose-Headers', 'auth-token')
                     .header('auth-token', token)
                     .json({
-                        success: true,
-                        message: "Successo."
+                        isAuthenticated: true,
+                        message: "isAuthenticatedo."
                     });
             } else {
                 return res.status(401)
                     .json({
-                        success: false,
+                        isAuthenticated: false,
                         message: "Senha inválida."
                     });
             }
-
-
         }
     })
 }
 
+
+export const confirmAccount = (req: Request, res: Response) => {
+    const username = req.params.username;
+    const confirmToken = req.params.username;
+}
+
+export const lostPassword = (req: Request, res: Response) => {
+
+}
+
+export const confirmLostPassword = (req: Request, res: Response) => {
+    
+}
