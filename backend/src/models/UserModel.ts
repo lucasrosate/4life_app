@@ -53,7 +53,7 @@ const UserSchema = new mongoose.Schema({
         require: false,
     }
 
-})
+});
 
 UserSchema.pre("save", function (this: IUserModel, next) {
     const user = this;
@@ -76,7 +76,7 @@ UserSchema.pre("save", function (this: IUserModel, next) {
 });
 
 
-const User: mongoose.Model<IUserModel> = mongoose.model<IUserModel>("User", UserSchema);
+const User: mongoose.Model<IUserModel> = mongoose.model<IUserModel>("user", UserSchema);
 
 
 export default User;

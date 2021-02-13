@@ -33,6 +33,7 @@ export type UserState = {
     user: IUser,
     loading: boolean,
     responseMessage: string,
+    successForms: boolean,
     responseError: IUser
 }
 

@@ -57,18 +57,15 @@ const MyAccountPage: React.FC = () => {
                         <CSSTransition
                             in={showCropPictureWindow}
                             timeout={400}
-                            classNames={{
-                                enter: style.AnimationEnter,
-                                enterActive: style.AnimationEnterActive,
-                                exit: style.AnimationExit,
-                                exitActive: style.AnimationExitActive
-                            }}
+                            classNames="fade"
                             mountOnEnter
                             unmountOnExit
                         >
 
                             <ChangePictureSystem
-                                handleShowCropPictureWindow={handleShowCropPictureWindow} />
+                                handleShowCropPictureWindow={handleShowCropPictureWindow}
+                                showCropPictureWindow={showCropPictureWindow}
+                                />
 
                         </CSSTransition>
 

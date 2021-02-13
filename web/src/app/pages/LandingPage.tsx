@@ -17,16 +17,20 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
 
     var responseMessage = useSelector((state: StoreState) => state.userReducer.responseMessage);
+    var successForms = useSelector((state: StoreState) => state.userReducer.successForms);
 
+    const delay = 600;
+    const fadeClassName = "fade-form"
 
     const showLoginFormFunction = () => {
-        setShowLoginForm(true);
         setShowRegistrationForm(false);
+        setTimeout(() => {setShowLoginForm(true)}, delay + 50);
+
     }
 
     const showRegistrationFormFunction = () => {
         setShowLoginForm(false);
-        setShowRegistrationForm(true);
+        setTimeout(() => {setShowRegistrationForm(true)}, delay + 50);
     }
 
 
@@ -38,7 +42,7 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
         <>
             <CSSTransition
                 in={showPage}
-                timeout={1000}
+                timeout={600}
                 classNames="fade"
                 mountOnEnter
             >
@@ -59,13 +63,14 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
                                 <div id="loginForm">
                                     <CSSTransition
                                         in={showLoginForm}
-                                        timeout={1000}
-                                        classNames="fade"
+                                        timeout={delay}
+                                        classNames={fadeClassName}
                                         mountOnEnter
                                         unmountOnExit
                                     >
                                         <LoginForm
-                                            userLogggedIn={userLoggedIn}
+                                            successForms={successForms}
+                                            userLoggedIn={userLoggedIn}
                                             showRegistrationFormFunction={showRegistrationFormFunction}
                                             responseMessage={responseMessage}
                                         />
@@ -79,12 +84,13 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
                                 <div id="registrationForm">
                                     <CSSTransition
                                         in={showRegistrationForm}
-                                        timeout={1000}
-                                        classNames="fade"
+                                        timeout={delay}
+                                        classNames={fadeClassName}
                                         mountOnEnter
                                         unmountOnExit
                                     >
                                         <RegistrationForm
+                                            successForms={successForms}
                                             showLoginFormFunction={showLoginFormFunction}
                                             responseMessage={responseMessage}
                                         />

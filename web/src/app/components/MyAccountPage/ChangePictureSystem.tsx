@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import {uploadUserPicture} from '../../store/actions/userActions';
+import { uploadUserPicture } from '../../store/actions/userActions';
 
 import getCroppedPic from '../../scripts/getCroppedPic';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,6 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Cropper from 'react-easy-crop';
 import Slider from '@material-ui/core/Slider'
 import { GoX } from "react-icons/go";
+
+import CSSTransition from 'react-transition-group/CSSTransition';
 import style from '../../styles/components/MyAccount/ChangePictureSystem.module.css';
 import '../../styles/components/MyAccount/ReactEasyCropContainer.css';
 
@@ -22,6 +24,7 @@ const { useState, useCallback } = React;
 
 interface Props {
     handleShowCropPictureWindow: Function,
+    showCropPictureWindow: boolean
 }
 
 // Configuração das cores do Slider do zoom e da rotação da imagem
@@ -52,11 +55,10 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
     var [rotation, setRotation] = useState<number>(0);
     var [zoom, setZoom] = useState<number>(1);
 
-
     const uploadPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPicture(URL.createObjectURL(e.target.files? e.target.files[0]: ""));
-        setPictureFile(e.target.files? e.target.files[0]: null);
-       setShowEasyCrop(true);
+        setPicture(URL.createObjectURL(e.target.files ? e.target.files[0] : ""));
+        setPictureFile(e.target.files ? e.target.files[0] : null);
+        setShowEasyCrop(true);
     }
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
@@ -83,77 +85,85 @@ const ChangePictureSystem: React.FC<Props> = (props: Props) => {
     }
 
     const onCropChange = (newCrop: ICoord) => setCrop(newCrop);
-    const onZoomChange = (newZoom: number) => {console.log(zoom); setZoom(newZoom)};
+    const onZoomChange = (newZoom: number) => { console.log(zoom); setZoom(newZoom) };
     const onSlideZoomChange = (e: any, value: any) => { console.log(value); setZoom(value) };
     const onSlideRotationChange = (e: any, value: any) => { setRotation(value) };
 
-
-
     return (
-        <div className={style.Container}>  
+        <div className={style.Container}>
             <div className={style.changePictureWindowBackground} onClick={_handleShowCrop} />
             <div className={style.changePictureContentContainer}>
                 <div className={style.changePicturePositionContainer}>
-                    <div className={style.changePictureContainer}>
-                        <div className={style.exitButtonContainer}>
-                            <button type="button" onClick={_handleShowCrop}>
-                                <GoX size={25} />
-                            </button>
+
+                    <CSSTransition
+                        in={props.showCropPictureWindow}
+                        timeout={400}
+                        classNames="fade-window"
+                        mountOnEnter
+                        unmountOnExit
+                    >
+                        <div className={style.changePictureContainer}>
+                            <div className={style.exitButtonContainer}>
+                                <button type="button" onClick={_handleShowCrop}>
+                                    <GoX size={25} />
+                                </button>
+                            </div>
+                            <div className={style.PictureField}>
+                                {
+                                    showEasyCrop ?
+                                        <Cropper
+                                            image={picture!}
+                                            zoom={zoom}
+                                            restrictPosition={true}
+                                            rotation={rotation}
+                                            crop={crop}
+                                            aspect={1}
+
+                                            onZoomChange={onZoomChange}
+                                            onCropChange={onCropChange}
+                                            onCropComplete={onCropComplete}
+                                            cropShape="round"
+                                        /> : null
+                                }
+
+                            </div>
+
+                            <div className={style.ZoomSliderContainer}>
+                                <h3>Zoom</h3> <span>({zoom}x)</span>
+                                <AppSlider
+                                    defaultValue={1}
+                                    min={1}
+                                    max={4}
+                                    step={.1}
+                                    onChange={(e, value) => onSlideZoomChange(e, value)}
+                                    marks
+                                />
+
+                                <h3>Rotação</h3> <span>({rotation} °)</span>
+                                <AppSlider
+                                    defaultValue={0}
+                                    min={-180}
+                                    max={180}
+                                    onChange={(e, value) => onSlideRotationChange(e, value)}
+                                />
+
+                            </div>
+
+                            <div className={style.cropPictureTools}>
+                                <input
+                                    className={style.inputProfileImg}
+                                    id="inputProfileImgFile"
+                                    type="file"
+                                    accept=".jpg, .jpeg, .png"
+                                    onChange={uploadPicture}
+                                    hidden />
+                                <label htmlFor="inputProfileImgFile">Trocar a foto</label>
+
+                                <button type="button" onClick={exportCroppedPicture}>Salvar mudanças</button>
+                            </div>
                         </div>
-                        <div className={style.PictureField}>
-                            {
-                                showEasyCrop ?
-                                    <Cropper
-                                        image={picture!}
-                                        zoom={zoom}
-                                        restrictPosition={true}
-                                        rotation={rotation}
-                                        crop={crop}
-                                        aspect={1}
-     
-                                        onZoomChange={onZoomChange}
-                                        onCropChange={onCropChange}
-                                        onCropComplete={onCropComplete}
-                                        cropShape="round"
-                                    /> : null
-                            }
+                    </CSSTransition>
 
-                        </div>
-
-                        <div className={style.ZoomSliderContainer}>
-                            <h3>Zoom</h3> <span>({zoom}x)</span>
-                            <AppSlider
-                                defaultValue={1}
-                                min={1}
-                                max={4}
-                                step={.1}
-                                onChange={(e, value) => onSlideZoomChange(e,value)}
-                                marks
-                            />
-
-                            <h3>Rotação</h3> <span>({rotation} °)</span>
-                            <AppSlider
-                                defaultValue={0}
-                                min={-180}
-                                max={180}
-                                onChange={(e, value) => onSlideRotationChange(e, value)}
-                            />
-
-                        </div>
-
-                        <div className={style.cropPictureTools}>
-                            <input
-                                className={style.inputProfileImg}
-                                id="inputProfileImgFile"
-                                type="file"
-                                accept=".jpg, .jpeg, .png"
-                                onChange={uploadPicture}
-                                hidden />
-                            <label htmlFor="inputProfileImgFile">Trocar a foto</label>
-
-                            <button type="button" onClick={exportCroppedPicture}>Salvar mudanças</button>
-                        </div>
-                    </div>
                 </div>
 
             </div>

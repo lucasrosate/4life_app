@@ -16,6 +16,7 @@ const userInitialState: UserState = {
         profilePhoto: ""
     },
     loading: true,
+    successForms: false,
     responseMessage: "",
     responseError: {
         firstname: "",
@@ -43,7 +44,8 @@ export const userReducer: Reducer<UserState, UserAction> =
                 return {
                     ...state,
                     responseMessage: "",
-                    loading: false
+                    loading: false,
+                    successForms: true
                 };
 
             case actionTypes.USER_CREATE_ACCOUNT_FAILED:
@@ -64,7 +66,7 @@ export const userReducer: Reducer<UserState, UserAction> =
             case actionTypes.USER_LOGIN_FAILED:
                 return {
                     ...state,
-                    responseMessage: "O seu login ou sua senha ou ambos incorretos. Verifique e tente novamente",
+                    responseMessage: "Erro: O seu login ou sua senha ou ambos incorretos. Verifique e tente novamente",
                     loading: false
                 }
 

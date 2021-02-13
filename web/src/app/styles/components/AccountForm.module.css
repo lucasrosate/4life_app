@@ -1,49 +1,62 @@
 .container {
-    position: fixed;
-    top: 2%;
-    right: 0px;
-    width: 400px;
-    height: auto;
-    display: flex;
-    align-items: center;
-    border-radius: 10px;
-    padding: 30px 40px 40px 30px;
+    max-width: 350px;
+    max-height: 1000px;
+    padding: 50px 80px;
+    border-radius: 8px;
     background-color: rgb(255, 255, 255);
-    margin-right: calc(6% - 30px);
+
+    overflow: hidden;
 }
+
+.container form {
+    height: 100%;
+    width: 100%;
+    position: static;
+}
+
+
 
 .logContainer {
     top: 30%;
+    max-height: 500px;
 }
 
 .signupFormContainer {
-    padding-top: 20px;
-    padding-bottom: 20px;
     display: block;
     text-align: center;
 }
 
-.signupFormContainer h1 {
+.signupFormContainer  div h1 {
     text-align: left;
     font-size: 180%;
-    margin-left: 11%;
+
 }
 
-.signupForm {
-    margin-bottom: 10px;
+label {
+    width: 100%;
+}
+
+select {
+    margin-top: 5px;
+    background: rgb(232, 232, 232, .5);
+    width: 305px;
+    height: 35px;
+    border: none;
 }
 
 label>span {
+    width: 100%;
     text-align: left;
     font-size: 100%;
     font-weight: 500;
-    margin-top: 20px;
-    margin-bottom: 10px;
+
     display: block;
 }
 
 .signupLabel {
-    margin-left: 45px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 0;
 }
 
 .loginFormContainer {
@@ -52,6 +65,7 @@ label>span {
 
 .loginFormContainer h1 {
     font-size: 180%;
+    margin-bottom: 15px;
 }
 
 .loginFormContainer .title p {
@@ -73,10 +87,21 @@ label>span {
     cursor: pointer;
 }
 
+.input {
+    width: 300px;
+    height: 35px;
+    padding-left: 15px;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .btn {
     width: 100px;
     height: 34px;
     margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 .buttonsRegistration {

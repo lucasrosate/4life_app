@@ -11,6 +11,14 @@ export interface IUser {
     birth?: Date
 }
 
+export interface IDiet {
+    name: string,
+    quantity: string,
+    weight: number,
+    weight_unit: string,
+    calories: number
+}
+
 export interface IPhoto {
     filename?: string
     _user?: string,

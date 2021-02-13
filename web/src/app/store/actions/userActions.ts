@@ -21,6 +21,9 @@ export const createAccount = (user: IUser) => {
                 state: user.state,
                 phone: user.phone
             });
+
+            console.log(res)
+
             return dispatch({
                 type: actionType.USER_CREATE_ACCOUNT_SUCCESS,
                 payload: res.data
@@ -199,8 +202,6 @@ export const updateUserData = (newValue: string, option: string) => {
                 newValue: newValue,
                 option: option
             });
-
-            console.log(res);
 
             if (res.data.success) {
                 return dispatch({

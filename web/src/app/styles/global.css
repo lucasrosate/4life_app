@@ -30,11 +30,8 @@
 .input {
     font-family: "Dosis", sans-serif;
     background-color: #f3f4fc;
-    padding-left: 10px;
     border: 0;
     border-radius: 8px;
-    width: 300px;
-    height: 35px;
 }
 
 .input:focus {
@@ -76,13 +73,40 @@
     overflow: hidden;
 }
 
-.fade-enter {
+
+/* page transitions */
+.fade-form-enter {
     opacity: .05;
+    transform: translatey(-100px);
+}
+
+.fade-form-enter-active {
+    opacity: 1;
+    transform: translatey(0);
+    transition: opacity 500ms ease, transform 400ms ease;
+}
+
+.fade-form-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-form-exit-active {
+    opacity: .05;
+    transform: translateY(-100px);
+    transition: opacity 500ms ease, transform 300ms ease;
+
+}
+
+
+/* login and registration form transitions */
+.fade-enter {
+    opacity: .1;
 }
 
 .fade-enter-active {
     opacity: 1;
-    transition: opacity 600ms ease
+    transition: opacity 400ms ease;
 }
 
 .fade-exit {
@@ -90,10 +114,35 @@
 }
 
 .fade-exit-active {
-    opacity: 0;
-    transform: scale(0.9);
+    opacity: .1;
+    transition: opacity 400ms ease;
+
 }
 
+
+/* window component transition */
+.fade-window-enter {
+    opacity: .1;
+    transform: scale(.6);
+}
+
+.fade-window-enter-active {
+    opacity: 1;
+    transition: scale(1);
+    transition: opacity 400ms ease, transform 200ms ease;
+}
+
+.fade-window-exit {
+    opacity: 1;
+    transition: scale(1);
+}
+
+.fade-window-exit-active {
+    opacity: .1;
+    transform: scale(.6);
+    transition: opacity 400ms ease, transform 200ms ease;
+
+}
 
 ::-webkit-scrollbar {
     display: none;

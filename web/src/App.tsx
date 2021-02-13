@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { getProfilePicture, getUserData } from './app/store/actions/userActions';
 import api from './app/api/api';
 import NavigationBar from './app/components/Navigation/NavigationBar';
 import LandingPage from './app/pages/LandingPage';
@@ -14,7 +15,7 @@ import MyAccountPage from './app/pages/MyAccountPage';
 
 import './app/styles/global.css';
 
-import { getProfilePicture, getUserData } from './app/store/actions/userActions';
+
 
 const App: React.FC = () => {
 

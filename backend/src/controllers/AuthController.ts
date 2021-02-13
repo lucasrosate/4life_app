@@ -45,7 +45,8 @@ export const signup = async (req: Request, res: Response) => {
     try {
         await user.save();
     } catch (err) {
-        return res.status(409).json({
+        console.log(err)
+        return res.status(200).json({
             success: false,
             message: "Esse usuário já existe, tente novamente."
         });
