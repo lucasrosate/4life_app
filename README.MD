@@ -5,15 +5,19 @@ It's an basic app for taking care your routine.
 #### Front-end
 * [React.js v17.0.1](https://github.com/facebook/react)
 * [react-easy-crop v3.3.0](https://github.com/ricardo-ch/react-easy-crop)
+* [styled-components](https://github.com/styled-components/styled-components)
+* [Axios](https://github.com/axios/axios)
+* [Redux](https://github.com/reduxjs/redux)
 
 
 
 #### Back-end
-* [Node.js v5.10.11](https://github.com/nodejs/node)
-* [Axios v0.21.0](https://github.com/axios/axios)
-* [Express.js v4.17.1](https://github.com/expressjs/express)
-* [DropboxSDK v8.1.0](https://github.com/dropbox/dropbox-sdk-js)
-* [Mongoose v5.10.11](https://github.com/Automattic/mongoose)
+* [Node.js](https://github.com/nodejs/node)
+* [Express.js](https://github.com/expressjs/express)
+* [DropboxSDK](https://github.com/dropbox/dropbox-sdk-js)
+* [Mongoose](https://github.com/Automattic/mongoose)
+* [GoogleApi](https://github.com/googleapis/google-api-nodejs-client)
+* [nodemailer](https://github.com/nodemailer/nodemailer)
 
 
 
