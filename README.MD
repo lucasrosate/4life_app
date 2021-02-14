@@ -3,8 +3,8 @@ It's an basic app for taking care your routine.
 
 ### Technologies
 #### Front-end
-* [React.js v17.0.1](https://github.com/facebook/react)
-* [react-easy-crop v3.3.0](https://github.com/ricardo-ch/react-easy-crop)
+* [React.js](https://github.com/facebook/react)
+* [react-easy-crop](https://github.com/ricardo-ch/react-easy-crop)
 * [styled-components](https://github.com/styled-components/styled-components)
 * [Axios](https://github.com/axios/axios)
 * [Redux](https://github.com/reduxjs/redux)
