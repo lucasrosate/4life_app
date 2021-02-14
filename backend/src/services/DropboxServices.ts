@@ -1,5 +1,5 @@
 import { Dropbox } from 'dropbox';
-
+require('dotenv').config;
 // configuração do dropbox
 const dbx = new Dropbox({
     accessToken: process.env.DROPBOX_ACCESS_TOKEN as string,

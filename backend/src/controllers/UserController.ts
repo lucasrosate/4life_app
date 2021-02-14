@@ -6,7 +6,7 @@ import UserView from '../views/UserView';
 import decodePicture from '../common/functions/decodePicture';
 
 import { Request, Response } from 'express';
-import { ITemporaryLink } from '../../interfaces';
+import { ITemporaryLink, IUser } from '../../interfaces';
 
 require('dotenv').config;
 
@@ -65,6 +65,16 @@ export const changeUserProperty = async (req: Request, res: Response) => {
         case "EDIT_BIRTH":
             user.birth = new Date(newValue);
             break;
+
+        case "EDIT_PASSWORD":
+            user.password = newValue;
+            break;
+        
+        default:
+            return res.status(200).json({
+                isAuthenticated: false,
+                message: "Opção inválida."
+            });
     }
 
     user.save((err, user) => {
@@ -192,10 +202,5 @@ export const getProfilePicture = async (req: Request, res: Response) => {
 
         }
     });
-}
-
-
-export const setUserPassword = (req: Request, res: Response) => {
-
 }
 
