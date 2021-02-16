@@ -20,18 +20,22 @@ export const createAccount = (user: IUser) => {
                 email: user.email,
                 state: user.state,
                 phone: user.phone
-            });
+            });    
 
-            console.log(res)
+            if (res.data.success && res.data.isAuthenticated) 
+                return dispatch({
+                    type: actionType.USER_CREATE_ACCOUNT_SUCCESS,
+                    payload: ""
+                });
 
             return dispatch({
-                type: actionType.USER_CREATE_ACCOUNT_SUCCESS,
-                payload: res.data
+                type: actionType.USER_CREATE_ACCOUNT_FAILED,
+                payload: "Esse usuário já existe."
             });
         } catch (error) {
             return dispatch({
                 type: actionType.USER_CREATE_ACCOUNT_FAILED,
-                payload: error
+                payload: "Erro durante o registro."
             });
         }
     }
@@ -89,7 +93,8 @@ export const getUserData = () => {
                 token: localStorage.getItem("auth-token")
             });
 
-            if (res.data.isAuthenticated) {
+            console.log(res.data);
+            if (res.data.isAuthenticated && res.data.success) {
                 dispatch({
                     type: actionType.USER_GET_DATA_SUCCESS,
                     payload: res.data.user
@@ -125,7 +130,7 @@ export const getProfilePicture = () => {
                 user: store.getState().userReducer.user
             });
 
-            if (res.data.hasPhoto) {
+            if (res.data.isAuthenticated && res.data.hasPhoto) {
                 localStorage.setItem("profile-picture-url", res.data.url);
 
                 return dispatch({
@@ -162,8 +167,8 @@ export const uploadUserPicture = (cropped: { croppedPicture: string, encodedCrop
                 token: localStorage.getItem("auth-token"),
                 encodedPicture: cropped.encodedCroppedPicture
             });
-
-            if (res.data.isAuthenticated) {
+            
+            if (res.data.success && res.data.isAuthenticated) {
                 localStorage.setItem("profile-picture-url", cropped.croppedPicture)
 
                 return dispatch({
@@ -203,7 +208,7 @@ export const updateUserData = (newValue: string, option: string) => {
                 option: option
             });
 
-            if (res.data.isAuthenticated) {
+            if (res.data.success && res.data.isAuthenticated) {
                 return dispatch({
                     type: actionType.USER_UPDATE_DATA_SUCCESS,
                     payload: { newValue: newValue, option: option }
@@ -211,7 +216,7 @@ export const updateUserData = (newValue: string, option: string) => {
 
             } else {
                 return dispatch({
-                    type: actionType.USER_UPDATE_DATA_FAILED, 
+                    type: actionType.USER_UPDATE_DATA_FAILED,
                     payload: { option: option }
                 });
             }
@@ -221,8 +226,24 @@ export const updateUserData = (newValue: string, option: string) => {
                 payload: ""
             });
         }
+    }
+}
 
 
+export const resetFormStatus = () => {
+    return (dispatch: Dispatch<UserAction>) => {
+        return dispatch({
+            type: actionType.USER_RESET_FORM_STATUS,
+            payload: ""
+        });
+    }
+}
 
+export const registrationSuccess = () => {
+    return (dispatch: Dispatch<UserAction>) => {
+        return dispatch({
+            type: actionType.USER_REGISTRATION_SUCCESS,
+            payload: "Conta criada com sucesso! Um e-mail para confirmar sua conta foi enviado para você."
+        });
     }
 }

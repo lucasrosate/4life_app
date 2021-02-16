@@ -8,9 +8,11 @@ export interface IUser {
     phone: string,
     birth?: Date
     authentication: {
-        isValid: boolean,
-        temporaryLink: string,
+        isActivated: boolean,
+        validateToken: string,
+        tokenType: string,
         created_at: Date
+        
     }
 }
 

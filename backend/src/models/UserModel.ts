@@ -54,13 +54,17 @@ const UserSchema = new mongoose.Schema({
     },
 
     authentication: {
-        isValid: {
+        isActivated: {
             type: Boolean,
             require: true
         },
-        temporaryLink: {
+        validateToken: {
             type: String,
             require: false
+        },
+        tokenType: {
+            type: String,
+            require: false,
         },
         created_at: {
             type: Date,
@@ -75,17 +79,12 @@ UserSchema.pre("save", function (this: IUserModel, next) {
     const user = this;
 
     if (this.isModified("password") || this.isNew) {
-        bcrypt.genSalt(10, function (err, salt) {
-            if (err) return next(err);
-
-
-            bcrypt.hash(user.password, salt, function (err, hash) {
+            bcrypt.hash(user.password, 10, function (err, hash) {
                 if (err) return next(err);
 
                 user.password = hash;
                 next();
             });
-        });
     } else {
         return next();
     }

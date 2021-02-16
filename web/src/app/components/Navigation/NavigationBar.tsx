@@ -1,8 +1,11 @@
 import React, { CSSProperties, useEffect } from 'react';
+import {useDispatch} from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import AccountOptions from './AccountOptions';
+
+import { getProfilePicture } from '../../store/actions/userActions';
 
 import { GoChevronDown, GoChevronUp } from 'react-icons/go'
 import style from '../../styles/components/Navigation/NavigationBar.module.css';
@@ -46,6 +49,8 @@ const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut })
 
     const [accMenu, setAccMenu] = useState(false);
 
+    const dispatch = useDispatch();
+
     //Retorna uma string da rota atual
     const documentURL = useLocation().pathname;
 
@@ -83,6 +88,10 @@ const NavigationBar: React.FC<{ userLoggedOut: Function }> = ({ userLoggedOut })
 
 
     }, [documentURL])
+
+    useEffect(() => {
+        dispatch(getProfilePicture());
+    }, []);
 
     return (
 

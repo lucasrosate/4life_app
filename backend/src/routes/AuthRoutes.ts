@@ -13,9 +13,10 @@ const routes = express.Router();
 
 routes.post('/signup', signup);
 routes.post('/signin', signin);
-routes.get('user/confirm/:username/:confirmToken', confirmAccount);
 routes.post('/lostpassword', lostPassword);
-routes.post('user/lostpassconfirm/:username/:confirmToken', confirmLostPassword);
+routes.get('/user/confirm_account/:username/:confirmToken', confirmAccount);
+routes.get('/user/lost_password_confirm/:username/:confirmToken', confirmLostPassword);
+
 
 
 export default routes;

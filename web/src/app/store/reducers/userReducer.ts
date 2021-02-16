@@ -43,18 +43,32 @@ export const userReducer: Reducer<UserState, UserAction> =
                     loading: true
                 };
 
+                case actionTypes.USER_RESET_FORM_STATUS:
+                    return {
+                        ...state,
+                        responseMessage: ""
+                    };
+    
+                case actionTypes.USER_REGISTRATION_SUCCESS: 
+                    return {
+                        ...state,
+                        successForms: false,
+                        responseMessage: userAction.payload
+                    }
+
             case actionTypes.USER_CREATE_ACCOUNT_SUCCESS:
                 return {
                     ...state,
-                    responseMessage: "",
+                    successForms: true,
                     loading: false,
-                    successForms: true
+                    responseMessage: ""
+
                 };
 
             case actionTypes.USER_CREATE_ACCOUNT_FAILED:
                 return {
                     ...state,
-                    responseMessage: "Erro durante a criação da conta.",
+                    responseMessage: userAction.payload,
                     loading: false
                 }
 
@@ -132,7 +146,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 username: ""
                             }
                         }
-
                     case "EDIT_FIRSTNAME":
                         return {
                             ...state,
@@ -194,7 +207,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                 break;
 
             case actionTypes.USER_UPDATE_DATA_FAILED:
-
                 switch (userAction.payload.option) {
                     case "EDIT_USERNAME":
                         return {
@@ -204,7 +216,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 username: "Esse nome de usuário já existe."
                             }
                         }
-
                     case "EDIT_FIRSTNAME":
                         return {
                             ...state,
@@ -212,7 +223,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 ...state.responseError
                             }
                         }
-
                     case "EDIT_LASTNAME":
                         return {
                             ...state,
@@ -235,7 +245,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 ...state.responseError
                             }
                         }
-
                     case "EDIT_STATE":
                         return {
                             ...state,
@@ -243,7 +252,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 ...state.responseError
                             }
                         }
-
                     case "EDIT_BIRTH":
                         return {
                             ...state,
@@ -251,7 +259,6 @@ export const userReducer: Reducer<UserState, UserAction> =
                                 ...state.responseError
                             }
                         }
-
                     default:
                         return {
                             ...state

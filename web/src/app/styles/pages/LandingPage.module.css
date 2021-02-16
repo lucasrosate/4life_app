@@ -2,6 +2,7 @@
         width: 100vw;
         height: 100vh;
         max-height: 100vh;
+        
         background-image: url("https://images.pexels.com/photos/1125782/pexels-photo-1125782.jpeg?crop=entropy&cs=srgb&dl=pexels-josh-sorenson-1125782.jpg&fit=crop&fm=jpg&h=4372&w=4373");
         background-position: center;
         background-repeat: no-repeat;
@@ -9,6 +10,15 @@
         overflow: hidden;
     }
     
+    .source {
+        right: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        position: absolute;
+    }
+
     .landingPage {
         width: 100vw;
         height: 100vh;

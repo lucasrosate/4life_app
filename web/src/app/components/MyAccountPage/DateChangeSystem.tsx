@@ -60,8 +60,9 @@ const ChangeButtonSystem: React.FC<Props> = (props: Props) => {
 
 
     const onSubmit = handleSubmit(() => {
-        if (oldDate < formattedFieldValue) {
+        if (formattedFieldValue < new Date(Date.now()) ) {
             setFieldValue(fieldValue);
+            console.log(fieldValue);
             dispatch(updateUserData(fieldValue, props.option));
         } else {
             setErrorMessage("A data deve ser inferior à hoje.")

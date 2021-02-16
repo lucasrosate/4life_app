@@ -1,6 +1,7 @@
 import axios from 'axios';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
+
 require('dotenv').config;
 
 
@@ -20,7 +21,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendMail = async (username: string, email: string, text: string, htmlText: string) => {
+const sendMail = async (subject: string, email: string, text: string, htmlText: string) => {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
 
@@ -45,16 +46,17 @@ const sendMail = async (username: string, email: string, text: string, htmlText:
             auth: auth,
             from: `4LifeApp <${USER}>`,
             to: email,
-            subject: "Recuperação de senha",
-            text: text
+            subject: subject,
+            html: htmlText
             
         }
 
         const result = await transport.sendMail(mailOptions);
 
-        console.log(result);
-
+        return console.log(`Email sent to: ${email}`);
     } catch (error) {
         return console.log(error);
     }
 }
+
+export default sendMail;

@@ -77,13 +77,13 @@
 /* page transitions */
 .fade-form-enter {
     opacity: .05;
-    transform: translatey(-100px);
+    transform: translatey(-60px);
 }
 
 .fade-form-enter-active {
     opacity: 1;
     transform: translatey(0);
-    transition: opacity 500ms ease, transform 400ms ease;
+    transition: opacity 200ms ease, transform 200ms ease;
 }
 
 .fade-form-exit {
@@ -93,8 +93,8 @@
 
 .fade-form-exit-active {
     opacity: .05;
-    transform: translateY(-100px);
-    transition: opacity 500ms ease, transform 300ms ease;
+    transform: translateY(-60px);
+    transition: opacity 200ms ease, transform 200ms ease;
 
 }
 

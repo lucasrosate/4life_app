@@ -1,8 +1,3 @@
-
-// Função para localizar o formadto da imagem que foi upada e também retirar o termo data:image/png;FORMATO_DA_IMAGEM, para a imagem ser apresentada como foi enviada
-import fs from 'fs';
-import path from 'path';
-
 const getFileFormat = (base64Picture: string) => {
     var matches = base64Picture.match(/^data:image([A-Za-z-+\/]+);base64,(.+)$/);
 

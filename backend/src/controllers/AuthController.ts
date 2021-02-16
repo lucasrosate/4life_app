@@ -1,9 +1,14 @@
-import mongoose, { DocumentQuery } from 'mongoose';
+import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User, { IUserModel } from '../models/UserModel'
+import sendMail from '../services/NodeMailerServices';
+import { tokenPassTextMessage, tokenPassHTMLMessage } from '../html/tokenPassHTMLMessage';
+import { tokenPassTextMessageSuccess, tokenPassHTMLMessageSuccess } from '../html/tokenPassHTMLMessageSuccess';
+import getRandomUserValidateLink from '../common/functions/getRandomUserValidateLink';
 
 import { Request, Response } from 'express';
+import {tokenPassLostAccountHTMLMessage, tokenPassLostAccountMessage } from '../html/tokenPassLostAccountHTMLMessage';
 
 require('dotenv').config();
 
@@ -19,50 +24,62 @@ export const signup = async (req: Request, res: Response) => {
             phone
         } = req.body;
 
-    const salt = await bcrypt.genSalt(10).catch((error) => { throw error });
-
     if (!firstname || !lastname || !username || !password || !email || !state || !phone)
         return res.status(200).json({
-            isAuthenticated: false,
+            succcess: false,
             message: "Nem todos os campos foram registrados."
         });
 
-    const hashedPassword = await bcrypt.hash(password, salt).catch((error) => { throw error });
+    const randomUserConfirmKey = await getRandomUserValidateLink(username);
 
     const user = new User({
         firstname: firstname,
         lastname: lastname,
         username: username,
-        password: hashedPassword,
+        password: password,
         email: email,
         state: state,
-        phone: phone
+        phone: phone,
+        authentication: {
+            isActivated: false,
+            validateToken: randomUserConfirmKey,
+            created_at: Date.now()
+        }
     });
 
     try {
+        user.authentication.tokenType = "USER_ACCOUNT_CONFIRM"
         await user.save();
+
+        const confirmTokenUrl = `http://localhost:3000/user/confirm_account/${username}/${randomUserConfirmKey}`;
+
+        sendMail(
+            "Confirmação de conta - Ativação",
+            email,
+            tokenPassTextMessage(username, confirmTokenUrl),
+            tokenPassHTMLMessage(username, confirmTokenUrl)
+        );
+
     } catch (err) {
         return res.status(200).json({
-            isAuthenticated: false,
-            message: "Esse usuário já existe, tente novamente."
+            succcess: false,
+            message: "Erro durante o registro. O usuário pode já existir. Erro: " + err
         });
     }
 
     return res.status(200).json({
-        isAuthenticated: true,
+        success: true,
         message: "Registrado com sucesso."
     });
 }
 
 
 export const signin = async (req: Request, res: Response) => {
-    if (req.body.password == undefined) return res.status(401).json({
-        message: "A senha não existe. Ela deve ser preenchida."
-    });
 
     User.findOne({
         username: req.body.username
     }, async (err, user) => {
+
         if (err) return res.status(401).json({ message: err });
 
         var password: string;
@@ -87,7 +104,7 @@ export const signin = async (req: Request, res: Response) => {
                         message: "isAuthenticatedo."
                     });
             } else {
-                return res.status(401)
+                return res.status(200)
                     .json({
                         isAuthenticated: false,
                         message: "Senha inválida."
@@ -98,15 +115,74 @@ export const signin = async (req: Request, res: Response) => {
 }
 
 
-export const confirmAccount = (req: Request, res: Response) => {
+export const confirmAccount = async (req: Request, res: Response) => {
     const username = req.params.username;
-    const confirmToken = req.params.username;
+    const confirmToken = req.params.confirmToken;
+
+
+    User.findOne({ username: username },
+        (err, user) => {
+            if (err)
+                return res.status(200).json({
+                    success: false,
+                    message: `Erro durante a busca. ${err}`
+                });
+
+            if (!user)
+                return res.status(200).json({
+                    success: false,
+                    message: "Usuário não encontrado."
+                });
+
+            if (user.authentication.validateToken === confirmToken && user.authentication.tokenType === "USER_ACCOUNT_CONFIRM") {
+                user.authentication.isActivated = true;
+                user.authentication.validateToken === "";
+
+                user.save();
+
+                sendMail(
+                    "Sua conta foi ativada",
+                    user.email,
+                    tokenPassTextMessageSuccess(user.username),
+                    tokenPassHTMLMessageSuccess(user.username)
+                )
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Usuário confirmado."
+                });
+            }
+        });
 }
 
-export const lostPassword = (req: Request, res: Response) => {
+export const lostPassword = async (req: Request, res: Response) => {
+    const email = req.body.email;
+
+    User.findOne({email: email}, async (err, user) => {
+        if(err) return res.status(404).json({"done": true});
+        
+        if(!user) return res.status(404).json({"done": true});
+
+        const username = user.username;
+        const randomUserConfirmKey = await getRandomUserValidateLink(username);
+
+        user.authentication.validateToken = randomUserConfirmKey;
+        user.authentication.tokenType = "USER_RECOVER_PASSWORD";
+        user.save();
+
+        const confirmTokenUrl = `http://localhost:3000/user/confirm_account/${username}/${randomUserConfirmKey}`;
+
+        sendMail(
+            "Recuperação de senha",
+            email,
+            tokenPassLostAccountMessage(username, confirmTokenUrl),
+            tokenPassLostAccountHTMLMessage(username, confirmTokenUrl)
+            );
+    });
+
 
 }
 
-export const confirmLostPassword = (req: Request, res: Response) => {
-    
+export const confirmLostPassword = async (req: Request, res: Response) => {
+
 }

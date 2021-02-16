@@ -8,7 +8,7 @@ import {
     changeUserProperty,
     uploadProfilePicture,
     getProfilePicture,
-    setUserPassword
+    // setUserPassword
 } from '../controllers/UserController';
 
 
@@ -20,6 +20,5 @@ routes.post('/getuserinfo', verifyUser, getUserInfo);
 routes.post('/changeuserproperty', verifyUser, changeUserProperty);
 routes.post('/uploadprofilepicture', verifyUser, uploadProfilePicture);
 routes.post('/getprofilepicture', verifyUser, getProfilePicture);
-routes.put('/setuserpassword', verifyUser, setUserPassword);
 
 export default routes;

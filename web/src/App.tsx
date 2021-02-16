@@ -10,8 +10,10 @@ import HealthPage from './app/pages/HealthPage';
 import CashFlowPage from './app/pages/CashFlowPage';
 import TaskPage from './app/pages/TaskPage';
 import EntertainmentPage from './app/pages/EntertainmentPage';
-import NotFoundPage from './app/pages/NotFoundPage';
 import MyAccountPage from './app/pages/MyAccountPage';
+import ConfirmAccountPage from './app/pages/ConfirmAccountPage';
+import NotFoundPage from './app/pages/NotFoundPage';
+
 
 import './app/styles/global.css';
 
@@ -35,11 +37,10 @@ const App: React.FC = () => {
                         username: username,
                         token: token
                     });
-        
+
                     if (res.data.isAuthenticated) {
                         setIsLoggedIn(true);
                         dispatch(getUserData());
-                        dispatch(getProfilePicture());
 
                     }
                 } catch (error) {
@@ -110,7 +111,13 @@ const App: React.FC = () => {
                         )}
                     />
 
+                    <Route path="/user/confirm_account/:username/:confirmToken">
+                            <ConfirmAccountPage />
+                    </Route>
+
                     <Route component={NotFoundPage} />
+
+
                 </Switch>
 
             </BrowserRouter>

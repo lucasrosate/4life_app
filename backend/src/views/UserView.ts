@@ -10,7 +10,8 @@ const UserView = (user: IUser) => {
         phone: user.phone,
         birth: user.birth,
         authentication: {
-            isValid: user.authentication.isValid
+            isActivated: user.authentication.isActivated,
+            tokenType: user.authentication.tokenType
         }
     }
 }

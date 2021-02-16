@@ -1,40 +1,42 @@
 import React, { useEffect } from 'react';
-import {useSelector} from 'react-redux';
-
-import LoginForm from '../components/LoginForm';
-import RegistrationForm from '../components/RegistrationForm';
+import { useSelector, useDispatch } from 'react-redux';
+import LoginForm from '../components/Authentication/LoginForm';
+import RegistrationForm from '../components/Authentication/RegistrationForm';
 import style from '../styles/pages/LandingPage.module.css';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import { StoreState } from '../../../interfaces';
+
 const { useState } = React;
 
 
 
-const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
+const LandingPage: React.FC<{ userLoggedIn: Function }> = ({ userLoggedIn }) => {
 
-    const [showPage, setShowPage] = useState(false); 
+    const dispatch = useDispatch();
+
+    const [showPage, setShowPage] = useState(false);
     const [showLoginForm, setShowLoginForm] = useState(true);
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
 
     var responseMessage = useSelector((state: StoreState) => state.userReducer.responseMessage);
     var successForms = useSelector((state: StoreState) => state.userReducer.successForms);
 
-    const delay = 600;
+    const delay = 200;
     const fadeClassName = "fade-form"
 
     const showLoginFormFunction = () => {
         setShowRegistrationForm(false);
-        setTimeout(() => {setShowLoginForm(true)}, delay + 50);
+        setTimeout(() => { setShowLoginForm(true) }, delay + 50);
 
     }
 
     const showRegistrationFormFunction = () => {
         setShowLoginForm(false);
-        setTimeout(() => {setShowRegistrationForm(true)}, delay + 50);
+        setTimeout(() => { setShowRegistrationForm(true) }, delay + 50);
     }
 
 
-    useEffect(()=> {
+    useEffect(() => {
         setShowPage(true);
     }, []);
 
@@ -46,7 +48,6 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
                 classNames="fade"
                 mountOnEnter
             >
-
                 <div className={style.backgroundLandingPage}>
 
                     <div className={style.landingPage}>
@@ -54,7 +55,7 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
                         <div className={style.landingContainer}>
                             <div className={style.infoPage}>
                                 <h1>4life</h1>
-                                <h2>Já pensou se você pudesse controlar todos os problemas do seu dia a dia na palma da sua mão? Pois é, agora é possível</h2>
+                                <h2>Uma solução para os problemas do seu dia a dia. Para você se organizar quanto a saúde, finaceiramente e ainda lembrar sobre seus entretenimentos</h2>
 
                             </div>
 
@@ -102,7 +103,9 @@ const LandingPage: React.FC<{userLoggedIn: Function}> = ({userLoggedIn}) => {
                             </div >
                         </div>
                     </div>
-
+                    <div>
+                        Video by Javier Lemus.
+                    </div>
 
                 </div>
             </CSSTransition>
