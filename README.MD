@@ -39,6 +39,11 @@ DROPBOX_ACCESS_TOKEN = YOUR_DROPBOX_ACCESS_TOKEN
 
 ### Photos
 
-<img src="https://i.imgur.com/SP6LCU7.png" width="700"/>
+<img src="https://i.imgur.com/8e0ltt7.png" width="700"/>
 
-<img src="https://i.imgur.com/LOmbGzU.png" width="700"/>
+<img src="https://i.imgur.com/hiNNAGg.png" width="700"/>
+
+<img src="https://i.imgur.com/GG6sfQf.png" width="700"/>
+
+<img src="https://i.imgur.com/zMIOsni.png" width="700"/>
+
