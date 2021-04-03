@@ -1,5 +1,0 @@
-const USER = "4lifeapp.no.reply@gmail.com"
-const CLIENT_ID = "499433904509-bkamlsq2eode8ffg9bh4bbh8dbfm36qn.apps.googleusercontent.com";
-const CLIENT_SECRET = "dXzIo6ciLmUujEBy2pN_73V6";
-const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-const REFRESH_TOKEN = "1//04mz95FHlQ4PZCgYIARAAGAQSNwF-L9IrhJODzi3Cmr4HXd-TLzo0r_-lBxASjqlWyFxoKtIc27Vr6CSHqSeiOqVABVU2WBx3TMo";
